@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "905331262654",
+    "firebase_url": "https://mytuition-fatec.firebaseio.com",
+    "project_id": "mytuition-fatec",
+    "storage_bucket": "mytuition-fatec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905331262654:android:acd10be4260fc194",
+        "android_client_info": {
+          "package_name": "com.felipemacedo.mytuition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905331262654-skmfk4c28t8ur5mfs94gl0c7qtc4guin.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.felipemacedo.mytuition",
+            "certificate_hash": "e4c6ee8805b8dd43de7093cf4cb209b8404d35ec"
+          }
+        },
+        {
+          "client_id": "905331262654-od1u6paqlnhl7unueepnoj5nesl61245.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxlRhiinjDQnlPwkcFHRJ5fICMbEwgy0o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905331262654-od1u6paqlnhl7unueepnoj5nesl61245.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
