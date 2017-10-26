@@ -5,28 +5,27 @@ import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by felipemacedo on 22/09/17.
  */
-@Entity(tableName = "tb_licoes")
 public class Licao implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private Long id;
+    private String id;
     private String titulo;
-
-    @Ignore
-    private List<Conteudo> conteudos;
+    private int conteudoCount;
+    private Map<String, Long> usuarios = new HashMap<>();
 
     public Licao() {}
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -38,12 +37,20 @@ public class Licao implements Serializable {
         this.titulo = titulo;
     }
 
-    public List<Conteudo> getConteudos() {
-        return conteudos;
+    public int getConteudoCount() {
+        return conteudoCount;
     }
 
-    public void setConteudos(List<Conteudo> conteudos) {
-        this.conteudos = conteudos;
+    public void setConteudoCount(int conteudoCount) {
+        this.conteudoCount = conteudoCount;
+    }
+
+    public Map<String, Long> getUsuarios() {
+        return usuarios;
+    }
+
+    public void setUsuarios(HashMap<String, Long> conteudos) {
+        this.usuarios = usuarios;
     }
 
     public String toString() {

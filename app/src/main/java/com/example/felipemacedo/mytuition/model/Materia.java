@@ -10,23 +10,20 @@ import java.util.List;
 /**
  * Created by felipemacedo on 07/10/17.
  */
-@Entity(tableName = "tb_materias")
 public class Materia implements Serializable {
 
-    @PrimaryKey(autoGenerate = true)
-    private Long id;
+    private String id;
     private String titulo;
 
-    @Ignore
     private List<Licao> licoes;
 
     public Materia() {}
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -1,24 +1,21 @@
 package com.example.felipemacedo.mytuition.licoes;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.felipemacedo.mytuition.R;
-import com.example.felipemacedo.mytuition.model.Conteudo;
 import com.example.felipemacedo.mytuition.model.Licao;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
-
-/**
- * Created by felipemacedo on 19/09/17.
- */
 
 public class LicoesAdapter extends RecyclerView.Adapter<LicoesAdapter.LicoesViewHolder> {
 
@@ -34,29 +31,24 @@ public class LicoesAdapter extends RecyclerView.Adapter<LicoesAdapter.LicoesView
     @Override
     public LicoesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = mLayoutInflater.inflate(R.layout.item_licao, parent, false);
-        LicoesViewHolder lvh = new LicoesViewHolder(v);
-
-        return lvh;
+        return new LicoesViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(LicoesViewHolder holder, int position) {
-        holder.nomeLicao.setText(licoes.get(position).toString());
+        Licao licao = licoes.get(position);
 
-//        int conteudoCompleto = 0;
-//        int size = licoes.get(position).getConteudos().size();
-//
-//        for(Conteudo c : licoes.get(position).getConteudos()) {
-//            if (c.isCompletado()) {
-//                conteudoCompleto++;
-//            }
-//        }
+        holder.nomeLicao.setText(licao.toString());
 
-//        holder.qtdLicoes.setText(conteudoCompleto + "/" + size);
+        int completado = 0;
 
+        if (licao.getUsuarios() != null && licao.getUsuarios().containsKey(getUid())) {
+            completado = licao.getUsuarios().get(getUid()).intValue();
+        }
 
-//        holder.mProgressBar.setProgress((conteudoCompleto * 100) / size);
+        holder.qtdLicoes.setText(completado + "/" + licao.getConteudoCount());
 
+        holder.mProgressBar.setProgress(completado > 0 ? (completado * 100) / licao.getConteudoCount() : 0);
     }
 
     @Override
@@ -73,8 +65,6 @@ public class LicoesAdapter extends RecyclerView.Adapter<LicoesAdapter.LicoesView
         private TextView nomeLicao;
         private TextView qtdLicoes;
         private RelativeLayout status;
-        private RelativeLayout statusBackground;
-        private RelativeLayout statusActual;
         private ProgressBar mProgressBar;
 
         public LicoesViewHolder(View itemView) {
@@ -96,5 +86,9 @@ public class LicoesAdapter extends RecyclerView.Adapter<LicoesAdapter.LicoesView
             }
 
         }
+    }
+
+    private String getUid() {
+        return FirebaseAuth.getInstance().getUid();
     }
 }

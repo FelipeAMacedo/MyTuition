@@ -1,8 +1,8 @@
 package com.example.felipemacedo.mytuition;
 
-import android.arch.persistence.room.Room;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -13,23 +13,21 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.example.felipemacedo.mytuition.dao.ConteudoDao;
-//import com.example.felipemacedo.mytuition.dao.LicaoDao;
-import com.example.felipemacedo.mytuition.dao.LicaDao;
-import com.example.felipemacedo.mytuition.database.Database;
-import com.example.felipemacedo.mytuition.model.Conteudo;
+import com.example.felipemacedo.mytuition.model.CurrentUser;
 import com.example.felipemacedo.mytuition.model.Licao;
-import com.example.felipemacedo.mytuition.model.Materia;
+import com.example.felipemacedo.mytuition.model.Usuario;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
-    private TextView mTextMessage;
     private BottomNavigationView navigation;
-    private DatabaseReference mDatabase;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     switchFragment(new LicoesFragment());
                     return true;
                 case R.id.navigation_notifications:
-                    mTextMessage.setText(R.string.title_notifications);
+                    Toast.makeText(MainActivity.this, "Notification taped", Toast.LENGTH_SHORT).show();
                     return true;
             }
             return false;
@@ -57,29 +55,44 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (conectivtyManager.getActiveNetworkInfo() != null
+                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
+        } else {
+        }
+
+
         navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Materia materia = new Materia();
-        materia.setTitulo("Estrutura de Dados");
-        mDatabase.child("materias").child(mDatabase.push().getKey()).setValue(materia);
+//        mDatabase = FirebaseDatabase.getInstance().getReference();
+//
+//        Materia materia = new Materia();
+//        materia.setTitulo("Estrutura de Dados");
+//        mDatabase.child("materias").child(mDatabase.push().getKey()).setValue(materia);
+//
+//        Licao licao = new Licao();
+//        licao.setTitulo("Pilha");
+//
+//        mDatabase.child("licoes").child(mDatabase.push().getKey()).setValue(licao);
+//
+//        Toast.makeText(this, "Inserido", Toast.LENGTH_LONG).show();
+//
+//        Licao licao1 = new Licao();
+//        licao1.setTitulo("Fila");
+//        mDatabase.child("licoes").child(mDatabase.push().getKey()).setValue(licao1);
+//
+//
+//        Toast.makeText(this, "Inserido", Toast.LENGTH_LONG).show();
 
-        Licao licao = new Licao();
-        licao.setTitulo("Pilha");
-
-        mDatabase.child("licoes").child(mDatabase.push().getKey()).setValue(licao);
-
-        Toast.makeText(this, "Inserido", Toast.LENGTH_LONG).show();
-
-        Licao licao1 = new Licao();
-        licao1.setTitulo("Fila");
-        mDatabase.child("licoes").child(mDatabase.push().getKey()).setValue(licao1);
 
 
-        Toast.makeText(this, "Inserido", Toast.LENGTH_LONG).show();
+
+
+
 
 
 //        insertDataOnTables();
@@ -110,6 +123,9 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 //        licao.setTitulo("TESTE COM O ROOM");
 //        licao.setConteudos(new ArrayList<Conteudo>());
 //        licaoDao.insert(licao);
+
+
+        switchFragment(new HomeFragment());
     }
 
 //    private void insertDataOnTables() {
@@ -133,6 +149,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     public void switchFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.fragment_home, fragment, fragment.getTag()).commit();
+        fm.beginTransaction().replace(R.id.frame_home, fragment, fragment.getTag()).commit();
     }
 }

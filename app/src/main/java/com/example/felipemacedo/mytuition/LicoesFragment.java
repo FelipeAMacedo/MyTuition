@@ -1,10 +1,8 @@
 package com.example.felipemacedo.mytuition;
 
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,13 +13,24 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 //import com.example.felipemacedo.mytuition.dao.LicaoDao;
-import com.example.felipemacedo.mytuition.database.Database;
 import com.example.felipemacedo.mytuition.licoes.LicoesAdapter;
 import com.example.felipemacedo.mytuition.licoes.RecyclerViewOnItemClickListener;
+import com.example.felipemacedo.mytuition.model.Conteudo;
+import com.example.felipemacedo.mytuition.model.CurrentUser;
 import com.example.felipemacedo.mytuition.model.Licao;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -43,10 +52,12 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     private String mParam2;
 
 
+    private Licao licao;
     private RecyclerView mRecyclerView;
     private List<Licao> licoes;
     private LicoesAdapter licoesAdapter;
     private OnFragmentInteractionListener mListener;
+    private DatabaseReference mDatabase;
 
     public LicoesFragment() {
         // Required empty public constructor
@@ -77,32 +88,6 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        licoes = new ArrayList<>();
-
-
-
-//        new AsyncTask<Void, Void, Void>() {
-//
-//
-//
-//            @Override
-//            protected List<Licao> doInBackground(Void... voids) {
-//                Database db = Room.inMemoryDatabaseBuilder(getActivity().getApplicationContext(),
-//                        Database.class).build();
-//                List<Licao> licoes = db.licaoDao().findAll();
-//
-//
-//
-//                if(licoesAdapter != null) {
-//                    System.out.println("AQUI");
-//                    licoesAdapter.notifyDataSetChanged();
-//                    System.out.println(licoes.size());
-//                }
-//
-//                return licoes;
-//            }
-//        }.execute();
     }
 
     @Override
@@ -119,13 +104,38 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
         mRecyclerView.setLayoutManager(llm);
 
 
-//        Database db = Room.inMemoryDatabaseBuilder(getActivity().getApplicationContext(),
-//                Database.class).build();
-//        licoes = db.licaoDao().findAll();
-//        licoes = new LicaoDao(getContext()).findAll();
         licoes = new ArrayList<>();
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        mDatabase.child("licoes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot dt : dataSnapshot.getChildren()) {
+
+                    licao = dt.getValue(Licao.class);
+
+                    for (DataSnapshot dt2 : dt.child("usuarios").getChildren()) {
+                        if (dt2.getKey().equals(CurrentUser.getInstance().id)) {
+                            licao.getUsuarios().put(dt2.getKey(), (Long) dt2.getValue());
+                            break;
+                        }
+                    }
+
+                    licoes.add(licao);
+                }
+                licoesAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
         licoesAdapter = new LicoesAdapter(getActivity(), licoes);
-        licoesAdapter.setmRecyclerViewOnClickListener(this);
+        licoesAdapter.setmRecyclerViewOnClickListener(LicoesFragment.this);
 
         mRecyclerView.setAdapter(licoesAdapter);
 
@@ -135,8 +145,6 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     @Override
     public void onResume() {
         super.onResume();
-        new LicoesAsyncTask(licoesAdapter, this.getContext()).execute();
-
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -165,9 +173,12 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
     @Override
     public void onItemClickListener (View view, int position) {
-        Toast.makeText(getActivity(), "ID: " + licoes.get(position).getId(), Toast.LENGTH_LONG).show();
         Intent intent = new Intent(getActivity(), ConteudoActivity.class);
-        intent.putExtra("LicaoId", licoes.get(position).getId());
+        intent.putExtra("LicaoId", licoes.get(position).getId().toString());
+
+        Long conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
+
+        intent.putExtra("conteudosCompletados", conteudosCompletados);
         startActivity(intent);
     }
 }

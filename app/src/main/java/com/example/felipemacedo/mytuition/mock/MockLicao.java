@@ -56,7 +56,6 @@ public class MockLicao {
 
 
 
-        licao1.setConteudos(conteudos1);
         licoes.add(licao1);
 
 
@@ -76,7 +75,6 @@ public class MockLicao {
 
         Licao licao2 = new Licao();
         licao2.setTitulo("Fila");
-        licao2.setConteudos(conteudos2);
         System.out.println(conteudos2.size());
         licoes.add(licao2);
 
