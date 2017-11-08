@@ -31,6 +31,11 @@
         <activity android:name=".ExerAnimActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegisterActivity" />
+        <activity
+            android:name=".LutaActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_luta"
+            android:theme="@style/FullscreenTheme"></activity>
     </application>
 
 </manifest>

@@ -42,9 +42,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        mEmail = (TextView) findViewById(R.id.reg_email);
-        mSenha = (TextView) findViewById(R.id.reg_password);
-        mConfSenha = (TextView) findViewById(R.id.reg_password_confirm);
+        mEmail = (TextView) findViewById(R.id.etCadEmail);
+        mSenha = (TextView) findViewById(R.id.etCadPassword);
+        mConfSenha = (TextView) findViewById(R.id.etCadPasswordConfirm);
         mCadastrarButton = (Button) findViewById(R.id.btnCreateAccount);
     }
 

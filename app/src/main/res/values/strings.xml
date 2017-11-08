@@ -14,9 +14,10 @@
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Senha</string>
-    <string name="action_sign_in">Logar</string>
-    <string name="action_register">Cadastrar</string>
+    <string name="action_sign_in">LOGAR</string>
+    <string name="action_register">CADASTRAR</string>
     <string name="action_sign_in_short">Logar</string>
+    <string name="action_retrieve_password">Esqueci a senha</string>
     <string name="error_invalid_email">Email inválido</string>
     <string name="error_invalid_password">Senha muito curta</string>
     <string name="error_incorrect_password">Senha incorreta</string>
@@ -28,6 +29,21 @@
 
     <!-- String to Register Activity -->
     <string name="action_create_account">Criar conta</string>
-    <string name="prompt_conf_password">Confirmar senha</string>
+    <string name="action_cancel">cancelar</string>
+    <string name="prompt_conf_password">Repetir senha</string>
+    <string name="prompt_complete_name">Nome completo</string>
+    <string name="prompt_hero_name">Nome do heroi</string>
+    <string name="prompt_ra">R.A.</string>
+    <string name="prompt_birthday">Data de nascimento</string>
+    <string name="prompt_gender">Sexo</string>
+    <string name="prompt_male">Masculino</string>
+    <string name="prompt_female">Feminino</string>
+
+
+    <string name="title_activity_jgggy">jgggy</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_luta">LutaActivity</string>
 
 </resources>

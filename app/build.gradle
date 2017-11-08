@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.felipemacedo.mytuition"
         minSdkVersion 21
@@ -69,6 +69,10 @@ dependencies {
     compile 'com.google.firebase:firebase-crash:11.4.2'
     testCompile 'junit:junit:4.12'
 }
+
+
+
+
 
 
 

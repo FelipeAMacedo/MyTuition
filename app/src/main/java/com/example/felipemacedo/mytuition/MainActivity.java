@@ -8,8 +8,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +33,12 @@ import java.util.HashMap;
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
     private BottomNavigationView navigation;
+    private ViewPager mViewPager;
+    private Fragment[] fragments = {new HomeFragment(), new LicoesFragment(), new AchievementsFragment()};
+
+    private ImageButton ibtnHome;
+    private ImageButton ibtnLicoes;
+    private ImageButton ibtnAchievements;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -47,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             }
             return false;
         }
-
     };
 
     @Override
@@ -55,17 +65,19 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (conectivtyManager.getActiveNetworkInfo() != null
-                && conectivtyManager.getActiveNetworkInfo().isAvailable()
-                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
-        } else {
-        }
+//        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+//        if (conectivtyManager.getActiveNetworkInfo() != null
+//                && conectivtyManager.getActiveNetworkInfo().isAvailable()
+//                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
+//        } else {
+//        }
 
+        initComponents();
+        initListeners();
 
-        navigation = (BottomNavigationView) findViewById(R.id.navigation);
+//        navigation = (BottomNavigationView) findViewById(R.id.navigation);
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
 
 //        mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -126,6 +138,62 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
 
         switchFragment(new HomeFragment());
+    }
+
+    private void initComponents() {
+        ibtnHome = (ImageButton) findViewById(R.id.ibtnHome);
+        ibtnLicoes = (ImageButton) findViewById(R.id.ibtnLicoes);
+        ibtnAchievements = (ImageButton) findViewById(R.id.ibtnAchievements);
+
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+        mViewPager = (ViewPager) findViewById(R.id.vpMain);
+
+        mViewPager.setAdapter(new MainAdapter(getSupportFragmentManager()));
+    }
+
+    private void initListeners() {
+
+        ibtnHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewPager.setCurrentItem(0);
+            }
+        });
+
+        ibtnLicoes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewPager.setCurrentItem(1);
+            }
+        });
+
+        ibtnAchievements.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewPager.setCurrentItem(2);
+            }
+        });
+    }
+
+    private class MainAdapter extends FragmentStatePagerAdapter {
+        private final int NUM_PAGES = 3;
+
+        public MainAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments[position];
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
     }
 
 //    private void insertDataOnTables() {

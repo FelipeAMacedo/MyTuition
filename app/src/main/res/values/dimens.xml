@@ -4,4 +4,7 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="licao_status_progress_width">-1.0px</dimen>
+    <dimen name="design_bottom_navigation_text_size">16sp</dimen>
+    <dimen name="design_bottom_navigation_active_text_size">20sp</dimen>
+    <dimen name="design_bottom_navigation_height">70dp</dimen>
 </resources>

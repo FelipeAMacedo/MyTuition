@@ -4,14 +4,18 @@
     <!-- Define the background properties like color etc -->
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="#BBBBBB" />
+            <stroke android:color="#FFF" android:width="3.33dp" />
+            <corners android:radius="16.67dp" />
+            <solid android:color="#9D9D9D" />
         </shape>
     </item>
     <!-- Define the progress properties like start color, end color etc -->
     <item android:id="@android:id/progress">
         <clip>
             <shape>
-                <solid android:color="#F5B64E" />
+                <stroke android:color="#FFF" android:width="3.33dp" />
+                <corners android:radius="16.67dp" />
+                <solid android:color="#13CE66" />
             </shape>
         </clip>
     </item>

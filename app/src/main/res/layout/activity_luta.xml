@@ -1,0 +1,153 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    tools:context="com.example.felipemacedo.mytuition.LutaActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E8E8E8">
+
+        <ImageView
+            android:id="@+id/imgLutaVilao"
+            android:layout_width="286.67dp"
+            android:layout_height="272.67dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="27.33dp"
+            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+
+        <LinearLayout
+            android:id="@+id/llInfoVilao"
+            android:layout_width="286.67dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/imgLutaVilao"
+            android:background="@drawable/luta_info"
+            android:orientation="vertical"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:id="@+id/tvInfoNomeVilao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
+                android:paddingLeft="17.67dp"
+                android:text="TextView"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="258.67dp"
+                android:layout_height="26.67dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/luta_hp"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15.67dp"
+                    android:text="HP"
+                    android:textColor="#FFD002"
+                    android:textSize="20sp" />
+
+                <ProgressBar
+                    android:id="@+id/pgbHPVilao"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="13.33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="7.33dp"
+                    android:progress="100"
+                    android:progressDrawable="@drawable/hp_progressbar" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLutaAtacar"
+            android:layout_width="162.67dp"
+            android:layout_height="54.67dp"
+            android:layout_below="@id/llInfoVilao"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="42.33dp"
+            android:layout_marginBottom="25.67dp"
+            android:text="ATACAR!"
+            android:textColor="#926E09"
+            android:textSize="20dp"
+            android:background="@drawable/luta_button_atacar"/>
+
+        <LinearLayout
+            android:id="@+id/llInfoHeroi"
+            android:layout_width="286.67dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/btnLutaAtacar"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/luta_info"
+            android:orientation="vertical"
+            android:paddingTop="7dp">
+
+            <TextView
+                android:id="@+id/tvInfoNomeHeroi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="17.67dp"
+                android:paddingBottom="5dp"
+                android:text="TextView"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="258.67dp"
+                android:layout_height="26.67dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/luta_hp"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="15.67dp"
+                    android:text="HP"
+                    android:textColor="#FFD002"
+                    android:textSize="20sp" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar2"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="13.33dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="7.33dp"
+                    android:progressDrawable="@drawable/hp_progressbar"
+                    android:progress="100" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnLutaSair"
+            android:layout_width="41.33dp"
+            android:layout_height="41.33dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="12.67dp"
+            android:layout_marginTop="6.67dp"
+            android:background="@drawable/luta_button_sair"
+            android:text="X"
+            android:textColor="#FFF"
+            android:textSize="26.67sp" />
+
+    </RelativeLayout>
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+
+</FrameLayout>

@@ -1,0 +1,62 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.felipemacedo.mytuition.AchievementsFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/backgroundDark">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="166.67dp"
+            android:background="#CBEDFF"
+            android:layout_alignParentTop="true">
+
+            <TextView
+                android:id="@+id/tvAchHeroiNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="42dp"
+                android:gravity="center_horizontal"
+                android:text="Felipe Alves de Macedo"
+                android:textColor="#47525E"
+                android:textSize="25.67sp" />
+
+            <TextView
+                android:id="@+id/tvAchNivel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvAchHeroiNome"
+                android:gravity="center_horizontal"
+                android:textColor="#637181"
+                android:text="Nível "
+                android:textSize="20sp" />
+
+            <ProgressBar
+                android:id="@+id/pbAchNivel"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="216.67dp"
+                android:layout_height="10.33dp"
+                android:layout_below="@id/tvAchNivel"
+                android:background="@drawable/licao_progressbar"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/tvAchPontos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pbAchNivel"
+                android:gravity="center_horizontal"
+                android:text="Nível "
+                android:textColor="#637181"
+                android:textSize="13.33sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+    <!-- TODO: Update blank fragment layout -->
+
+</FrameLayout>

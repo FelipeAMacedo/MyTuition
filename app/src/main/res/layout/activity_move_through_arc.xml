@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:layout_editor_absoluteY="8dp"
+    tools:layout_editor_absoluteX="8dp">
+
+    <Button
+        android:id="@+id/btnMoveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="0dp"
+        android:text="Button"
+        tools:layout_editor_absoluteX="97dp"
+        tools:layout_editor_absoluteY="200dp"
+        android:layout_marginBottom="56dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="120dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="57dp"
+        android:background="@drawable/pilha_container"
+        android:text=""
+        android:layout_below="@+id/txtPilhaValue"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/textView"
+        android:layout_alignStart="@+id/textView"
+        android:layout_marginBottom="13dp"
+        android:background="@drawable/item_pilha"
+        android:gravity="center"
+        android:text="4"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="275dp" />
+
+    <TextView
+        android:id="@+id/txtPilhaValue"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="71dp"
+        android:layout_toStartOf="@+id/btnMoveButton"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:text="5"
+        android:background="@drawable/item_pilha"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="275dp" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="80dp"
+        android:layout_height="30dp"
+        android:layout_above="@+id/btnMoveButton"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="113dp"
+        android:background="@drawable/item_pilha"
+        android:gravity="center"
+        android:text="8"
+        android:textSize="22sp"
+        tools:layout_editor_absoluteX="163dp"
+        tools:layout_editor_absoluteY="275dp" />
+</RelativeLayout>
