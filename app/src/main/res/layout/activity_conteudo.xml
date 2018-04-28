@@ -4,28 +4,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="20dp"
+    android:background="#F3F3F3"
     tools:context="com.example.felipemacedo.mytuition.ConteudoActivity">
 
-    <TextView
-        android:id="@+id/textoConteudo"
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/conteudoToolbar"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:text="CONTEUDO"
-        android:textSize="20sp"
-        android:padding="15dp"
-        android:background="@drawable/border_conteudo"
-        tools:layout_editor_absoluteX="178dp"
-        tools:layout_editor_absoluteY="246dp" />
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/btnAvancar"
+        android:layout_alignParentTop="true"
+        android:background="#72B3FF"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ToolbarArrowTheme"
+        app:title="CONTEUDO"
+        app:titleTextColor="#FFF" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/conteudoToolbar"
+        android:paddingEnd="15.67dp"
+        android:paddingStart="15.67dp"
+        android:paddingTop="27.67dp">
+
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textoConteudo"
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:background="@drawable/border_conteudo"
+                    android:padding="15dp"
+                    android:text="CONTEUDO"
+                    android:textSize="20sp"
+                    android:scrollbars="vertical"
+                    tools:layout_editor_absoluteX="178dp"
+                    tools:layout_editor_absoluteY="246dp" />
+            </LinearLayout>
+
+        </ScrollView>
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnAvancar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Próximo"
-        tools:layout_editor_absoluteX="251dp"
-        tools:layout_editor_absoluteY="410dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="21dp" />
+        android:layout_marginBottom="21dp"
+        android:text="Próximo"
+        tools:layout_editor_absoluteX="251dp"
+        tools:layout_editor_absoluteY="410dp" />
+
 </RelativeLayout>

@@ -40,6 +40,16 @@
     <string name="prompt_female">Feminino</string>
 
 
+    <!-- Luta Fim Dialog Strings -->
+    <string name="prompt_win_fight">VOCÊ VENCEU!</string>
+    <string name="prompt_lose_fight">VOCÊ PERDEU!</string>
+
+
+    <!-- Luta Sair Dialog -->
+    <string name="prompt_exit_confirm">Tem certeza que deseja sair da luta?</string>
+
+    <string name="prompt_congratulations">PARABÉNS!</string>
+
     <string name="title_activity_jgggy">jgggy</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>

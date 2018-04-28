@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:innerRadiusRatio="3"
-    android:shape="ring"
-    android:thickness="5dp"
-    android:useLevel="true" >
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@android:id/background">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:innerRadiusRatio="3"
+            android:shape="ring"
+            android:thickness="6.67dp"
+            android:useLevel="false">
 
-    <solid android:color="@color/colorPrimary" />
-    <size android:width="10dp" android:height="10dp"/>
-</shape>
+            <solid android:color="#747474" />
+            <size android:width="70dp" android:height="70dp"/>
+        </shape>
+    </item>
+    <item android:id="@android:id/progress">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"
+            android:innerRadiusRatio="3"
+            android:shape="ring"
+            android:thickness="6.67dp"
+            android:useLevel="true" >
 
+            <solid android:color="#F7D92B" />
+            <size android:width="70dp" android:height="70dp"/>
+        </shape>
+    </item>
+</layer-list>
 
 
 <!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->

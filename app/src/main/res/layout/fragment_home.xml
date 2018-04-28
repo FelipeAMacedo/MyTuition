@@ -1,19 +1,61 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.felipemacedo.mytuition.HomeFragment">
 
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="42.67dp"
+            android:layout_height="42.67dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="53dp"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/alarm" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageButton"
+            android:layout_marginEnd="32dp"
+            android:layout_marginTop="158dp"
+            android:layout_toStartOf="@+id/imageButton"
+            android:text="Button" />
+
+        <EditText
+            android:id="@+id/editTextHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/imageButton"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="72dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="Name" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="9.67dp"
+        android:padding="0dp">
 
         <ProgressBar
             android:id="@+id/levelProgress"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:progress="100"
+            android:progress="10"
             android:progressDrawable="@drawable/level_ring"
             android:rotation="-90" />
 
@@ -21,22 +63,24 @@
             android:id="@+id/txtHomeLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
-            android:paddingBottom="10dp"
+            android:layout_centerVertical="true"
             android:gravity="center"
-            android:textSize="32sp"
-            android:text="" />
+            android:paddingBottom="10dp"
+            android:text=""
+            android:textColor="#FFF"
+            android:textSize="26.67sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
-            android:paddingTop="30dp"
             android:gravity="center"
-            android:textSize="12sp"
-            android:text="level"/>
+            android:paddingTop="30dp"
+            android:text="level"
+            android:textColor="#FFF"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

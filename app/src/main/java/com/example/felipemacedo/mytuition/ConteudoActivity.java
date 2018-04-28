@@ -1,12 +1,17 @@
 package com.example.felipemacedo.mytuition;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.Toolbar;
 
 //import com.example.felipemacedo.mytuition.dao.ConteudoDao;
 import com.example.felipemacedo.mytuition.model.Conteudo;
@@ -26,12 +31,15 @@ public class ConteudoActivity extends AppCompatActivity {
 
     private TextView textoConteudo;
     private Button btnAvancar;
-    private String licaoId;
+    private Licao licao;
     private Long conteudosCompletados = 0L;
     private int posicao = 0;
     private DatabaseReference mDatabase;
     private List<Conteudo> conteudos;
     private Conteudo conteudo;
+    private Toolbar toolbar;
+    private ActionBar ab;
+    private CurrentUser currUser = CurrentUser.getInstance();
 
 
     @Override
@@ -44,7 +52,7 @@ public class ConteudoActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        licaoId = getIntent().getExtras().getString("LicaoId");
+        licao = (Licao) getIntent().getExtras().getSerializable("licao");
         conteudosCompletados = getIntent().getExtras().getLong("conteudosCompletados");
 
         conteudo = new Conteudo();
@@ -53,10 +61,18 @@ public class ConteudoActivity extends AppCompatActivity {
         textoConteudo = (TextView) findViewById(R.id.textoConteudo);
         btnAvancar = (Button) findViewById(R.id.btnAvancar);
 
+        toolbar = (Toolbar) findViewById(R.id.conteudoToolbar);
+        setSupportActionBar(toolbar);
 
+        ab = getSupportActionBar();
+
+        // Enable the Up button
+        ab.setDisplayHomeAsUpEnabled(true);
+
+        textoConteudo.setMovementMethod(new ScrollingMovementMethod());
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("conteudos").child(licaoId).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("conteudos").child(licao.getId().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot dt : dataSnapshot.getChildren()) {
@@ -66,11 +82,7 @@ public class ConteudoActivity extends AppCompatActivity {
 
                 conteudo = conteudos.get(posicao);
 
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    textoConteudo.setText(Html.fromHtml(conteudo.getTexto(), Html.FROM_HTML_MODE_LEGACY).toString());
-                } else {
-                    textoConteudo.setText(Html.fromHtml(conteudo.getTexto()).toString());
-                }
+                populateData(conteudo);
             }
 
             @Override
@@ -84,25 +96,26 @@ public class ConteudoActivity extends AppCompatActivity {
         this.btnAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CurrentUser currUser = CurrentUser.getInstance();
-
-                if (conteudosCompletados != conteudos.size()) {
-                    mDatabase.child("licoes").child(licaoId).child("usuarios").child(currUser.id).setValue(posicao + 1);
-                }
 
                 ++posicao;
+
+                if (conteudosCompletados != conteudos.size() && posicao > conteudosCompletados) {
+                    conteudosCompletados++;
+                    mDatabase.child("licoes").child(licao.getId().toString()).child("usuarios").child(currUser.id).setValue(posicao);
+                }
+
+                if (posicao < conteudos.size()) {
+                    conteudo = conteudos.get(posicao);
+                    populateData(conteudo);
+                }
 
                 if(posicao == conteudos.size() - 1) {
                     btnAvancar.setText("Finalizar");
 
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                        textoConteudo.setText(Html.fromHtml(conteudos.get(posicao).getTexto(), Html.FROM_HTML_MODE_LEGACY).toString());
-                    } else {
-                        textoConteudo.setText(Html.fromHtml(conteudos.get(posicao).getTexto()).toString());
-                    }
+                    populateData(conteudo);
                 } else if(posicao == conteudos.size()) {
                     if (conteudosCompletados != conteudos.size()) {
-                        currUser.xp += 50;
+                        currUser.xp += licao.getPontos();
 
                         currUser.level = Level.calculateLevel(currUser.xp);
 
@@ -114,5 +127,43 @@ public class ConteudoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void populateData(Conteudo conteudo) {
+
+        ab.setTitle(licao.getTitulo() + " " + (posicao + 1) + "/" + conteudos.size());
+
+        Spanned spanned;
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            spanned = Html.fromHtml(conteudo.getTexto(), Html.FROM_HTML_MODE_LEGACY);
+        } else {
+            spanned = Html.fromHtml(conteudo.getTexto());
+        }
+
+        textoConteudo.setText(spanned);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (posicao == 0) {
+                    finish();
+                } else {
+                    --posicao;
+
+                    if (btnAvancar.getText() != "Avançar") {
+                        btnAvancar.setText("Avançar");
+                    }
+
+                    conteudo = conteudos.get(posicao);
+                    populateData(conteudo);
+
+                }
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

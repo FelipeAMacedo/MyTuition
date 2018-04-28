@@ -1,18 +1,24 @@
 package com.example.felipemacedo.mytuition;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.graphics.Color;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class LutaActivity extends AppCompatActivity {
+
+    private boolean resultado;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -127,6 +133,11 @@ public class LutaActivity extends AppCompatActivity {
     }
 
     private void hide() {
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+
+        decorView.setSystemUiVisibility(uiOptions);
         // Hide UI first
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -159,5 +170,44 @@ public class LutaActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    private void finalizarLuta() {
+        final Dialog mensagem = new Dialog(this);
+        mensagem.setContentView(R.layout.dialog_luta_fim);
+
+
+
+        resultado = true;
+
+
+        TextView tvResultado = (TextView) mensagem.findViewById(R.id.tvDialogLutaResultado);
+        TextView tvPontos = (TextView) mensagem.findViewById(R.id.tvDialogLutaPontos);
+        Button btnOk = (Button) mensagem.findViewById(R.id.btnDialogLutaFim);
+
+        if(resultado) {
+            tvResultado.setText(R.string.prompt_win_fight);
+            tvResultado.setTextColor(Color.parseColor("#37A20D"));
+
+            tvPontos.setText("GANHOU 100 PONTOS");
+            tvPontos.setTextColor(Color.parseColor("#6C7077"));
+            tvPontos.setBackgroundColor(Color.parseColor("#A8FCAA"));
+        } else {
+            tvResultado.setText(R.string.prompt_lose_fight);
+            tvResultado.setTextColor(Color.parseColor("#F95F62"));
+
+            tvPontos.setText("PERDEU 350 PONTOS");
+            tvPontos.setTextColor(Color.parseColor("#980103"));
+            tvPontos.setBackgroundColor(Color.parseColor("#F7C9CA"));
+        }
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mensagem.cancel();
+            }
+        });
+
+        mensagem.show();
     }
 }

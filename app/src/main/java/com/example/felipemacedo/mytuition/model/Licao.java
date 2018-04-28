@@ -17,9 +17,18 @@ public class Licao implements Serializable {
     private String id;
     private String titulo;
     private int conteudoCount;
+    private int pontos;
     private Map<String, Long> usuarios = new HashMap<>();
 
     public Licao() {}
+
+    public int getPontos() {
+        return pontos;
+    }
+
+    public void setPontos(int pontos) {
+        this.pontos = pontos;
+    }
 
     public String getId() {
         return id;

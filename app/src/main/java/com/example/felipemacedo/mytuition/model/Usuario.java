@@ -8,18 +8,26 @@ import java.io.Serializable;
 
 public class Usuario implements Serializable {
 
-    public String username;
+    public String nomeCompleto;
+    public String nomeHeroi;
+    public long ra;
+    public long dataNascimento;
+    public boolean sexo;
     public String email;
     public String senha;
-    public int level;
-    public int xp;
+    public int level = 1;
+    public int xp = 0;
 
     public Usuario() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public Usuario (String username, String email, String senha, int level, int xp) {
-        this.username = username;
+    public Usuario (String nomeCompleto, String nomeHeroi, long ra, long dataNascimento, boolean sexo, String email, String senha, int level, int xp) {
+        this.nomeCompleto = nomeCompleto;
+        this.nomeHeroi = nomeHeroi;
+        this.ra = ra;
+        this.dataNascimento = dataNascimento;
+        this.sexo = sexo;
         this.email = email;
         this.senha = senha;
         this.level = level;

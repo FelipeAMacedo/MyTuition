@@ -2,6 +2,7 @@ package com.example.felipemacedo.mytuition;
 
 import android.app.Application;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.FirebaseDatabase;
 
 /**
@@ -13,5 +14,10 @@ public class MyTuition extends Application {
     public void onCreate(){
         super.onCreate();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
     }
 }

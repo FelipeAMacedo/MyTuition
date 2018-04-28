@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
 //        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 //        if (conectivtyManager.getActiveNetworkInfo() != null
 //                && conectivtyManager.getActiveNetworkInfo().isAvailable()

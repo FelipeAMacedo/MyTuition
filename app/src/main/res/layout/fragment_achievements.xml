@@ -41,7 +41,7 @@
                 android:layout_width="216.67dp"
                 android:layout_height="10.33dp"
                 android:layout_below="@id/tvAchNivel"
-                android:background="@drawable/licao_progressbar"
+                android:progressDrawable="@drawable/licao_progressbar"
                 android:layout_centerHorizontal="true" />
 
             <TextView
@@ -50,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pbAchNivel"
                 android:gravity="center_horizontal"
-                android:text="Nível "
                 android:textColor="#637181"
                 android:textSize="13.33sp" />
 

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,16 +18,27 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class RegisterActivity extends AppCompatActivity {
 
+    private TextView mNomeCompleto;
+    private TextView mNomeHeroi;
+    private TextView mRa;
+    private TextView mNascimento;
+    private RadioButton mMasculino;
+    private RadioButton mFeminino;
     private TextView mEmail;
     private TextView mSenha;
     private TextView mConfSenha;
     private Button mCadastrarButton;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String email;
-    private String senha;
+
+    private Usuario usuario;
     private String mensagem;
 
     @Override
@@ -42,6 +54,14 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
+        mNomeCompleto = (TextView) findViewById(R.id.etCadNomeCompleto);
+        mNomeHeroi = (TextView) findViewById(R.id.etCadNomeHeroi);
+        mRa = (TextView) findViewById(R.id.etCadRA);
+        mNascimento = (TextView) findViewById(R.id.etCadNascimento);
+
+        mMasculino = (RadioButton) findViewById(R.id.rBtnCadMasculino);
+        mFeminino = (RadioButton) findViewById(R.id.rBtnCadFeminino);
+
         mEmail = (TextView) findViewById(R.id.etCadEmail);
         mSenha = (TextView) findViewById(R.id.etCadPassword);
         mConfSenha = (TextView) findViewById(R.id.etCadPasswordConfirm);
@@ -56,7 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                mAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                mAuth.createUserWithEmailAndPassword(usuario.email, usuario.senha).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
@@ -70,54 +90,63 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
             }
         });
     }
 
     private void onAuthSuccess(FirebaseUser user) {
-        String username = usernameFromEmail(user.getEmail());
-        writeNewUser(user.getUid(), username, user.getEmail(), senha);
+        writeNewUser(user.getUid());
     }
 
-    private String usernameFromEmail(String email) {
-        if (email.contains("@")) {
-            return email.split("@")[0];
-        } else {
-            return email;
-        }
-    }
-
-    private void writeNewUser(String userId, String username, String email, String senha) {
-        Usuario usuario = new Usuario (username, email, senha, 1, 0);
-
+    private void writeNewUser(String userId) {
         mDatabase.child("usuarios").child(userId).setValue(usuario);
     }
 
     private boolean validateForm() {
-        email = mEmail.getText().toString();
-        senha = mSenha.getText().toString();
+        usuario = new Usuario();
+
+        usuario.nomeCompleto = mNomeCompleto.getText().toString();
+        usuario.nomeHeroi = mNomeHeroi.getText().toString();
+        usuario.ra = Long.parseLong(mRa.getText().toString());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        try {
+            usuario.dataNascimento = sdf.parse(mNascimento.getText().toString()).getTime();
+        } catch (ParseException pe) {
+            pe.printStackTrace();
+        }
+
+        if (mMasculino.isChecked()) {
+            usuario.sexo = true;
+        } else if (mFeminino.isChecked()) {
+            usuario.sexo = false;
+        }
+
+
+        usuario.email = mEmail.getText().toString();
+        usuario.senha = mSenha.getText().toString();
         String confSenha = mConfSenha.getText().toString();
 
-        if (email.equals("") || senha.equals("") || confSenha.equals("")) {
-            mensagem = "Preencha os dados corretamente";
-            Toast.makeText(RegisterActivity.this, mensagem, Toast.LENGTH_LONG).show();
+        if (usuario.nomeCompleto.equals("") || usuario.nomeHeroi.equals("") || usuario.ra < 1l || usuario.dataNascimento < 1l || (!mMasculino.isChecked() && !mFeminino.isChecked()) || usuario.email.equals("") || usuario.senha.equals("") || confSenha.equals("")) {
+            exibirToast("Preencha os dados corretamente");
             return false;
         }
 
-        if (senha.length() < 6) {
-            mensagem = "A senha deve ter pelo menos 6 dígitos";
-            Toast.makeText(RegisterActivity.this, mensagem, Toast.LENGTH_LONG).show();
+        if (usuario.senha.length() < 6) {
+            exibirToast("A senha deve ter pelo menos 6 dígitos");
             return false;
         }
 
-        if (!senha.equals(confSenha)) {
-            mensagem = "Preencha os dados corretamente";
-            Toast.makeText(RegisterActivity.this, mensagem, Toast.LENGTH_LONG).show();
+        if (!usuario.senha.equals(confSenha)) {
+            exibirToast("As senhas informadas são diferentes");
             return false;
         }
 
         return true;
+    }
+
+    private void exibirToast(String mensagem) {
+        Toast.makeText(RegisterActivity.this, mensagem, Toast.LENGTH_LONG).show();
     }
 }

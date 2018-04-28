@@ -18,6 +18,7 @@ import com.example.felipemacedo.mytuition.licoes.RecyclerViewOnItemClickListener
 import com.example.felipemacedo.mytuition.model.Conteudo;
 import com.example.felipemacedo.mytuition.model.CurrentUser;
 import com.example.felipemacedo.mytuition.model.Licao;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,6 +29,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -174,11 +176,26 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     @Override
     public void onItemClickListener (View view, int position) {
         Intent intent = new Intent(getActivity(), ConteudoActivity.class);
-        intent.putExtra("LicaoId", licoes.get(position).getId().toString());
+        intent.putExtra("licao", licoes.get(position));
 
-        Long conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
 
-        intent.putExtra("conteudosCompletados", conteudosCompletados);
+        Long conteudosCompletados = 0L;
+
+
+        if (licoes.get(position).getUsuarios().size() > 0) {
+            conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
+        }
+
+        intent.putExtra("conteudos_completados", conteudosCompletados);
+
+        Bundle bundle = new Bundle();
+        bundle.putString("licao", licao.getTitulo());
+        bundle.putLong("timestamp_inicio", new Date().getTime());
+
+        FirebaseAnalytics fa = FirebaseAnalytics.getInstance(getContext());
+        fa.setUserId(CurrentUser.getInstance().id);
+        fa.logEvent("inicio_licao", bundle);
+
         startActivity(intent);
     }
 }

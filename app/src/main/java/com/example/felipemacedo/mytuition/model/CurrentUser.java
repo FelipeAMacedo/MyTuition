@@ -4,13 +4,9 @@ package com.example.felipemacedo.mytuition.model;
  * Created by felipemacedo on 23/10/17.
  */
 
-public class CurrentUser {
+public class CurrentUser extends Usuario {
     public String id;
-    public String username;
-    public String email;
-    public String senha;
-    public int level;
-    public int xp;
+
     private static CurrentUser currentUser = new CurrentUser();
 
     private CurrentUser() {
