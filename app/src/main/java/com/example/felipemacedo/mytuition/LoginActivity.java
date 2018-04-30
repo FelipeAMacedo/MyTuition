@@ -1,101 +1,95 @@
 package com.example.felipemacedo.mytuition;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.model.Usuario;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.example.felipemacedo.mytuition.dto.LoginDTO;
+import com.example.felipemacedo.mytuition.dto.save.wrapper.LoginWrapper;
+import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.services.UsuarioService;
+import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
+    private Button mEmailSignInButton;
+    private Button mRegisterButton;
 
     private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
+
+    private UsuarioService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mAuth = FirebaseAuth.getInstance();
+        initComponents();
+        initListeners();
+    }
 
-        // Set up the login form.
+    private void initComponents() {
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mRegisterButton = (Button) findViewById(R.id.btnRegister);
+    }
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+    private void initListeners() {
         mEmailSignInButton.setOnClickListener(this);
-
-        Button mRegisterButton = (Button) findViewById(R.id.btnRegister);
         mRegisterButton.setOnClickListener(this);
-
-        signIn();
     }
 
     private void signIn() {
-        if(!validateForm()) {
+        if (!validateForm()) {
             return;
         }
 
-//        String email = mEmailView.getText().toString();
-//        String password = mPasswordView.getText().toString();
+        service = new UsuarioServiceImpl();
 
-        String email = "josi@josi.com.br";
-        String password = "felipes2";
+        service.logar(this.getBaseContext(), generateWrappedDTO(), new JsonRequestListener() {
+            @Override
+            public void onSuccess(Object response) {
+                LoginActivity.this.moveToHomeActivity();
+            }
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
-                        } else {
-                            Toast.makeText(LoginActivity.this, "Sign In Failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+            @Override
+            public void onError(Object response) {
+
+            }
+        });
+    }
+
+    private LoginWrapper generateWrappedDTO() {
+        LoginWrapper wrapper = new LoginWrapper();
+        wrapper.setLoginDTO(getLoginData());
+
+        return wrapper;
     }
 
     private boolean validateForm() {
         return true;
     }
 
-    private void onAuthSuccess(FirebaseUser user) {
-        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-        finish();
+    private void register() {
+        startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 
-    private void register() {
-        Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent);
+    private void moveToHomeActivity() {
+        startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 
     @Override
@@ -107,6 +101,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    public LoginDTO getLoginData() {
+        LoginDTO loginDTO = new LoginDTO();
 
+        loginDTO.setEmail(mEmailView.getText().toString());
+        loginDTO.setSenha(mPasswordView.getText().toString());
+
+        return loginDTO;
+    }
 }
 
