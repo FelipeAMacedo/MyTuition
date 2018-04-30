@@ -1,27 +1,28 @@
 package com.example.felipemacedo.mytuition;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.model.Usuario;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.example.felipemacedo.mytuition.dto.AlunoDTO;
+import com.example.felipemacedo.mytuition.dto.HeroiDTO;
+import com.example.felipemacedo.mytuition.dto.UsuarioDTO;
+import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioSaveWrapper;
+import com.example.felipemacedo.mytuition.enums.Perfil;
+import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.model.eclipse.Aluno;
+import com.example.felipemacedo.mytuition.model.eclipse.Heroi;
+import com.example.felipemacedo.mytuition.model.eclipse.Usuario;
+import com.example.felipemacedo.mytuition.services.UsuarioService;
+import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -35,9 +36,11 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView mSenha;
     private TextView mConfSenha;
     private Button mCadastrarButton;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
 
+    private UsuarioService service;
+
+    private Aluno aluno;
+    private Heroi heroi;
     private Usuario usuario;
     private String mensagem;
 
@@ -45,9 +48,6 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
-
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         initComponents();
         initListeners();
@@ -76,74 +76,110 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                mAuth.createUserWithEmailAndPassword(usuario.email, usuario.senha).addOnCompleteListener(RegisterActivity.this, new OnCompleteListener<AuthResult>() {
+                service = new UsuarioServiceImpl();
+                service.registrar(view.getContext(), generateWrappedDTO(), new JsonRequestListener() {
                     @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            onAuthSuccess(task.getResult().getUser());
-                            mensagem = "Conta criada com sucesso";
-                            Toast.makeText(RegisterActivity.this, mensagem, Toast.LENGTH_SHORT).show();
-                        } else {
-                            mensagem = "Erro na criação da conta";
-                            Toast.makeText(RegisterActivity.this, mensagem,
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                    public void onSuccess(Object response) {
+                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                    }
+
+                    @Override
+                    public void onError(Object response) {
+
                     }
                 });
+
             }
         });
     }
 
-    private void onAuthSuccess(FirebaseUser user) {
-        writeNewUser(user.getUid());
-    }
-
-    private void writeNewUser(String userId) {
-        mDatabase.child("usuarios").child(userId).setValue(usuario);
-    }
-
     private boolean validateForm() {
-        usuario = new Usuario();
-
-        usuario.nomeCompleto = mNomeCompleto.getText().toString();
-        usuario.nomeHeroi = mNomeHeroi.getText().toString();
-        usuario.ra = Long.parseLong(mRa.getText().toString());
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-        try {
-            usuario.dataNascimento = sdf.parse(mNascimento.getText().toString()).getTime();
-        } catch (ParseException pe) {
-            pe.printStackTrace();
-        }
-
-        if (mMasculino.isChecked()) {
-            usuario.sexo = true;
-        } else if (mFeminino.isChecked()) {
-            usuario.sexo = false;
-        }
-
-
-        usuario.email = mEmail.getText().toString();
-        usuario.senha = mSenha.getText().toString();
+        String nomeCompleto = mNomeCompleto.getText().toString();
         String confSenha = mConfSenha.getText().toString();
+        String nomeHeroi = mNomeHeroi.getText().toString();
+        String ra = mRa.getText().toString();
+        String dataNascimento = mNascimento.getText().toString();
+        String senha = mSenha.getText().toString();
+        String email = mEmail.getText().toString();
 
-        if (usuario.nomeCompleto.equals("") || usuario.nomeHeroi.equals("") || usuario.ra < 1l || usuario.dataNascimento < 1l || (!mMasculino.isChecked() && !mFeminino.isChecked()) || usuario.email.equals("") || usuario.senha.equals("") || confSenha.equals("")) {
+        if (nomeCompleto.isEmpty() || nomeHeroi.isEmpty() ||
+                ra.isEmpty() || dataNascimento.isEmpty() ||
+                (!mMasculino.isChecked() && !mFeminino.isChecked()) ||
+                email.equals("") || senha.isEmpty() ||
+                confSenha.isEmpty()) {
+
             exibirToast("Preencha os dados corretamente");
             return false;
         }
 
-        if (usuario.senha.length() < 6) {
+        if (senha.length() < 6) {
             exibirToast("A senha deve ter pelo menos 6 dígitos");
             return false;
         }
 
-        if (!usuario.senha.equals(confSenha)) {
+        if (!senha.equals(confSenha)) {
             exibirToast("As senhas informadas são diferentes");
             return false;
         }
 
         return true;
+    }
+
+    private UsuarioSaveWrapper generateWrappedDTO() {
+        UsuarioDTO usuario = getUsuarioData();
+        usuario.setAlunoDTO(getAlunoData());
+        usuario.setHeroiDTO(getHeroiData());
+
+        UsuarioSaveWrapper wrapper = new UsuarioSaveWrapper();
+        wrapper.setUsuarioDTO(usuario);
+
+        return wrapper;
+    }
+
+    private AlunoDTO getAlunoData() {
+        AlunoDTO aluno = new AlunoDTO();
+
+        aluno.setNome(mNomeCompleto.getText().toString());
+        aluno.setRa(mRa.getText().toString());
+
+
+        mockData(aluno);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        aluno.setDataNascimento(LocalDate.parse(mNascimento.getText().toString(), formatter));
+
+
+        if (mMasculino.isChecked()) {
+            aluno.setSexo(true);
+        } else if (mFeminino.isChecked()) {
+            aluno.setSexo(false);
+        }
+
+        return aluno;
+    }
+
+    private void mockData(AlunoDTO aluno) {
+        aluno.setCpf("431.353.768-69");
+        aluno.setTrabalhaArea(true);
+        aluno.setDataEntrada(LocalDate.now());
+    }
+
+    private UsuarioDTO getUsuarioData() {
+        UsuarioDTO usuario = new UsuarioDTO();
+
+        usuario.setEmail(mEmail.getText().toString());
+        usuario.setSenha(mSenha.getText().toString());
+        usuario.setPerfil(Perfil.ALUNO);
+
+        return usuario;
+    }
+
+    private HeroiDTO getHeroiData() {
+        HeroiDTO heroi = new HeroiDTO();
+
+        heroi.setNome(mNomeHeroi.getText().toString());
+
+        return heroi;
     }
 
     private void exibirToast(String mensagem) {
