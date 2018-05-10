@@ -7,39 +7,48 @@ import java.io.Serializable;
 
 public class MateriaResultDTO implements Serializable {
 
-	private static final long serialVersionUID = -8729032093983945789L;
+    @SerializedName("id")
+    private Long id;
 
-	@SerializedName("nome")
-	private String nome;
+    @SerializedName("nome")
+    private String nome;
 
-	@SerializedName("pontos")
-	private Integer pontos;
+    @SerializedName("pontos")
+    private Integer pontos;
 
-	@SerializedName("atributo")
-	private Atributo atributo;
+    @SerializedName("atributo")
+    private Atributo atributo;
 
-	public String getNome() {
-		return nome;
-	}
+    public Long getid() {
+        return id;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Integer getPontos() {
-		return pontos;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setPontos(Integer pontos) {
-		this.pontos = pontos;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public Atributo getAtributo() {
-		return atributo;
-	}
+    public Integer getPontos() {
+        return pontos;
+    }
 
-	public void setAtributo(Atributo atributo) {
-		this.atributo = atributo;
-	}
+    public void setPontos(Integer pontos) {
+        this.pontos = pontos;
+    }
+
+    public Atributo getAtributo() {
+        return atributo;
+    }
+
+    public void setAtributo(Atributo atributo) {
+        this.atributo = atributo;
+    }
 
 }

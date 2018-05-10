@@ -7,32 +7,32 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-//import com.example.felipemacedo.mytuition.dao.LicaoDao;
-import com.example.felipemacedo.mytuition.licoes.LicoesAdapter;
+import com.example.felipemacedo.mytuition.dto.materia.MateriaResultDTO;
+import com.example.felipemacedo.mytuition.dto.wrapper.response.MateriaResponseWrapper;
+import com.example.felipemacedo.mytuition.licoes.MateriasAdapter;
 import com.example.felipemacedo.mytuition.licoes.RecyclerViewOnItemClickListener;
-import com.example.felipemacedo.mytuition.model.Conteudo;
-import com.example.felipemacedo.mytuition.model.CurrentUser;
-import com.example.felipemacedo.mytuition.model.Licao;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
+import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.model.eclipse.Materia;
+import com.example.felipemacedo.mytuition.services.MateriaService;
+import com.example.felipemacedo.mytuition.services.impl.MateriaServiceImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
-import java.sql.SQLOutput;
+import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
+
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
+
+//import com.example.felipemacedo.mytuition.dao.LicaoDao;
 
 
 /**
@@ -48,18 +48,24 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "MATERIAS";
+
+
+    // Variável temporária
+    private static final Long disciplinaId = 1L;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
-
-    private Licao licao;
     private RecyclerView mRecyclerView;
-    private List<Licao> licoes;
-    private LicoesAdapter licoesAdapter;
+    private List<Materia> materias;
+    private MateriasAdapter materiasAdapter;
+
+    private MateriaService service;
+
+
     private OnFragmentInteractionListener mListener;
-    private DatabaseReference mDatabase;
 
     public LicoesFragment() {
         // Required empty public constructor
@@ -90,6 +96,8 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        Toast.makeText(getContext(), "ENTROU NO CREATE", Toast.LENGTH_LONG);
     }
 
     @Override
@@ -106,40 +114,47 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
         mRecyclerView.setLayoutManager(llm);
 
 
-        licoes = new ArrayList<>();
+        service = new MateriaServiceImpl();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        materias = new ArrayList<>();
 
-        mDatabase.child("licoes").addListenerForSingleValueEvent(new ValueEventListener() {
+        service.findByDisciplinaId(this.getContext(), disciplinaId, new JsonRequestListener<JSONObject>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onSuccess(JSONObject response) {
+                Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .create();
 
-                for (DataSnapshot dt : dataSnapshot.getChildren()) {
+                MateriaResponseWrapper wrapper = gson.fromJson(String.valueOf(response), MateriaResponseWrapper.class);
 
-                    licao = dt.getValue(Licao.class);
+                materias = convertDTOToEntity(wrapper.getMaterias());
 
-                    for (DataSnapshot dt2 : dt.child("usuarios").getChildren()) {
-                        if (dt2.getKey().equals(CurrentUser.getInstance().id)) {
-                            licao.getUsuarios().put(dt2.getKey(), (Long) dt2.getValue());
-                            break;
-                        }
-                    }
+                materiasAdapter = new MateriasAdapter(getActivity(), materias);
+                materiasAdapter.setmRecyclerViewOnClickListener(LicoesFragment.this);
 
-                    licoes.add(licao);
+                mRecyclerView.setAdapter(materiasAdapter);
+
+                materiasAdapter.notifyDataSetChanged();
+
+            }
+
+            private List<Materia> convertDTOToEntity(Set<MateriaResultDTO> materias) {
+                List<Materia> convertedMaterias = new ArrayList<>();
+                ModelMapper mapper = new ModelMapper();
+
+                for (MateriaResultDTO m : materias) {
+                    convertedMaterias.add(mapper.map(m, Materia.class));
                 }
-                licoesAdapter.notifyDataSetChanged();
+
+                return convertedMaterias;
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onError(JSONObject response) {
+                Toast.makeText(LicoesFragment.this.getContext(), "Não foi possível carregar as matérias", Toast.LENGTH_LONG);
+                Log.e(TAG, response.toString());
             }
         });
-
-        licoesAdapter = new LicoesAdapter(getActivity(), licoes);
-        licoesAdapter.setmRecyclerViewOnClickListener(LicoesFragment.this);
-
-        mRecyclerView.setAdapter(licoesAdapter);
 
         return view;
     }
@@ -174,27 +189,33 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     }
 
     @Override
-    public void onItemClickListener (View view, int position) {
+    public void onItemClickListener(View view, int position) {
+
+
         Intent intent = new Intent(getActivity(), ConteudoActivity.class);
-        intent.putExtra("licao", licoes.get(position));
 
+        intent.putExtra("materia", materias.get(position));
 
-        Long conteudosCompletados = 0L;
-
-
-        if (licoes.get(position).getUsuarios().size() > 0) {
-            conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
-        }
-
-        intent.putExtra("conteudos_completados", conteudosCompletados);
-
-        Bundle bundle = new Bundle();
-        bundle.putString("licao", licao.getTitulo());
-        bundle.putLong("timestamp_inicio", new Date().getTime());
-
-        FirebaseAnalytics fa = FirebaseAnalytics.getInstance(getContext());
-        fa.setUserId(CurrentUser.getInstance().id);
-        fa.logEvent("inicio_licao", bundle);
+        // Este trecho de código estava passando os conteúdos da matéria selecionada para a próxima activity
+//        intent.putExtra("licao", licoes.get(position));
+//
+//
+//        Long conteudosCompletados = 0L;
+//
+//
+//        if (licoes.get(position).getUsuarios().size() > 0) {
+//            conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
+//        }
+//
+//        intent.putExtra("conteudos_completados", conteudosCompletados);
+//
+//        Bundle bundle = new Bundle();
+//        bundle.putString("licao", licao.getTitulo());
+//        bundle.putLong("timestamp_inicio", new Date().getTime());
+//
+//        FirebaseAnalytics fa = FirebaseAnalytics.getInstance(getContext());
+//        fa.setUserId(CurrentUser.getInstance().id);
+//        fa.logEvent("inicio_licao", bundle);
 
         startActivity(intent);
     }

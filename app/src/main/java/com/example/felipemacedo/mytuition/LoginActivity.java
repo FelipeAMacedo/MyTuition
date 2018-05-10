@@ -8,14 +8,23 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.LoginDTO;
+import com.example.felipemacedo.mytuition.dto.login.UsuarioResponseDTO;
 import com.example.felipemacedo.mytuition.dto.save.wrapper.LoginWrapper;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.services.UsuarioService;
 import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
+import com.example.felipemacedo.mytuition.utils.LocalDateAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.time.LocalDate;
 
 /**
  * A login screen that offers login via email/password.
@@ -39,6 +48,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         initComponents();
         initListeners();
+
+        mEmailView.setText("felipexalves@gmail.com");
+        mPasswordView.setText("felipe");
+
+        signIn();
     }
 
     private void initComponents() {
@@ -60,17 +74,37 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         service = new UsuarioServiceImpl();
 
-        service.logar(this.getBaseContext(), generateWrappedDTO(), new JsonRequestListener() {
+        service.logar(this.getBaseContext(), generateWrappedDTO(), new JsonRequestListener<JSONObject>() {
             @Override
-            public void onSuccess(Object response) {
-                LoginActivity.this.moveToHomeActivity();
+            public void onSuccess(JSONObject response) {
+
+
+                Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                        .create();
+
+                UsuarioResponseDTO dto = gson.fromJson(String.valueOf(response), UsuarioResponseDTO.class);
+
+                LoginActivity.this.moveToHomeActivity(dto);
+
             }
 
             @Override
-            public void onError(Object response) {
+            public void onError(JSONObject response) {
 
             }
         });
+    }
+
+    private JSONObject getJSONObject(Object object) throws JSONException {
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .create();
+
+        String json = gson.toJson(object).replace("\n", "");
+        return new JSONObject(json);
     }
 
     private LoginWrapper generateWrappedDTO() {
@@ -88,7 +122,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
     }
 
-    private void moveToHomeActivity() {
+    private void moveToHomeActivity(UsuarioResponseDTO dto) {
+        Configuration.usuario = dto;
         startActivity(new Intent(LoginActivity.this, MainActivity.class));
     }
 

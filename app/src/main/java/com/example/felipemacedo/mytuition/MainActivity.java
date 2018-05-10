@@ -1,7 +1,5 @@
 package com.example.felipemacedo.mytuition;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,25 +8,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.felipemacedo.mytuition.model.CurrentUser;
-import com.example.felipemacedo.mytuition.model.Licao;
-import com.example.felipemacedo.mytuition.model.Usuario;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements OnFragmentInteractionListener {
 
@@ -65,78 +49,8 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-//        ConnectivityManager conectivtyManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//        if (conectivtyManager.getActiveNetworkInfo() != null
-//                && conectivtyManager.getActiveNetworkInfo().isAvailable()
-//                && conectivtyManager.getActiveNetworkInfo().isConnected()) {
-//        } else {
-//        }
-
         initComponents();
         initListeners();
-
-//        navigation = (BottomNavigationView) findViewById(R.id.navigation);
-
-//        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
-
-//        mDatabase = FirebaseDatabase.getInstance().getReference();
-//
-//        Materia materia = new Materia();
-//        materia.setTitulo("Estrutura de Dados");
-//        mDatabase.child("materias").child(mDatabase.push().getKey()).setValue(materia);
-//
-//        Licao licao = new Licao();
-//        licao.setTitulo("Pilha");
-//
-//        mDatabase.child("licoes").child(mDatabase.push().getKey()).setValue(licao);
-//
-//        Toast.makeText(this, "Inserido", Toast.LENGTH_LONG).show();
-//
-//        Licao licao1 = new Licao();
-//        licao1.setTitulo("Fila");
-//        mDatabase.child("licoes").child(mDatabase.push().getKey()).setValue(licao1);
-//
-//
-//        Toast.makeText(this, "Inserido", Toast.LENGTH_LONG).show();
-
-
-
-
-
-
-
-
-//        insertDataOnTables();
-
-
-//        new AsyncTask<Void, Void, Void>() {
-//            @Override
-//            protected Void doInBackground(Void... voids) {
-//                System.out.println("Tentando criar o banco");
-//                Database db = Room.databaseBuilder(getApplicationContext(),
-//                        Database.class, "myTuition").build();
-//
-//                LicaDao licaoDao = db.licaoDao();
-//                Licao licao = new Licao();
-//                licao.setTitulo("TESTE COM O ROOM");
-//                licao.setConteudos(new ArrayList<Conteudo>());
-//                System.out.println(licaoDao.insert(licao));
-//                System.out.println("Banco criado");
-//                return null;
-//            }
-//        }.execute();
-
-//        Database db = Room.databaseBuilder(getApplicationContext(),
-//                Database.class, "myTuition").build();
-//
-//        LicaDao licaoDao = db.licaoDao();
-//        Licao licao = new Licao();
-//        licao.setTitulo("TESTE COM O ROOM");
-//        licao.setConteudos(new ArrayList<Conteudo>());
-//        licaoDao.insert(licao);
-
 
         switchFragment(new HomeFragment());
     }
@@ -196,20 +110,6 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
             return NUM_PAGES;
         }
     }
-
-//    private void insertDataOnTables() {
-//        ConteudoDao conteudoDao = new ConteudoDao(this);
-//
-//        Licao licao1 = new Licao();
-//        licao1.setTitulo("Pilha");
-//
-//        Licao licao2 = new Licao();
-//        licao2.setTitulo("Fila");
-//
-//        new LicaoDao(this.getBaseContext()).insert(licao1);
-//        new LicaoDao(this.getBaseContext()).insert(licao2);
-//
-//    }
 
     @Override
     public void onFragmentInteraction(Uri uri) {

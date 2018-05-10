@@ -13,65 +13,68 @@ import android.widget.Toast;
 
 import com.example.felipemacedo.mytuition.R;
 import com.example.felipemacedo.mytuition.model.Licao;
+import com.example.felipemacedo.mytuition.model.eclipse.Materia;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
+import java.util.Set;
 
-public class LicoesAdapter extends RecyclerView.Adapter<LicoesAdapter.LicoesViewHolder> {
+public class MateriasAdapter extends RecyclerView.Adapter<MateriasAdapter.MateriasViewHolder> {
 
-    private List<Licao> licoes;
+    private List<Materia> materias;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewOnItemClickListener mRecyclerViewOnItemClickListener;
 
-    public LicoesAdapter(Context context, List<Licao> licoes) {
-        this.licoes = licoes;
+    public MateriasAdapter(Context context, List<Materia> materias) {
+        this.materias = materias;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public LicoesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MateriasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = mLayoutInflater.inflate(R.layout.item_licao, parent, false);
-        return new LicoesViewHolder(v);
+        return new MateriasViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(LicoesViewHolder holder, int position) {
-        Licao licao = licoes.get(position);
+    public void onBindViewHolder(MateriasViewHolder holder, int position) {
+        Materia materia = materias.get(position);
 
-        holder.nomeLicao.setText(licao.toString());
+        holder.nomeMateria.setText(materia.getNome());
 
-        int completado = 0;
+//        int completado = 0;
 
-        if (licao.getUsuarios() != null && licao.getUsuarios().containsKey(getUid())) {
-            completado = licao.getUsuarios().get(getUid()).intValue();
-        }
+        // calcula o quanto já foi estudado
+//        if (licao.getUsuarios() != null && licao.getUsuarios().containsKey(getUid())) {
+//            completado = licao.getUsuarios().get(getUid()).intValue();
+//        }
 
-        holder.qtdLicoes.setText(completado + "/" + licao.getConteudoCount());
+//        holder.qtdLicoes.setText(completado + "/" + licao.getConteudoCount());
 
-        holder.mProgressBar.setProgress(completado > 0 ? (completado * 100) / licao.getConteudoCount() : 0);
+//        holder.mProgressBar.setProgress(completado > 0 ? (completado * 100) / licao.getConteudoCount() : 0);
     }
 
     @Override
     public int getItemCount() {
-        return licoes.size();
+        return materias.size();
     }
 
     public void setmRecyclerViewOnClickListener(RecyclerViewOnItemClickListener r) {
         mRecyclerViewOnItemClickListener = r;
     }
 
-    public class LicoesViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MateriasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView nomeLicao;
-        private TextView qtdLicoes;
+        private TextView nomeMateria;
+        private TextView qtdConteudo;
         private RelativeLayout status;
         private ProgressBar mProgressBar;
 
-        public LicoesViewHolder(View itemView) {
+        public MateriasViewHolder(View itemView) {
             super(itemView);
 
-            nomeLicao = (TextView) itemView.findViewById(R.id.txtNomeLicao);
-            qtdLicoes = (TextView) itemView.findViewById(R.id.txtQtdLicoes);
+            nomeMateria = (TextView) itemView.findViewById(R.id.txtNomeLicao);
+            qtdConteudo = (TextView) itemView.findViewById(R.id.txtQtdLicoes);
             status = (RelativeLayout) itemView.findViewById(R.id.licao_status);
             mProgressBar = (ProgressBar) itemView.findViewById(R.id.progresso_da_licao);
 
@@ -81,14 +84,11 @@ public class LicoesAdapter extends RecyclerView.Adapter<LicoesAdapter.LicoesView
 
         @Override
         public void onClick(View view) {
-            if(mRecyclerViewOnItemClickListener != null) {
+            if (mRecyclerViewOnItemClickListener != null) {
                 mRecyclerViewOnItemClickListener.onItemClickListener(view, getAdapterPosition());
             }
 
         }
     }
 
-    private String getUid() {
-        return FirebaseAuth.getInstance().getUid();
-    }
 }

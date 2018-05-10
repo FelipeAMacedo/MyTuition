@@ -25,7 +25,7 @@ import java.time.LocalDate;
 
 public class UsuarioServiceImpl implements UsuarioService {
 
-    private String urlUsuario = Configuration.API_URL + "usuario";
+    private static final String urlUsuario = Configuration.API_URL + "usuario";
 
     @Override
     public void registrar(Context context, UsuarioSaveWrapper wrapper, JsonRequestListener listener) {
