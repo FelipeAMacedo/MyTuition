@@ -3,14 +3,18 @@ package com.example.felipemacedo.mytuition;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.graphics.Color;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.example.felipemacedo.mytuition.conf.Configuration;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -18,12 +22,16 @@ import android.widget.TextView;
  */
 public class LutaActivity extends AppCompatActivity {
 
-    private boolean resultado;
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
      */
     private static final boolean AUTO_HIDE = true;
+
+    private Button btnLutaAtacar;
+
+    private ProgressBar vidaVilaoProgress;
+    private ProgressBar vidaHeroiProgress;
 
     /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
@@ -47,12 +55,12 @@ public class LutaActivity extends AppCompatActivity {
             // Note that some of these constants are new as of API 16 (Jelly Bean)
             // and API 19 (KitKat). It is safe to use them, as they are inlined
             // at compile-time and do nothing on earlier devices.
-            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+//            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+//                    | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
     };
     private View mControlsView;
@@ -64,7 +72,7 @@ public class LutaActivity extends AppCompatActivity {
             if (actionBar != null) {
                 actionBar.show();
             }
-            mControlsView.setVisibility(View.VISIBLE);
+//            mControlsView.setVisibility(View.VISIBLE);
         }
     };
     private boolean mVisible;
@@ -101,17 +109,68 @@ public class LutaActivity extends AppCompatActivity {
 
 
         // Set up the user interaction to manually show or hide the system UI.
-        mContentView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                toggle();
-            }
-        });
+//        mContentView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                toggle();
+//            }
+//        });
 
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
 //        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        initComponents();
+        initListeners();
+    }
+
+    private void initComponents() {
+        vidaHeroiProgress = (ProgressBar) findViewById(R.id.pgbHPHeroi);
+        vidaVilaoProgress = (ProgressBar) findViewById(R.id.pgbHPVilao);
+        btnLutaAtacar = (Button) findViewById(R.id.btnLutaAtacar);
+
+        vidaHeroiProgress.setMax(100);
+        vidaHeroiProgress.setProgress(100);
+        vidaVilaoProgress.setMax(100);
+        vidaVilaoProgress.setProgress(100);
+    }
+
+    private void initListeners() {
+        btnLutaAtacar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (true) {
+                    reduzirVida(calcularDano(Configuration.usuario.getHeroiResponseDTO().getDefesa(), 30), Adversario.HEROI);
+                } else {
+                    reduzirVida(calcularDano(30, Configuration.usuario.getHeroiResponseDTO().getForca()), Adversario.VILAO);
+                }
+            }
+
+            private int calcularDano(int defesa, int ataque) {
+                int dano = 30;
+
+                return dano;
+            }
+
+            private void reduzirVida(int dano, Adversario adversario) {
+                if (adversario.equals(Adversario.HEROI)) {
+                    int vida = vidaHeroiProgress.getProgress() - dano;
+                    vidaHeroiProgress.setProgress(vida);
+
+                    if (vida <= 0) {
+                        finalizarLuta(Adversario.VILAO);
+                    }
+                } else {
+                    int vida = vidaVilaoProgress.getProgress() - dano;
+                    vidaVilaoProgress.setProgress(vida);
+
+                    if (vida <= 0) {
+                        finalizarLuta(Adversario.HEROI);
+                    }
+                }
+            }
+        });
     }
 
     @Override
@@ -143,7 +202,7 @@ public class LutaActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.hide();
         }
-        mControlsView.setVisibility(View.GONE);
+//        mControlsView.setVisibility(View.GONE);
         mVisible = false;
 
         // Schedule a runnable to remove the status and navigation bar after a delay
@@ -154,9 +213,9 @@ public class LutaActivity extends AppCompatActivity {
     @SuppressLint("InlinedApi")
     private void show() {
         // Show the system bar
-        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-        mVisible = true;
+//        mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+//        mVisible = true;
 
         // Schedule a runnable to display UI elements after a delay
         mHideHandler.removeCallbacks(mHidePart2Runnable);
@@ -172,20 +231,15 @@ public class LutaActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
-    private void finalizarLuta() {
+    private void finalizarLuta(Adversario vencedor) {
         final Dialog mensagem = new Dialog(this);
         mensagem.setContentView(R.layout.dialog_luta_fim);
-
-
-
-        resultado = true;
-
 
         TextView tvResultado = (TextView) mensagem.findViewById(R.id.tvDialogLutaResultado);
         TextView tvPontos = (TextView) mensagem.findViewById(R.id.tvDialogLutaPontos);
         Button btnOk = (Button) mensagem.findViewById(R.id.btnDialogLutaFim);
 
-        if(resultado) {
+        if (vencedor.equals(Adversario.HEROI)) {
             tvResultado.setText(R.string.prompt_win_fight);
             tvResultado.setTextColor(Color.parseColor("#37A20D"));
 
@@ -205,9 +259,14 @@ public class LutaActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 mensagem.cancel();
+                LutaActivity.this.finish();
             }
         });
 
         mensagem.show();
+    }
+
+    private enum Adversario {
+        HEROI, VILAO;
     }
 }

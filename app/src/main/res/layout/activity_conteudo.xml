@@ -33,6 +33,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/contentLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -43,9 +44,9 @@
                     android:layout_height="400dp"
                     android:background="@drawable/border_conteudo"
                     android:padding="15dp"
+                    android:scrollbars="vertical"
                     android:text="CONTEUDO"
                     android:textSize="20sp"
-                    android:scrollbars="vertical"
                     tools:layout_editor_absoluteX="178dp"
                     tools:layout_editor_absoluteY="246dp" />
             </LinearLayout>

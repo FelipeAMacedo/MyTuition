@@ -1,6 +1,7 @@
 package com.example.felipemacedo.mytuition;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -27,9 +29,7 @@ public class HomeFragment extends Fragment {
 
     private ProgressBar mLevelProgress;
     private TextView mLevel;
-
-    private Button button3;
-    private EditText editTextHome;
+    private ImageButton alertButton;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -76,14 +76,14 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        loadProgress();
     }
 
     private void initComponents(View view) {
         mLevel = (TextView) view.findViewById(R.id.txtHomeLevel);
         mLevelProgress = (ProgressBar) view.findViewById(R.id.levelProgress);
+        alertButton = (ImageButton) view.findViewById(R.id.alertButton);
 
-        button3 = (Button) view.findViewById(R.id.button3);
-        editTextHome = (EditText) view.findViewById(R.id.editTextHome);
     }
 
     private void loadProgress() {
@@ -101,8 +101,12 @@ public class HomeFragment extends Fragment {
     }
 
     private void initListeners() {
-        button3.setOnClickListener((view) -> {
 
+        alertButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(HomeFragment.this.getContext(), LutaActivity.class));
+            }
         });
     }
 
@@ -115,8 +119,6 @@ public class HomeFragment extends Fragment {
 
         initComponents(view);
         initListeners();
-        loadProgress();
-
 
         return view;
     }
@@ -131,6 +133,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
         } else {

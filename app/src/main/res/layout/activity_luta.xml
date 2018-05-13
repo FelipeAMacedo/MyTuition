@@ -118,14 +118,14 @@
                     android:textSize="20sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressBar2"
+                    android:id="@+id/pgbHPHeroi"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="13.33dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="7.33dp"
-                    android:progressDrawable="@drawable/hp_progressbar"
-                    android:progress="100" />
+                    android:progress="100"
+                    android:progressDrawable="@drawable/hp_progressbar" />
             </LinearLayout>
         </LinearLayout>
 

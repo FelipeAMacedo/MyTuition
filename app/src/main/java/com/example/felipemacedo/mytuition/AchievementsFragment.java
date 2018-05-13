@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.model.CurrentUser;
 
 /**
@@ -62,8 +63,8 @@ public class AchievementsFragment extends Fragment {
     }
 
     private void loadProgress() {
-        int level = CurrentUser.getInstance().level;
-        int xp = CurrentUser.getInstance().xp;
+        int xp = Configuration.usuario.getHeroiResponseDTO().getXp();
+        int level = Level.calculateLevel(xp);
 
         int neededExp = Level.calculateNeededExp(level + 1);
         int neededExpActualLevel = Level.calculateNeededExp(level);

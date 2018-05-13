@@ -11,23 +11,18 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.services.ConteudoService;
 import com.example.felipemacedo.mytuition.services.MateriaService;
-import com.example.felipemacedo.mytuition.utils.LocalDateAdapter;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
+public class ConteudoServiceImpl implements ConteudoService {
 
-public class MateriaServiceImpl implements MateriaService {
-
-    private static final String materiaUrl = Configuration.API_URL + "materia";
+    private static final String materiaUrl = Configuration.API_URL + "conteudo";
 
     @Override
-    public void findByDisciplinaId(Context context, Long id, JsonRequestListener listener) {
-        String url = materiaUrl + "/disciplina/" + id;
+    public void findByMateriaId(Context context, Long id, JsonRequestListener listener) {
+        String url = materiaUrl + "/materia/" + id;
 
         JsonObjectRequest getRequest = buildGetRequest(context, url, listener);
 

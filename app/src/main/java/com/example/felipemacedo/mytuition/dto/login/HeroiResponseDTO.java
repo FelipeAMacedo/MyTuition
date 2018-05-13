@@ -8,6 +8,9 @@ public class HeroiResponseDTO implements Serializable {
 
     private static final long serialVersionUID = 8121810391676220L;
 
+    @SerializedName("id")
+    private Long id;
+
     @SerializedName("nome")
     private String nome;
 
@@ -25,6 +28,14 @@ public class HeroiResponseDTO implements Serializable {
 
     @SerializedName("defesa")
     private Integer defesa;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getNome() {
         return nome;

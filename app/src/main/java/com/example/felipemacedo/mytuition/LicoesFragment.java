@@ -13,22 +13,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
 import com.example.felipemacedo.mytuition.dto.materia.MateriaResultDTO;
+import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
 import com.example.felipemacedo.mytuition.dto.wrapper.response.MateriaResponseWrapper;
 import com.example.felipemacedo.mytuition.licoes.MateriasAdapter;
 import com.example.felipemacedo.mytuition.licoes.RecyclerViewOnItemClickListener;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.example.felipemacedo.mytuition.model.eclipse.Materia;
+import com.example.felipemacedo.mytuition.services.ConteudoService;
 import com.example.felipemacedo.mytuition.services.MateriaService;
+import com.example.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
 import com.example.felipemacedo.mytuition.services.impl.MateriaServiceImpl;
+import com.example.felipemacedo.mytuition.utils.LocalTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -63,6 +71,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     private MateriasAdapter materiasAdapter;
 
     private MateriaService service;
+    private ConteudoService conteudoService;
 
 
     private OnFragmentInteractionListener mListener;
@@ -127,7 +136,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
                 MateriaResponseWrapper wrapper = gson.fromJson(String.valueOf(response), MateriaResponseWrapper.class);
 
-                materias = convertDTOToEntity(wrapper.getMaterias());
+                materias = convertMateriaDTOToEntity(wrapper.getMaterias());
 
                 materiasAdapter = new MateriasAdapter(getActivity(), materias);
                 materiasAdapter.setmRecyclerViewOnClickListener(LicoesFragment.this);
@@ -138,7 +147,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
             }
 
-            private List<Materia> convertDTOToEntity(Set<MateriaResultDTO> materias) {
+            private List<Materia> convertMateriaDTOToEntity(Set<MateriaResultDTO> materias) {
                 List<Materia> convertedMaterias = new ArrayList<>();
                 ModelMapper mapper = new ModelMapper();
 
@@ -190,33 +199,70 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
     @Override
     public void onItemClickListener(View view, int position) {
+        conteudoService = new ConteudoServiceImpl();
+
+        conteudoService.findByMateriaId(this.getContext(), materias.get(position).getId(), new JsonRequestListener<JSONObject>() {
+
+            @Override
+            public void onSuccess(JSONObject response) {
+                Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(LocalTime.class, new LocalTimeDeserializer())
+                        .create();
+
+                ConteudoResponseWrapper wrapper = gson.fromJson(String.valueOf(response), ConteudoResponseWrapper.class);
+                List<Conteudo> conteudos = convertConteudoDTOToEntity(wrapper.getConteudos());
+
+                if (conteudos != null && !conteudos.isEmpty()) {
+                    Intent intent = new Intent(getActivity(), ConteudoActivity.class);
+
+                    intent.putExtra("materia", materias.get(position));
+                    intent.putExtra("conteudos", (Serializable) conteudos);
+
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "Não há conteúdos a serem exibidos", Toast.LENGTH_SHORT).show();
+                }
 
 
-        Intent intent = new Intent(getActivity(), ConteudoActivity.class);
+                // Este trecho de código estava passando os conteúdos da matéria selecionada para a próxima activity
+                //        intent.putExtra("licao", licoes.get(position));
+                //
+                //
+                //        Long conteudosCompletados = 0L;
+                //
+                //
+                //        if (licoes.get(position).getUsuarios().size() > 0) {
+                //            conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
+                //        }
+                //
+                //        intent.putExtra("conteudos_completados", conteudosCompletados);
+                //
+                //        Bundle bundle = new Bundle();
+                //        bundle.putString("licao", licao.getTitulo());
+                //        bundle.putLong("timestamp_inicio", new Date().getTime());
+                //
+                //        FirebaseAnalytics fa = FirebaseAnalytics.getInstance(getContext());
+                //        fa.setUserId(CurrentUser.getInstance().id);
+                //        fa.logEvent("inicio_licao", bundle);
 
-        intent.putExtra("materia", materias.get(position));
+            }
 
-        // Este trecho de código estava passando os conteúdos da matéria selecionada para a próxima activity
-//        intent.putExtra("licao", licoes.get(position));
-//
-//
-//        Long conteudosCompletados = 0L;
-//
-//
-//        if (licoes.get(position).getUsuarios().size() > 0) {
-//            conteudosCompletados = (Long) licoes.get(position).getUsuarios().values().toArray()[0];
-//        }
-//
-//        intent.putExtra("conteudos_completados", conteudosCompletados);
-//
-//        Bundle bundle = new Bundle();
-//        bundle.putString("licao", licao.getTitulo());
-//        bundle.putLong("timestamp_inicio", new Date().getTime());
-//
-//        FirebaseAnalytics fa = FirebaseAnalytics.getInstance(getContext());
-//        fa.setUserId(CurrentUser.getInstance().id);
-//        fa.logEvent("inicio_licao", bundle);
+            private List<Conteudo> convertConteudoDTOToEntity(Set<ConteudoResultDTO> conteudos) {
+                List<Conteudo> conteudosConvertidos = new ArrayList<>();
+                ModelMapper mapper = new ModelMapper();
 
-        startActivity(intent);
+                for (ConteudoResultDTO c : conteudos) {
+                    conteudosConvertidos.add(mapper.map(c, Conteudo.class));
+                }
+
+                return conteudosConvertidos;
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+        });
     }
 }
