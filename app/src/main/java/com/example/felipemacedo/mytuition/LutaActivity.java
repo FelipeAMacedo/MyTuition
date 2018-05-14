@@ -2,12 +2,12 @@ package com.example.felipemacedo.mytuition;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -15,6 +15,27 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.felipemacedo.mytuition.conf.Configuration;
+import com.example.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
+import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
+import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
+import com.example.felipemacedo.mytuition.services.ConteudoService;
+import com.example.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
+import com.example.felipemacedo.mytuition.utils.LocalTimeDeserializer;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import org.json.JSONObject;
+import org.modelmapper.ModelMapper;
+
+import java.io.Serializable;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -32,6 +53,11 @@ public class LutaActivity extends AppCompatActivity {
 
     private ProgressBar vidaVilaoProgress;
     private ProgressBar vidaHeroiProgress;
+
+    private List<Conteudo> questoes;
+    private Queue<Conteudo> questoesNaoRespondidas;
+
+    private static final Long MATERIA_ID = 1L;
 
     /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
@@ -123,6 +149,44 @@ public class LutaActivity extends AppCompatActivity {
 
         initComponents();
         initListeners();
+        loadData();
+    }
+
+    private void loadData() {
+        ConteudoService conteudoService = new ConteudoServiceImpl();
+
+        conteudoService.buscarQuestoes(this, MATERIA_ID,  new JsonRequestListener<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .registerTypeAdapter(LocalTime.class, new LocalTimeDeserializer())
+                        .create();
+
+                ConteudoResponseWrapper wrapper = gson.fromJson(String.valueOf(response), ConteudoResponseWrapper.class);
+                questoes = convertConteudoDTOToEntity(wrapper.getConteudos());
+
+                Collections.shuffle(questoes);
+                questoesNaoRespondidas = new LinkedBlockingQueue<>(questoes);
+
+            }
+
+            @Override
+            public void onError(JSONObject response) {
+
+            }
+        });
+    }
+
+    private List<Conteudo> convertConteudoDTOToEntity(Set<ConteudoResultDTO> conteudos) {
+        List<Conteudo> conteudosConvertidos = new ArrayList<>();
+        ModelMapper mapper = new ModelMapper();
+
+        for (ConteudoResultDTO c : conteudos) {
+            conteudosConvertidos.add(mapper.map(c, Conteudo.class));
+        }
+
+        return conteudosConvertidos;
     }
 
     private void initComponents() {
@@ -140,37 +204,53 @@ public class LutaActivity extends AppCompatActivity {
         btnLutaAtacar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (true) {
-                    reduzirVida(calcularDano(Configuration.usuario.getHeroiResponseDTO().getDefesa(), 30), Adversario.HEROI);
-                } else {
-                    reduzirVida(calcularDano(30, Configuration.usuario.getHeroiResponseDTO().getForca()), Adversario.VILAO);
+                Conteudo conteudo = questoesNaoRespondidas.poll();
+
+                if (questoesNaoRespondidas.isEmpty()) {
+                    // TODO: fazer inserção na queue de forma aleatória
+                    questoesNaoRespondidas = new LinkedBlockingQueue<>(questoes);
                 }
-            }
 
-            private int calcularDano(int defesa, int ataque) {
-                int dano = 30;
+                //TODO: fazer com que o Conteudo Activity esteja preparado para receber somente uma questao e nenhuma materia
+                Intent intent = new Intent(LutaActivity.this, ConteudoActivity.class);
+                intent.putExtra("somenteQuestao", true);
+                intent.putExtra("conteudo", (Serializable) conteudo);
 
-                return dano;
-            }
-
-            private void reduzirVida(int dano, Adversario adversario) {
-                if (adversario.equals(Adversario.HEROI)) {
-                    int vida = vidaHeroiProgress.getProgress() - dano;
-                    vidaHeroiProgress.setProgress(vida);
-
-                    if (vida <= 0) {
-                        finalizarLuta(Adversario.VILAO);
-                    }
-                } else {
-                    int vida = vidaVilaoProgress.getProgress() - dano;
-                    vidaVilaoProgress.setProgress(vida);
-
-                    if (vida <= 0) {
-                        finalizarLuta(Adversario.HEROI);
-                    }
-                }
+                startActivityForResult(intent, 1);
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK && requestCode == 1)
+            reduzirVida(calcularDano(Configuration.usuario.getHeroiResponseDTO().getDefesa(), 1), Adversario.HEROI);
+        else
+            reduzirVida(calcularDano(1, Configuration.usuario.getHeroiResponseDTO().getForca()), Adversario.VILAO);
+    }
+
+    private int calcularDano(int defesa, int ataque) {
+        return new Double((ataque / defesa) * ataque * 2).intValue();
+    }
+
+    private void reduzirVida(int dano, Adversario adversario) {
+        if (adversario.equals(Adversario.HEROI)) {
+            int vida = vidaHeroiProgress.getProgress() - dano;
+            vidaHeroiProgress.setProgress(vida);
+
+            if (vida <= 0) {
+                finalizarLuta(Adversario.VILAO);
+            }
+        } else {
+            int vida = vidaVilaoProgress.getProgress() - dano;
+            vidaVilaoProgress.setProgress(vida);
+
+            if (vida <= 0) {
+                finalizarLuta(Adversario.HEROI);
+            }
+        }
     }
 
     @Override

@@ -49,6 +49,8 @@ public class ConteudoActivity extends AppCompatActivity {
 
     private HeroiService heroiService;
 
+    private boolean somenteQuestao;
+
     private CurrentUser currUser = CurrentUser.getInstance();
 
 //    private DatabaseReference mDatabase;
@@ -63,14 +65,6 @@ public class ConteudoActivity extends AppCompatActivity {
     }
 
     private void initComponents() {
-        materia = (Materia) getIntent().getExtras().getSerializable("materia");
-        conteudos = (List<Conteudo>) getIntent().getExtras().getSerializable("conteudos");
-
-//        conteudosCompletados = getIntent().getExtras().getLong("conteudosCompletados");
-
-//        conteudo = new Conteudo();
-//        conteudos = new ArrayList<>();
-
         textoConteudo = (TextView) findViewById(R.id.textoConteudo);
         btnAvancar = (Button) findViewById(R.id.btnAvancar);
 
@@ -84,7 +78,20 @@ public class ConteudoActivity extends AppCompatActivity {
 
         textoConteudo.setMovementMethod(new ScrollingMovementMethod());
 
-        populateData(conteudos.get(posicao));
+
+        somenteQuestao = getIntent().getExtras().getBoolean("somenteQuestao");
+
+        if (somenteQuestao) {
+            conteudoAtual = (Conteudo) getIntent().getExtras().getSerializable("conteudo");
+        } else {
+            materia = (Materia) getIntent().getExtras().getSerializable("materia");
+            conteudos = (List<Conteudo>) getIntent().getExtras().getSerializable("conteudos");
+            populateData(conteudos.get(posicao));
+        }
+//        conteudosCompletados = getIntent().getExtras().getLong("conteudosCompletados");
+
+//        conteudo = new Conteudo();
+//        conteudos = new ArrayList<>();
 
         heroiService = new HeroiServiceImpl();
 
@@ -119,21 +126,22 @@ public class ConteudoActivity extends AppCompatActivity {
                     }
                 }
 
-                // lógica para verificar onde o usuário parou (os dasdos serão guardados e recuperados localmente)
-                ++posicao;
+                if (!somenteQuestao) {
+                    // lógica para verificar onde o usuário parou (os dasdos serão guardados e recuperados localmente)
+                    ++posicao;
 //
 //                if (conteudosCompletados != conteudos.size() && posicao > conteudosCompletados) {
 //                    conteudosCompletados++;
 //                    mDatabase.child("licoes").child(licao.getId().toString()).child("usuarios").child(currUser.id).setValue(posicao);
 //                }
 //
-                if (posicao < conteudos.size()) {
-                    populateData(conteudos.get(posicao));
-                }
+                    if (posicao < conteudos.size()) {
+                        populateData(conteudos.get(posicao));
+                    }
 
-                if(posicao == conteudos.size() - 1) {
-                    btnAvancar.setText("Finalizar");
-                } else if(posicao == conteudos.size()) {
+                    if (posicao == conteudos.size() - 1) {
+                        btnAvancar.setText("Finalizar");
+                    } else if (posicao == conteudos.size()) {
 //                    if (conteudosCompletados != conteudos.size()) {
 //                        currUser.xp += licao.getPontos();
 //
@@ -143,13 +151,16 @@ public class ConteudoActivity extends AppCompatActivity {
 //                        mDatabase.child("usuarios").child(currUser.id).child("xp").setValue(currUser.xp);
 //                    }
 
-                    adicionaExperiencia();
+                        adicionarExperiencia();
 
-                    finish();
+                        finish();
+                    }
+                } else {
+                    
                 }
             }
 
-            private void adicionaExperiencia() {
+            private void adicionarExperiencia() {
                 AtualizacaoExperienciaWrapper wrapper = new AtualizacaoExperienciaWrapper();
                 AtualizacaoExperienciaDTO dto = new AtualizacaoExperienciaDTO();
                 dto.setId(Configuration.usuario.getHeroiResponseDTO().getId());

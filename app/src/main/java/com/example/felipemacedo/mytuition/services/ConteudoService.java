@@ -7,4 +7,5 @@ import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 public interface ConteudoService {
 
     void findByMateriaId(Context context, Long id, JsonRequestListener listener);
+    void buscarQuestoes(Context context, Long id, JsonRequestListener listener);
 }

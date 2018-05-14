@@ -18,16 +18,26 @@ import org.json.JSONObject;
 
 public class ConteudoServiceImpl implements ConteudoService {
 
-    private static final String materiaUrl = Configuration.API_URL + "conteudo";
+    private static final String conteudoUrl = Configuration.API_URL + "conteudo";
 
     @Override
     public void findByMateriaId(Context context, Long id, JsonRequestListener listener) {
-        String url = materiaUrl + "/materia/" + id;
+        String url = conteudoUrl + "/materia/" + id;
 
         JsonObjectRequest getRequest = buildGetRequest(context, url, listener);
 
         Volley.newRequestQueue(context).add(getRequest);
 
+    }
+
+    @Override
+    public void buscarQuestoes(Context context, Long id, JsonRequestListener listener) {
+
+        String url = conteudoUrl + "/materia/" + id + "/questoes";
+
+        JsonObjectRequest getRequest = buildGetRequest(context, url, listener);
+
+        Volley.newRequestQueue(context).add(getRequest);
     }
 
     private JsonObjectRequest buildGetRequest(Context context, String url, JsonRequestListener listener) {
