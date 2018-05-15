@@ -16,11 +16,16 @@ import android.widget.TextView;
 
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
+import com.example.felipemacedo.mytuition.dto.heroi.AtualizacaoExperienciaDTO;
+import com.example.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
 import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.example.felipemacedo.mytuition.model.eclipse.Ataque;
 import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.example.felipemacedo.mytuition.services.ConteudoService;
+import com.example.felipemacedo.mytuition.services.HeroiService;
 import com.example.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
+import com.example.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
 import com.example.felipemacedo.mytuition.utils.LocalTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -29,6 +34,7 @@ import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,6 +56,7 @@ public class LutaActivity extends AppCompatActivity {
     private static final boolean AUTO_HIDE = true;
 
     private Button btnLutaAtacar;
+    private Ataque ataque;
 
     private ProgressBar vidaVilaoProgress;
     private ProgressBar vidaHeroiProgress;
@@ -153,9 +160,15 @@ public class LutaActivity extends AppCompatActivity {
     }
 
     private void loadData() {
+        ataque = new Ataque();
+        //TODO:
+//        ataque.setUsuario(Configuration.usuario);
+
+        ataque.setData(LocalDateTime.now());
+
         ConteudoService conteudoService = new ConteudoServiceImpl();
 
-        conteudoService.buscarQuestoes(this, MATERIA_ID,  new JsonRequestListener<JSONObject>() {
+        conteudoService.buscarQuestoes(this, MATERIA_ID, new JsonRequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
                 Gson gson = new GsonBuilder()
@@ -165,6 +178,8 @@ public class LutaActivity extends AppCompatActivity {
 
                 ConteudoResponseWrapper wrapper = gson.fromJson(String.valueOf(response), ConteudoResponseWrapper.class);
                 questoes = convertConteudoDTOToEntity(wrapper.getConteudos());
+//                TODO:
+//                ataque.setConteudo(questoes);
 
                 Collections.shuffle(questoes);
                 questoesNaoRespondidas = new LinkedBlockingQueue<>(questoes);
@@ -225,10 +240,21 @@ public class LutaActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == RESULT_OK && requestCode == 1)
-            reduzirVida(calcularDano(Configuration.usuario.getHeroiResponseDTO().getDefesa(), 1), Adversario.HEROI);
-        else
-            reduzirVida(calcularDano(1, Configuration.usuario.getHeroiResponseDTO().getForca()), Adversario.VILAO);
+
+        if (requestCode == 1) {
+            //TODO: ataque será de acordo com a pontuacao de habilidade de força do vilão
+            int ataqueVilao = 8;
+            int defesaVilao = 1;
+
+            Configuration.usuario.getHeroiResponseDTO().setForca(10);
+
+            if (data.getExtras().getBoolean("acertou") == false)
+                reduzirVida(calcularDano(Configuration.usuario.getHeroiResponseDTO().getDefesa(), ataqueVilao), Adversario.HEROI);
+            else
+                reduzirVida(calcularDano(defesaVilao, Configuration.usuario.getHeroiResponseDTO().getForca()), Adversario.VILAO);
+        }
+
+
     }
 
     private int calcularDano(int defesa, int ataque) {
@@ -319,18 +345,31 @@ public class LutaActivity extends AppCompatActivity {
         TextView tvPontos = (TextView) mensagem.findViewById(R.id.tvDialogLutaPontos);
         Button btnOk = (Button) mensagem.findViewById(R.id.btnDialogLutaFim);
 
+        int pontosVitoria = 3000;
+        int pontosDerrota = -5000;
+
         if (vencedor.equals(Adversario.HEROI)) {
+//            ataque.venceu(true);
+//            ataque.setPontos(pontos);
+
+            mudarExperienciaBanco(pontosVitoria);
+
             tvResultado.setText(R.string.prompt_win_fight);
             tvResultado.setTextColor(Color.parseColor("#37A20D"));
 
-            tvPontos.setText("GANHOU 100 PONTOS");
+            tvPontos.setText("GANHOU " + pontosVitoria + " PONTOS");
             tvPontos.setTextColor(Color.parseColor("#6C7077"));
             tvPontos.setBackgroundColor(Color.parseColor("#A8FCAA"));
         } else {
+//            ataque.venceu(false);
+//            ataque.setPontos(pontos);
+
+            mudarExperienciaBanco(pontosDerrota);
+
             tvResultado.setText(R.string.prompt_lose_fight);
             tvResultado.setTextColor(Color.parseColor("#F95F62"));
 
-            tvPontos.setText("PERDEU 350 PONTOS");
+            tvPontos.setText("PERDEU " + (pontosDerrota * -1) + " PONTOS");
             tvPontos.setTextColor(Color.parseColor("#980103"));
             tvPontos.setBackgroundColor(Color.parseColor("#F7C9CA"));
         }
@@ -344,6 +383,32 @@ public class LutaActivity extends AppCompatActivity {
         });
 
         mensagem.show();
+    }
+
+    private void mudarExperienciaBanco(int pontos) {
+        AtualizacaoExperienciaDTO dto = new AtualizacaoExperienciaDTO();
+        dto.setPontosAdicionais(pontos);
+        dto.setId(Configuration.usuario.getHeroiResponseDTO().getId());
+
+        AtualizacaoExperienciaWrapper wrapper = new AtualizacaoExperienciaWrapper();
+        wrapper.setAtualizacaoExperienciaDTO(dto);
+
+        HeroiService usuarioService = new HeroiServiceImpl();
+        usuarioService.adicionarExperiencia(this, wrapper, new JsonRequestListener() {
+            @Override
+            public void onSuccess(Object response) {
+                mudarExperienciaLocalmente(pontos);
+            }
+
+            @Override
+            public void onError(Object response) {
+
+            }
+
+            private void mudarExperienciaLocalmente(int pontos) {
+                Configuration.usuario.getHeroiResponseDTO().setXp(Configuration.usuario.getHeroiResponseDTO().getXp() + pontos);
+            }
+        });
     }
 
     private enum Adversario {

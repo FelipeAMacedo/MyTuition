@@ -1,5 +1,6 @@
 package com.example.felipemacedo.mytuition;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -24,7 +25,10 @@ import com.example.felipemacedo.mytuition.model.eclipse.Alternativa;
 import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.example.felipemacedo.mytuition.model.eclipse.Materia;
 import com.example.felipemacedo.mytuition.services.HeroiService;
+import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
 import com.example.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
+import com.example.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
+import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,11 +82,11 @@ public class ConteudoActivity extends AppCompatActivity {
 
         textoConteudo.setMovementMethod(new ScrollingMovementMethod());
 
-
         somenteQuestao = getIntent().getExtras().getBoolean("somenteQuestao");
 
         if (somenteQuestao) {
             conteudoAtual = (Conteudo) getIntent().getExtras().getSerializable("conteudo");
+            populateData(conteudoAtual);
         } else {
             materia = (Materia) getIntent().getExtras().getSerializable("materia");
             conteudos = (List<Conteudo>) getIntent().getExtras().getSerializable("conteudos");
@@ -120,13 +124,13 @@ public class ConteudoActivity extends AppCompatActivity {
         this.btnAvancar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (conteudoAtual.getAlternativas() != null && !conteudoAtual.getAlternativas().isEmpty()) {
-                    if (verificaResposta() == false) {
-                        return;
-                    }
-                }
 
                 if (!somenteQuestao) {
+                    if (conteudoAtual.getAlternativas() != null && !conteudoAtual.getAlternativas().isEmpty()) {
+                        if (verificaResposta() == false) {
+                            return;
+                        }
+                    }
                     // lógica para verificar onde o usuário parou (os dasdos serão guardados e recuperados localmente)
                     ++posicao;
 //
@@ -151,13 +155,32 @@ public class ConteudoActivity extends AppCompatActivity {
 //                        mDatabase.child("usuarios").child(currUser.id).child("xp").setValue(currUser.xp);
 //                    }
 
-                        adicionarExperiencia();
+                        finalizarMateria();
 
-                        finish();
+
                     }
                 } else {
-                    
+                    if (verificaResposta() == false)
+                        setResult(1, new Intent().putExtra("acertou", false));
+                    else
+                        setResult(1, new Intent().putExtra("acertou", true));
                 }
+                finish();
+            }
+
+            private void finalizarMateria() {
+                UsuarioMateriaService usuarioMateriaService = new UsuarioMateriaServiceImpl();
+                usuarioMateriaService.finalizarMateria(ConteudoActivity.this, Configuration.usuario.getEmail(), materia.getId(), new JsonRequestListener() {
+                    @Override
+                    public void onSuccess(Object response) {
+                        adicionarExperiencia();
+                    }
+
+                    @Override
+                    public void onError(Object response) {
+
+                    }
+                });
             }
 
             private void adicionarExperiencia() {
@@ -186,7 +209,7 @@ public class ConteudoActivity extends AppCompatActivity {
 
                 for (int x = 0; x < alternativasRadioGroup.getTouchables().size(); x++) {
                     RadioButton radio = (RadioButton) alternativasRadioGroup.getTouchables().get(x);
-                    if(radio.isChecked()) {
+                    if (radio.isChecked()) {
                         resposta = radio.getText().toString();
                     }
                 }
@@ -194,9 +217,9 @@ public class ConteudoActivity extends AppCompatActivity {
                 boolean acertou = false;
 
                 for (Alternativa alternativa : conteudoAtual.getAlternativas()) {
-                   if (alternativa.getTexto().equals(resposta)) {
-                       acertou = alternativa.getCerto();
-                   }
+                    if (alternativa.getTexto().equals(resposta)) {
+                        acertou = alternativa.getCerto();
+                    }
                 }
 
                 return acertou;
@@ -207,7 +230,11 @@ public class ConteudoActivity extends AppCompatActivity {
     private void populateData(Conteudo conteudo) {
         conteudoAtual = conteudo;
 
-        ab.setTitle(materia.getNome() + " " + (posicao + 1) + "/" + conteudos.size());
+        if(!somenteQuestao) {
+            ab.setTitle(materia.getNome() + " " + (posicao + 1) + "/" + conteudos.size());
+        } else {
+            ab.setTitle("Questão");
+        }
 
         Spanned spanned;
 
@@ -241,7 +268,7 @@ public class ConteudoActivity extends AppCompatActivity {
         List<Alternativa> alternativas = new ArrayList<>();
         alternativas.addAll(alternativasSet);
 
-        for(int x = 0; x < size; x++) {
+        for (int x = 0; x < size; x++) {
             RadioButton radio = new RadioButton(this);
             radio.setText(alternativas.get(x).getTexto());
             alternativasRadioGroup.addView(radio);

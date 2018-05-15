@@ -16,7 +16,7 @@
         android:background="#72B3FF"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ToolbarArrowTheme"
-        app:title="CONTEUDO"
+        app:title=""
         app:titleTextColor="#FFF" />
 
     <RelativeLayout
@@ -45,7 +45,7 @@
                     android:background="@drawable/border_conteudo"
                     android:padding="15dp"
                     android:scrollbars="vertical"
-                    android:text="CONTEUDO"
+                    android:text=""
                     android:textSize="20sp"
                     tools:layout_editor_absoluteX="178dp"
                     tools:layout_editor_absoluteY="246dp" />
