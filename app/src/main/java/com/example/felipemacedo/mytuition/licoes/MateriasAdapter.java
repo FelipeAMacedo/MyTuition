@@ -42,6 +42,14 @@ public class MateriasAdapter extends RecyclerView.Adapter<MateriasAdapter.Materi
 
         holder.nomeMateria.setText(materia.getNome());
 
+        if(materia.getUsuarioMateria() == null) {
+            holder.status.setBackgroundColor(Color.parseColor("#BBBBBB"));
+        } else if(materia.getUsuarioMateria().iterator().next().getConclusao() == null) {
+            holder.status.setBackgroundColor(Color.parseColor("#F5B64E"));
+        } else {
+            holder.status.setBackgroundColor(Color.parseColor("#13CE66"));
+        }
+
 //        int completado = 0;
 
         // calcula o quanto já foi estudado

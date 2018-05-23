@@ -16,8 +16,8 @@ public class Materia implements Serializable {
     private Integer pontos;
     private Atributo atributo;
     private Disciplina disciplina;
-
     private Set<Conteudo> conteudo = new HashSet<>(0);
+    private Set<UsuarioMateria> usuarioMateria = new HashSet<>(0);
 
     public Long getId() {
         return id;
@@ -67,4 +67,11 @@ public class Materia implements Serializable {
         this.conteudo = conteudo;
     }
 
+    public Set<UsuarioMateria> getUsuarioMateria() {
+        return usuarioMateria;
+    }
+
+    public void setUsuarioMateria(Set<UsuarioMateria> usuarioMateria) {
+        this.usuarioMateria = usuarioMateria;
+    }
 }

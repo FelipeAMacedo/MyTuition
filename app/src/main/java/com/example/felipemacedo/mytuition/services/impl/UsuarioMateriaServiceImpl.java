@@ -9,12 +9,14 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.dto.save.wrapper.LoginWrapper;
-import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioSaveWrapper;
+import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
-import com.example.felipemacedo.mytuition.services.UsuarioService;
 import com.example.felipemacedo.mytuition.utils.LocalDateAdapter;
+import com.example.felipemacedo.mytuition.utils.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,25 +24,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class UsuarioMateriaServiceImpl implements UsuarioMateriaService {
 
     private static final String urlUsuarioMateria = Configuration.API_URL + "usuarioMateria";
 
     @Override
-    public void finalizarMateria(Context context, String emailUsuario, Long materiaId, JsonRequestListener listener) {
-        StringBuilder url = new StringBuilder(urlUsuarioMateria).append("/finalizar").append("/").append(emailUsuario).append("/").append(materiaId)
+    public void finalizarMateria(Context context, UsuarioMateriaSaveWrapper wrapper, JsonRequestListener listener) {
+        StringBuilder url = new StringBuilder(urlUsuarioMateria).append("/finalizar");
 
         JSONObject jsonBody = null;
-
-
-        UsuarioMateriaDTO dto = new UsuarioMateriaDTO();
-        UsuarioM
-        dto.setEmail(emailUsuario);
-        dto.set
-
-        UsuarioMateriaWrapper wrapper = new UsuarioMateriaWrapper();
-        wrapper
 
         try {
             jsonBody = getJSONObject(wrapper);
@@ -49,14 +43,32 @@ public class UsuarioMateriaServiceImpl implements UsuarioMateriaService {
             jsonBody = new JSONObject();
         }
 
-        JsonObjectRequest postRequest = buildRequest(context, url.toString(), jsonBody, listener);
+        JsonObjectRequest postRequest = buildRequest(context, url.toString(), Request.Method.PUT, jsonBody, listener);
 
         Volley.newRequestQueue(context).add(postRequest);
     }
 
-    private JsonObjectRequest buildRequest(Context context, String url, JSONObject jsonBody, JsonRequestListener listener) {
+    @Override
+    public void iniciarMateria(Context context, UsuarioMateriaSaveWrapper wrapper, JsonRequestListener listener) {
+        StringBuilder url = new StringBuilder(urlUsuarioMateria).append("/iniciar");
+
+        JSONObject jsonBody = null;
+
+        try {
+            jsonBody = getJSONObject(wrapper);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            jsonBody = new JSONObject();
+        }
+
+        JsonObjectRequest postRequest = buildRequest(context, url.toString(), Request.Method.POST, jsonBody, listener);
+
+        Volley.newRequestQueue(context).add(postRequest);
+    }
+
+    private JsonObjectRequest buildRequest(Context context, String url, int requestMethod, JSONObject jsonBody, JsonRequestListener listener) {
         JsonObjectRequest request = new JsonObjectRequest
-                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                (requestMethod, url, jsonBody, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -80,7 +92,7 @@ public class UsuarioMateriaServiceImpl implements UsuarioMateriaService {
     private JSONObject getJSONObject(Object object) throws JSONException {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
-                .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
                 .create();
 
         String json = gson.toJson(object).replace("\n", "");

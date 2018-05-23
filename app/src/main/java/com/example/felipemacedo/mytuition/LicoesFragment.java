@@ -13,8 +13,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
 import com.example.felipemacedo.mytuition.dto.materia.MateriaResultDTO;
+import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
 import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
 import com.example.felipemacedo.mytuition.dto.wrapper.response.MateriaResponseWrapper;
 import com.example.felipemacedo.mytuition.licoes.MateriasAdapter;
@@ -22,10 +27,15 @@ import com.example.felipemacedo.mytuition.licoes.RecyclerViewOnItemClickListener
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.example.felipemacedo.mytuition.model.eclipse.Materia;
+import com.example.felipemacedo.mytuition.model.eclipse.UsuarioMateria;
+import com.example.felipemacedo.mytuition.model.eclipse.UsuarioMateriaId;
 import com.example.felipemacedo.mytuition.services.ConteudoService;
 import com.example.felipemacedo.mytuition.services.MateriaService;
+import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
 import com.example.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
 import com.example.felipemacedo.mytuition.services.impl.MateriaServiceImpl;
+import com.example.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
+import com.example.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
 import com.example.felipemacedo.mytuition.utils.LocalTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,6 +47,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -72,7 +83,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
     private MateriaService service;
     private ConteudoService conteudoService;
-
+    private UsuarioMateriaService usuarioMateriaService;
 
     private OnFragmentInteractionListener mListener;
 
@@ -127,10 +138,11 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
         materias = new ArrayList<>();
 
-        service.findByDisciplinaId(this.getContext(), disciplinaId, new JsonRequestListener<JSONObject>() {
+        service.findByDisciplinaId(this.getContext(), disciplinaId, Configuration.usuario.getEmail(), new JsonRequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
                 Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
                         .setPrettyPrinting()
                         .create();
 
@@ -214,12 +226,44 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
                 List<Conteudo> conteudos = convertConteudoDTOToEntity(wrapper.getConteudos());
 
                 if (conteudos != null && !conteudos.isEmpty()) {
-                    Intent intent = new Intent(getActivity(), ConteudoActivity.class);
 
-                    intent.putExtra("materia", materias.get(position));
-                    intent.putExtra("conteudos", (Serializable) conteudos);
+                    if(materias.get(position).getUsuarioMateria() == null) {
+                        UsuarioMateriaSaveWrapper wrapperUsuarioMateria = montarWrapper(Configuration.usuario.getEmail(), materias.get(position).getId());
+                        usuarioMateriaService = new UsuarioMateriaServiceImpl();
+                        usuarioMateriaService.iniciarMateria(LicoesFragment.this.getContext(), wrapperUsuarioMateria, new JsonRequestListener<JSONObject>() {
+                            @Override
+                            public void onSuccess(JSONObject response) {
+                                atribuirUsuarioMateriaLocalmente(wrapperUsuarioMateria.getUsuarioMateriaDTO());
+                                mostrarConteudo(position, conteudos, materias.get(position).getUsuarioMateria());
+                                materiasAdapter.notifyDataSetChanged();
+                            }
 
-                    startActivity(intent);
+                            private void atribuirUsuarioMateriaLocalmente(UsuarioMateriaDTO usuarioMateriaDTO) {
+                                UsuarioMateria usuarioMateria = new UsuarioMateria();
+                                usuarioMateria.setInicio(usuarioMateriaDTO.getInicio());
+                                usuarioMateria.setConclusao(usuarioMateriaDTO.getConclusao());
+
+                                UsuarioMateriaId id = new UsuarioMateriaId();
+                                id.setMateriaId(usuarioMateriaDTO.getMateria().getId());
+                                id.setUsuarioId(usuarioMateriaDTO.getUsuario().getEmail());
+
+                                usuarioMateria.setId(id);
+
+                                Set<UsuarioMateria> usuarioMaterias = new HashSet<>();
+                                usuarioMaterias.add(usuarioMateria);
+
+                                materias.get(position).setUsuarioMateria(usuarioMaterias);
+                            }
+
+                            @Override
+                            public void onError(JSONObject response) {
+                                Toast.makeText(getContext(), "Não foi possível iniciar a matéria", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        mostrarConteudo(position, conteudos, materias.get(position).getUsuarioMateria());
+                    }
+
                 } else {
                     Toast.makeText(getContext(), "Não há conteúdos a serem exibidos", Toast.LENGTH_SHORT).show();
                 }
@@ -248,6 +292,25 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
             }
 
+            private UsuarioMateriaSaveWrapper montarWrapper(String emailUsuario, Long materiaId) {
+                UsuarioMateriaDTO dto = new UsuarioMateriaDTO();
+                UsuarioMateriaMateriaDTO usuarioMateriaMateriaDTO = new UsuarioMateriaMateriaDTO();
+                usuarioMateriaMateriaDTO.setId(materiaId);
+
+                UsuarioMateriaUsuarioDTO usuarioMateriaUsuarioDTO = new UsuarioMateriaUsuarioDTO();
+                usuarioMateriaUsuarioDTO.setEmail(emailUsuario);
+
+                dto.setMateria(usuarioMateriaMateriaDTO);
+                dto.setUsuario(usuarioMateriaUsuarioDTO);
+                dto.setInicio(LocalDateTime.now());
+
+                UsuarioMateriaSaveWrapper wrapper = new UsuarioMateriaSaveWrapper();
+                wrapper.setUsuarioMateriaDTO(dto);
+
+                return wrapper;
+            }
+
+
             private List<Conteudo> convertConteudoDTOToEntity(Set<ConteudoResultDTO> conteudos) {
                 List<Conteudo> conteudosConvertidos = new ArrayList<>();
                 ModelMapper mapper = new ModelMapper();
@@ -264,5 +327,16 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
             }
         });
+    }
+
+    private void mostrarConteudo(int position, List<Conteudo> conteudos, Set<UsuarioMateria> usuarioMateria) {
+
+        Intent intent = new Intent(getActivity(), ConteudoActivity.class);
+
+        intent.putExtra("materia", materias.get(position));
+        intent.putExtra("conteudos", (Serializable) conteudos);
+        intent.putExtra("usuarioMateria", (Serializable) usuarioMateria);
+
+        startActivity(intent);
     }
 }

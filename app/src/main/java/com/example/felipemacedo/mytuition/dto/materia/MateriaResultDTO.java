@@ -1,9 +1,11 @@
 package com.example.felipemacedo.mytuition.dto.materia;
 
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
 import com.example.felipemacedo.mytuition.enums.Atributo;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class MateriaResultDTO implements Serializable {
 
@@ -18,6 +20,9 @@ public class MateriaResultDTO implements Serializable {
 
     @SerializedName("atributo")
     private Atributo atributo;
+
+    @SerializedName("usuarioMateria")
+    private Set<UsuarioMateriaDTO> usuarioMateriaDTO;
 
     public Long getid() {
         return id;
@@ -51,4 +56,11 @@ public class MateriaResultDTO implements Serializable {
         this.atributo = atributo;
     }
 
+    public Set<UsuarioMateriaDTO> getUsuarioMateriaDTO() {
+        return usuarioMateriaDTO;
+    }
+
+    public void setUsuarioMateriaDTO(Set<UsuarioMateriaDTO> usuarioMateriaDTO) {
+        this.usuarioMateriaDTO = usuarioMateriaDTO;
+    }
 }

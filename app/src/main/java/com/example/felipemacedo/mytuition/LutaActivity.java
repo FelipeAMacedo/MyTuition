@@ -2,14 +2,22 @@ package com.example.felipemacedo.mytuition;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -243,7 +251,7 @@ public class LutaActivity extends AppCompatActivity {
 
         if (requestCode == 1) {
             //TODO: ataque será de acordo com a pontuacao de habilidade de força do vilão
-            int ataqueVilao = 8;
+            int ataqueVilao = 3;
             int defesaVilao = 1;
 
             Configuration.usuario.getHeroiResponseDTO().setForca(10);
@@ -262,20 +270,31 @@ public class LutaActivity extends AppCompatActivity {
     }
 
     private void reduzirVida(int dano, Adversario adversario) {
+        HpProgressBarAnimation animation;
+
         if (adversario.equals(Adversario.HEROI)) {
             int vida = vidaHeroiProgress.getProgress() - dano;
-            vidaHeroiProgress.setProgress(vida);
 
-            if (vida <= 0) {
-                finalizarLuta(Adversario.VILAO);
-            }
+            animation = new HpProgressBarAnimation(vidaHeroiProgress, vidaHeroiProgress.getProgress(), vida);
+            animation.setDuration(10000L);
+            vidaHeroiProgress.startAnimation(animation);
+//            vidaHeroiProgress.setProgress(vida);
+
+//
+//            if (vida <= 0) {
+//                finalizarLuta(Adversario.VILAO);
+//            }
         } else {
             int vida = vidaVilaoProgress.getProgress() - dano;
-            vidaVilaoProgress.setProgress(vida);
 
-            if (vida <= 0) {
-                finalizarLuta(Adversario.HEROI);
-            }
+            animation = new HpProgressBarAnimation(vidaVilaoProgress, vidaVilaoProgress.getProgress(), vida);
+            animation.setDuration(10000L);
+            vidaVilaoProgress.startAnimation(animation);
+//            vidaVilaoProgress.setProgress(vida);
+
+//            if (vida <= 0) {
+//                finalizarLuta(Adversario.HEROI);
+//            }
         }
     }
 
@@ -413,5 +432,38 @@ public class LutaActivity extends AppCompatActivity {
 
     private enum Adversario {
         HEROI, VILAO;
+    }
+
+    private class HpProgressBarAnimation extends Animation {
+        private ProgressBar progressBar;
+        private float from;
+        private float  to;
+
+        public HpProgressBarAnimation(ProgressBar progressBar, float from, float to) {
+            super();
+            this.progressBar = progressBar;
+            this.from = from;
+            this.to = to;
+        }
+
+        @Override
+        protected void applyTransformation(float interpolatedTime, Transformation t) {
+            super.applyTransformation(interpolatedTime, t);
+            float value = from + (to - from) * interpolatedTime;
+
+            progressBar.setProgress((int) value);
+
+
+            if (value < 70) {
+                Resources res = getResources();
+                progressBar.getProgressDrawable().getBounds();
+
+                if (value >= 30) {
+                    progressBar.setBackgroundColor(Color.parseColor("#AFAF00"));
+                } else if (value < 30) {
+                    progressBar.setBackgroundColor(Color.parseColor("#EA0101"));
+                }
+            }
+        }
     }
 }

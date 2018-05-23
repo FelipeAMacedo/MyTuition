@@ -25,7 +25,7 @@
                 android:layout_marginBottom="3.33dp"
                 android:layout_marginTop="3.33dp"
                 android:layout_marginLeft="3.33dp"
-                android:background="#13CE66"
+                android:background="#BBBBBB"
                 android:orientation="vertical" />
 
             <TextView

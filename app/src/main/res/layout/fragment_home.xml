@@ -6,6 +6,35 @@
     tools:context="com.example.felipemacedo.mytuition.HomeFragment">
 
     <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginLeft="100dp">
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/common_google_signin_btn_icon_dark" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"></LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"></LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

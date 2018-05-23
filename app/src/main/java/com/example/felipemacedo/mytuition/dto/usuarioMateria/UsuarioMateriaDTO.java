@@ -3,42 +3,54 @@ package com.example.felipemacedo.mytuition.dto.usuarioMateria;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 public class UsuarioMateriaDTO implements Serializable {
 
-	private static final long serialVersionUID = -5427400437011577513L;
+    private static final long serialVersionUID = -5427400437011577513L;
 
-	@SerializedName("ordem")
-	private Integer ordem;
+    @SerializedName("usuario")
+    private UsuarioMateriaUsuarioDTO usuario;
 
-	@SerializedName("texto")
-	private String texto;
+    @SerializedName("materia")
+    private UsuarioMateriaMateriaDTO materia;
 
-	@SerializedName("certo")
-	private Boolean certo;
+    @SerializedName("inicio")
+    private LocalDateTime inicio;
 
-	public Integer getOrdem() {
-		return ordem;
-	}
+    @SerializedName("conclusao")
+    private LocalDateTime conclusao;
 
-	public void setOrdem(Integer ordem) {
-		this.ordem = ordem;
-	}
+    public UsuarioMateriaUsuarioDTO getUsuario() {
+        return usuario;
+    }
 
-	public String getTexto() {
-		return texto;
-	}
+    public void setUsuario(UsuarioMateriaUsuarioDTO usuario) {
+        this.usuario = usuario;
+    }
 
-	public void setTexto(String texto) {
-		this.texto = texto;
-	}
+    public UsuarioMateriaMateriaDTO getMateria() {
+        return materia;
+    }
 
-	public Boolean getCerto() {
-		return certo;
-	}
+    public void setMateria(UsuarioMateriaMateriaDTO materia) {
+        this.materia = materia;
+    }
 
-	public void setCerto(Boolean certo) {
-		this.certo = certo;
-	}
+    public LocalDateTime getInicio() {
+        return inicio;
+    }
+
+    public void setInicio(LocalDateTime inicio) {
+        this.inicio = inicio;
+    }
+
+    public LocalDateTime getConclusao() {
+        return conclusao;
+    }
+
+    public void setConclusao(LocalDateTime conclusao) {
+        this.conclusao = conclusao;
+    }
 
 }

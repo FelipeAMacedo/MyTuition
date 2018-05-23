@@ -1,6 +1,7 @@
 package com.example.felipemacedo.mytuition;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -19,17 +20,23 @@ import android.widget.TextView;
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.heroi.AtualizacaoExperienciaDTO;
 import com.example.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
+import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
+import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.model.CurrentUser;
 import com.example.felipemacedo.mytuition.model.eclipse.Alternativa;
 import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.example.felipemacedo.mytuition.model.eclipse.Materia;
+import com.example.felipemacedo.mytuition.model.eclipse.Usuario;
+import com.example.felipemacedo.mytuition.model.eclipse.UsuarioMateria;
 import com.example.felipemacedo.mytuition.services.HeroiService;
 import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
 import com.example.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
 import com.example.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
-import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -45,7 +52,9 @@ public class ConteudoActivity extends AppCompatActivity {
     private int posicao = 0;
     private List<Conteudo> conteudos;
     private Conteudo conteudoAtual;
+    private Set<UsuarioMateria> usuarioMateria;
     private RadioGroup alternativasRadioGroup;
+    private boolean aumentarExperiencia = false;
     //    private Conteudo conteudo;
 
     private Toolbar toolbar;
@@ -63,6 +72,10 @@ public class ConteudoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_conteudo);
+
+        if(savedInstanceState != null) {
+            posicao = savedInstanceState.getInt("posicao");
+        }
 
         initComponents();
         initListeners();
@@ -90,6 +103,7 @@ public class ConteudoActivity extends AppCompatActivity {
         } else {
             materia = (Materia) getIntent().getExtras().getSerializable("materia");
             conteudos = (List<Conteudo>) getIntent().getExtras().getSerializable("conteudos");
+            usuarioMateria = (Set<UsuarioMateria>) getIntent().getExtras().getSerializable("usuarioMateria");
             populateData(conteudos.get(posicao));
         }
 //        conteudosCompletados = getIntent().getExtras().getLong("conteudosCompletados");
@@ -156,24 +170,32 @@ public class ConteudoActivity extends AppCompatActivity {
 //                    }
 
                         finalizarMateria();
-
-
                     }
                 } else {
                     if (verificaResposta() == false)
                         setResult(1, new Intent().putExtra("acertou", false));
                     else
                         setResult(1, new Intent().putExtra("acertou", true));
+
+                    finish();
                 }
-                finish();
             }
 
             private void finalizarMateria() {
+                if (usuarioMateria.iterator().next().getConclusao() == null) {
+                    aumentarExperiencia = true;
+                }
+
                 UsuarioMateriaService usuarioMateriaService = new UsuarioMateriaServiceImpl();
-                usuarioMateriaService.finalizarMateria(ConteudoActivity.this, Configuration.usuario.getEmail(), materia.getId(), new JsonRequestListener() {
+                usuarioMateria.iterator().next().setConclusao(LocalDateTime.now());
+
+                usuarioMateriaService.finalizarMateria(ConteudoActivity.this, montarDTO(usuarioMateria.iterator().next()), new JsonRequestListener() {
                     @Override
                     public void onSuccess(Object response) {
-                        adicionarExperiencia();
+                        if (aumentarExperiencia)
+                            adicionarExperiencia();
+                        else
+                            finish();
                     }
 
                     @Override
@@ -181,6 +203,7 @@ public class ConteudoActivity extends AppCompatActivity {
 
                     }
                 });
+
             }
 
             private void adicionarExperiencia() {
@@ -195,6 +218,7 @@ public class ConteudoActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Object response) {
                         Configuration.usuario.getHeroiResponseDTO().setXp(Configuration.usuario.getHeroiResponseDTO().getXp() + materia.getPontos());
+                        finish();
                     }
 
                     @Override
@@ -227,13 +251,54 @@ public class ConteudoActivity extends AppCompatActivity {
         });
     }
 
+    private UsuarioMateriaSaveWrapper montarDTO(UsuarioMateria usuarioMateria) {
+        UsuarioMateriaSaveWrapper wrapper = new UsuarioMateriaSaveWrapper();
+        wrapper.setUsuarioMateriaDTO(mapEntityToDTO(usuarioMateria));
+
+        return wrapper;
+    }
+
+    private UsuarioMateriaDTO mapEntityToDTO(UsuarioMateria usuarioMateria) {
+        UsuarioMateriaDTO dto = new UsuarioMateriaDTO();
+        dto.setInicio(usuarioMateria.getInicio());
+        dto.setConclusao(usuarioMateria.getConclusao());
+
+        dto.setUsuario(mapUsuarioEntityToDTO(usuarioMateria.getUsuario()));
+        dto.setMateria(mapMateriaToEntityDTO(usuarioMateria.getMateria()));
+
+        return dto;
+    }
+
+    private UsuarioMateriaMateriaDTO mapMateriaToEntityDTO(Materia materia) {
+        UsuarioMateriaMateriaDTO materiaDTO = new UsuarioMateriaMateriaDTO();
+
+        if (materia == null)
+            materiaDTO.setId(this.materia.getId());
+        else
+            materiaDTO.setId(materia.getId());
+
+        return materiaDTO;
+    }
+
+    private UsuarioMateriaUsuarioDTO mapUsuarioEntityToDTO(Usuario usuario) {
+        UsuarioMateriaUsuarioDTO usuarioDTO = new UsuarioMateriaUsuarioDTO();
+
+        if (usuario == null)
+            usuarioDTO.setEmail(Configuration.usuario.getEmail());
+        else
+            usuarioDTO.setEmail(usuario.getEmail());
+
+        return usuarioDTO;
+    }
+
     private void populateData(Conteudo conteudo) {
         conteudoAtual = conteudo;
 
-        if(!somenteQuestao) {
+        if (!somenteQuestao) {
             ab.setTitle(materia.getNome() + " " + (posicao + 1) + "/" + conteudos.size());
         } else {
             ab.setTitle("Questão");
+            btnAvancar.setText("Finalizar");
         }
 
         Spanned spanned;
@@ -252,12 +317,11 @@ public class ConteudoActivity extends AppCompatActivity {
     }
 
     private void addAlternativas() {
-        if (conteudoAtual.getAlternativas() != null && !conteudoAtual.getAlternativas().isEmpty()) {
-            if (alternativasRadioGroup != null)
-                alternativasRadioGroup.removeAllViews();
+        if (alternativasRadioGroup != null)
+            alternativasRadioGroup.removeAllViews();
 
+        if (conteudoAtual.getAlternativas() != null && !conteudoAtual.getAlternativas().isEmpty())
             addRadioButtons(conteudoAtual.getAlternativas(), conteudoAtual.getAlternativas().size());
-        }
     }
 
     private void addRadioButtons(Set<Alternativa> alternativasSet, int size) {
@@ -297,5 +361,12 @@ public class ConteudoActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle bundle) {
+        super.onSaveInstanceState(bundle);
+
+        bundle.putInt("posicao", posicao);
     }
 }
