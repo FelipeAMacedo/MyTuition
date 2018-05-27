@@ -1,26 +1,25 @@
 package com.example.felipemacedo.mytuition;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.LayerDrawable;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Transformation;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
@@ -41,7 +40,6 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -72,6 +70,9 @@ public class LutaActivity extends AppCompatActivity {
     private List<Conteudo> questoes;
     private Queue<Conteudo> questoesNaoRespondidas;
 
+    private TextView tvInfoNomeHeroi;
+    private TextView tvInfoNomeVilao;
+
     private static final Long MATERIA_ID = 1L;
 
     /**
@@ -87,23 +88,22 @@ public class LutaActivity extends AppCompatActivity {
     private static final int UI_ANIMATION_DELAY = 300;
     private final Handler mHideHandler = new Handler();
     private View mContentView;
-    private final Runnable mHidePart2Runnable = new Runnable() {
-        @SuppressLint("InlinedApi")
-        @Override
-        public void run() {
-            // Delayed removal of status and navigation bar
 
-            // Note that some of these constants are new as of API 16 (Jelly Bean)
-            // and API 19 (KitKat). It is safe to use them, as they are inlined
-            // at compile-time and do nothing on earlier devices.
+    @SuppressLint("InlinedApi")
+    private final Runnable mHidePart2Runnable = () -> {
+        // Delayed removal of status and navigation bar
+
+        // Note that some of these constants are new as of API 16 (Jelly Bean)
+        // and API 19 (KitKat). It is safe to use them, as they are inlined
+        // at compile-time and do nothing on earlier devices.
 //            mContentView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
 //                    | View.SYSTEM_UI_FLAG_FULLSCREEN
 //                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 //                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 //                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
     };
+
     private View mControlsView;
     private final Runnable mShowPart2Runnable = new Runnable() {
         @Override
@@ -117,25 +117,19 @@ public class LutaActivity extends AppCompatActivity {
         }
     };
     private boolean mVisible;
-    private final Runnable mHideRunnable = new Runnable() {
-        @Override
-        public void run() {
-            hide();
-        }
-    };
+    private final Runnable mHideRunnable = () -> hide();
+
     /**
      * Touch listener to use for in-layout UI controls to delay hiding the
      * system UI. This is to prevent the jarring behavior of controls going away
      * while interacting with activity UI.
      */
-    private final View.OnTouchListener mDelayHideTouchListener = new View.OnTouchListener() {
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (AUTO_HIDE) {
-                delayedHide(AUTO_HIDE_DELAY_MILLIS);
-            }
-            return false;
-        }
+    private final View.OnTouchListener mDelayHideTouchListener = (view, motionEvent) -> {
+        if (AUTO_HIDE)
+            delayedHide(AUTO_HIDE_DELAY_MILLIS);
+
+        return false;
+
     };
 
     @Override
@@ -216,31 +210,34 @@ public class LutaActivity extends AppCompatActivity {
         vidaHeroiProgress = (ProgressBar) findViewById(R.id.pgbHPHeroi);
         vidaVilaoProgress = (ProgressBar) findViewById(R.id.pgbHPVilao);
         btnLutaAtacar = (Button) findViewById(R.id.btnLutaAtacar);
+        tvInfoNomeHeroi = (TextView) findViewById(R.id.tvInfoNomeHeroi);
+        tvInfoNomeVilao = (TextView) findViewById(R.id.tvInfoNomeVilao);
 
         vidaHeroiProgress.setMax(100);
         vidaHeroiProgress.setProgress(100);
         vidaVilaoProgress.setMax(100);
         vidaVilaoProgress.setProgress(100);
+
+        tvInfoNomeHeroi.setText(Configuration.usuario.getHeroiResponseDTO().getNome());
+        tvInfoNomeVilao.setText("Vilão");
+
     }
 
     private void initListeners() {
-        btnLutaAtacar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Conteudo conteudo = questoesNaoRespondidas.poll();
+        btnLutaAtacar.setOnClickListener((view) -> {
+            Conteudo conteudo = questoesNaoRespondidas.poll();
 
-                if (questoesNaoRespondidas.isEmpty()) {
-                    // TODO: fazer inserção na queue de forma aleatória
-                    questoesNaoRespondidas = new LinkedBlockingQueue<>(questoes);
-                }
-
-                //TODO: fazer com que o Conteudo Activity esteja preparado para receber somente uma questao e nenhuma materia
-                Intent intent = new Intent(LutaActivity.this, ConteudoActivity.class);
-                intent.putExtra("somenteQuestao", true);
-                intent.putExtra("conteudo", (Serializable) conteudo);
-
-                startActivityForResult(intent, 1);
+            if (questoesNaoRespondidas.isEmpty()) {
+                // TODO: fazer inserção na queue de forma aleatória
+                questoesNaoRespondidas = new LinkedBlockingQueue<>(questoes);
             }
+
+            //TODO: fazer com que o Conteudo Activity esteja preparado para receber somente uma questao e nenhuma materia
+            Intent intent = new Intent(LutaActivity.this, ConteudoActivity.class);
+            intent.putExtra("somenteQuestao", true);
+            intent.putExtra("conteudo", conteudo);
+
+            startActivityForResult(intent, 1);
         });
     }
 
@@ -254,48 +251,80 @@ public class LutaActivity extends AppCompatActivity {
             int ataqueVilao = 3;
             int defesaVilao = 1;
 
-            Configuration.usuario.getHeroiResponseDTO().setForca(10);
+            Configuration.usuario.getHeroiResponseDTO().setAtaque(10);
 
-            if (data.getExtras().getBoolean("acertou") == false)
+            if (!data.getExtras().getBoolean("acertou"))
                 reduzirVida(calcularDano(Configuration.usuario.getHeroiResponseDTO().getDefesa(), ataqueVilao), Adversario.HEROI);
             else
-                reduzirVida(calcularDano(defesaVilao, Configuration.usuario.getHeroiResponseDTO().getForca()), Adversario.VILAO);
+                reduzirVida(calcularDano(defesaVilao, Configuration.usuario.getHeroiResponseDTO().getAtaque()), Adversario.VILAO);
         }
 
 
     }
 
     private int calcularDano(int defesa, int ataque) {
-        return new Double((ataque / defesa) * ataque * 2).intValue();
+        return Double.valueOf((ataque / defesa) * ataque * 2).intValue();
     }
 
     private void reduzirVida(int dano, Adversario adversario) {
-        HpProgressBarAnimation animation;
+        int vida;
 
         if (adversario.equals(Adversario.HEROI)) {
-            int vida = vidaHeroiProgress.getProgress() - dano;
+            vida = vidaHeroiProgress.getProgress() - dano;
 
-            animation = new HpProgressBarAnimation(vidaHeroiProgress, vidaHeroiProgress.getProgress(), vida);
-            animation.setDuration(10000L);
-            vidaHeroiProgress.startAnimation(animation);
-//            vidaHeroiProgress.setProgress(vida);
+            doAnimation(vidaHeroiProgress, vida, Adversario.HEROI);
 
-//
-//            if (vida <= 0) {
-//                finalizarLuta(Adversario.VILAO);
-//            }
         } else {
-            int vida = vidaVilaoProgress.getProgress() - dano;
+            vida = vidaVilaoProgress.getProgress() - dano;
 
-            animation = new HpProgressBarAnimation(vidaVilaoProgress, vidaVilaoProgress.getProgress(), vida);
-            animation.setDuration(10000L);
-            vidaVilaoProgress.startAnimation(animation);
-//            vidaVilaoProgress.setProgress(vida);
-
-//            if (vida <= 0) {
-//                finalizarLuta(Adversario.HEROI);
-//            }
+            doAnimation(vidaVilaoProgress, vida, Adversario.VILAO);
         }
+    }
+
+    private void doAnimation(ProgressBar progressBar, int vida, Adversario sofreuAtaque) {
+        ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), vida).setDuration(5000L);
+
+        animator.setInterpolator(new AccelerateInterpolator());
+
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                if (progressBar.getProgress() < 70) {
+                    Resources res = getResources();
+                    Rect bounds = progressBar.getProgressDrawable().getBounds();
+
+                    if (progressBar.getProgress() >= 30)
+                        progressBar.setProgressDrawable(ContextCompat.getDrawable(LutaActivity.this, R.drawable.hp_progressbar_yellow));
+                    else if (progressBar.getProgress() < 30)
+                        progressBar.setProgressDrawable(ContextCompat.getDrawable(LutaActivity.this, R.drawable.hp_progressbar_red));
+
+                    progressBar.getProgressDrawable().setBounds(bounds);
+
+                    if (progressBar.getProgress() <= 0) {
+                        animator.pause();
+                    }
+                }
+            }
+        });
+
+        animator.addPauseListener(new Animator.AnimatorPauseListener() {
+            @Override
+            public void onAnimationPause(Animator animation) {
+                Toast.makeText(LutaActivity.this, "TERMINOU", Toast.LENGTH_SHORT);
+                if (sofreuAtaque.equals(Adversario.VILAO))
+                    finalizarLuta(Adversario.HEROI);
+                else
+                    finalizarLuta(Adversario.VILAO);
+
+            }
+
+            @Override
+            public void onAnimationResume(Animator animation) {
+
+            }
+        });
+
+        animator.start();
     }
 
     @Override
@@ -309,11 +338,10 @@ public class LutaActivity extends AppCompatActivity {
     }
 
     private void toggle() {
-        if (mVisible) {
+        if (mVisible)
             hide();
-        } else {
+        else
             show();
-        }
     }
 
     private void hide() {
@@ -431,39 +459,6 @@ public class LutaActivity extends AppCompatActivity {
     }
 
     private enum Adversario {
-        HEROI, VILAO;
-    }
-
-    private class HpProgressBarAnimation extends Animation {
-        private ProgressBar progressBar;
-        private float from;
-        private float  to;
-
-        public HpProgressBarAnimation(ProgressBar progressBar, float from, float to) {
-            super();
-            this.progressBar = progressBar;
-            this.from = from;
-            this.to = to;
-        }
-
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            super.applyTransformation(interpolatedTime, t);
-            float value = from + (to - from) * interpolatedTime;
-
-            progressBar.setProgress((int) value);
-
-
-            if (value < 70) {
-                Resources res = getResources();
-                progressBar.getProgressDrawable().getBounds();
-
-                if (value >= 30) {
-                    progressBar.setBackgroundColor(Color.parseColor("#AFAF00"));
-                } else if (value < 30) {
-                    progressBar.setBackgroundColor(Color.parseColor("#EA0101"));
-                }
-            }
-        }
+        HEROI, VILAO
     }
 }

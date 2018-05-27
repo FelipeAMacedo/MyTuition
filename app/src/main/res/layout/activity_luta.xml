@@ -64,7 +64,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="7.33dp"
                     android:progress="100"
-                    android:progressDrawable="@drawable/hp_progressbar" />
+                    android:progressDrawable="@drawable/hp_progressbar_green" />
             </LinearLayout>
         </LinearLayout>
 
@@ -125,7 +125,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="7.33dp"
                     android:progress="100"
-                    android:progressDrawable="@drawable/hp_progressbar" />
+                    android:progressDrawable="@drawable/hp_progressbar_green" />
             </LinearLayout>
         </LinearLayout>
 

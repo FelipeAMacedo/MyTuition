@@ -7,4 +7,8 @@
     <color name="backgroundLight">#6DA8EE</color>
     <color name="backgroundDark">#125AB0</color>
     <color name="bottomNavigationBar">#35485E</color>
+    <color name="hp_progress_green">#13CE66</color>
+    <color name="hp_progress_yellow">#ffce00</color>
+    <color name="hp_progress_red">#EA0101</color>
+
 </resources>

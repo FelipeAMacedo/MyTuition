@@ -20,11 +20,8 @@ public class HeroiResponseDTO implements Serializable {
     @SerializedName("xp")
     private Integer xp;
 
-    @SerializedName("forca")
-    private Integer forca;
-
-    @SerializedName("agilidade")
-    private Integer agilidade;
+    @SerializedName("ataque")
+    private Integer ataque;
 
     @SerializedName("defesa")
     private Integer defesa;
@@ -61,20 +58,12 @@ public class HeroiResponseDTO implements Serializable {
         this.xp = xp;
     }
 
-    public Integer getForca() {
-        return forca;
+    public Integer getAtaque() {
+        return ataque;
     }
 
-    public void setForca(Integer forca) {
-        this.forca = forca;
-    }
-
-    public Integer getAgilidade() {
-        return agilidade;
-    }
-
-    public void setAgilidade(Integer agilidade) {
-        this.agilidade = agilidade;
+    public void setAtaque(Integer ataque) {
+        this.ataque = ataque;
     }
 
     public Integer getDefesa() {

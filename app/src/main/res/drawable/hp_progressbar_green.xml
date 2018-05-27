@@ -15,7 +15,7 @@
             <shape>
                 <stroke android:color="#FFF" android:width="3.33dp" />
                 <corners android:radius="16.67dp" />
-                <solid android:color="#13CE66" />
+                <solid android:color="@color/hp_progress_green" />
             </shape>
         </clip>
     </item>

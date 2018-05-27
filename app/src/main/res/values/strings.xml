@@ -56,4 +56,6 @@
 
     <string name="title_activity_luta">LutaActivity</string>
 
+    <string name="descricao_heroi_imagem">Imagem do herói escolhido</string>
+
 </resources>
