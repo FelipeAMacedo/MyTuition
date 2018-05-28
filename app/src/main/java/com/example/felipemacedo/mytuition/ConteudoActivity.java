@@ -303,17 +303,16 @@ public class ConteudoActivity extends AppCompatActivity {
 
         Spanned spanned;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N)
             spanned = Html.fromHtml(conteudo.getTexto(), Html.FROM_HTML_MODE_LEGACY);
-        } else {
+        else
             spanned = Html.fromHtml(conteudo.getTexto());
-        }
 
+
+        textoConteudo.setScrollY(0);
         textoConteudo.setText(spanned);
 
         addAlternativas();
-
-
     }
 
     private void addAlternativas() {

@@ -1,129 +1,176 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.felipemacedo.mytuition.HomeFragment">
 
     <RelativeLayout
-        android:layout_width="200dp"
-        android:layout_height="400dp"
-
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:contentDescription="@string/descricao_heroi_imagem"
-            android:src="@drawable/common_google_signin_btn_icon_dark" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/home_header">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageButton
+                android:id="@+id/alertButton"
+                android:layout_width="42.67dp"
+                android:layout_height="42.67dp"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="53dp"
+                android:layout_marginTop="38dp"
+                android:background="@drawable/alarm" />
+
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_below="@+id/imageView2">
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="9.67dp"
+            android:padding="0dp">
 
-            <LinearLayout
+            <ProgressBar
+                android:id="@+id/levelProgress"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:progress="10"
+                android:progressDrawable="@drawable/level_ring"
+                android:rotation="-90" />
+
+            <TextView
+                android:id="@+id/txtHomeLevel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:id="@+id/defesa_container">
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingBottom="10dp"
+                android:text=""
+                android:textColor="#FFF"
+                android:textSize="26.67sp" />
 
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text=""
-                    tools:text="Ataque: 1"/>
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/textView5"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="100dp"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_toEndOf="@+id/defesa_container">
+                android:layout_centerHorizontal="true"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:paddingTop="30dp"
+                android:text="level"
+                android:textColor="#FFF"
+                android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text=""
-                    tools:text="Defesa: 1"/>
-
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/textView6"/>
-            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageButton
-            android:id="@+id/alertButton"
-            android:layout_width="42.67dp"
-            android:layout_height="42.67dp"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="53dp"
-            android:layout_marginTop="38dp"
-            android:background="@drawable/alarm" />
-
-
-    </RelativeLayout>
-
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="9.67dp"
-        android:padding="0dp">
+        android:layout_below="@id/home_header"
+        android:layout_centerHorizontal="true">
 
-        <ProgressBar
-            android:id="@+id/levelProgress"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:progress="10"
-            android:progressDrawable="@drawable/level_ring"
-            android:rotation="-90" />
+        <RelativeLayout
+            android:id="@+id/nome_heroi_container"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:background="@drawable/home_nome_background"
+            android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/txtHomeLevel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:gravity="center"
-            android:paddingBottom="10dp"
-            android:text=""
-            android:textColor="#FFF"
-            android:textSize="26.67sp" />
+            <TextView
+                android:id="@+id/tvNomeHeroiHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:paddingStart="15dp"
+                android:textColor="@android:color/black"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                tools:text="HEROI" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:paddingTop="30dp"
-            android:text="level"
-            android:textColor="#FFF"
-            android:textSize="20sp" />
+        </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/heroi_imagem_container"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_below="@id/nome_heroi_container"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="7dp"
+            android:layout_marginStart="7dp"
+            android:background="@drawable/home_hero_background">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="@string/descricao_heroi_imagem"
+                android:src="@drawable/common_google_signin_btn_icon_dark" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_below="@id/heroi_imagem_container"
+            android:layout_marginTop="-5dp"
+            android:background="@drawable/home_attrs_background"
+            android:gravity="center_vertical|center_horizontal">
+
+            <LinearLayout
+                android:id="@+id/ataque_container"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvAtaqueHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/home_hero_attack"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp"
+                    tools:text="Ataque: 10" />
+
+                <ImageButton
+                    android:id="@+id/btnAumentarAtaque"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tvAtaqueHome"
+                    android:visibility="invisible"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/defesa_container"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/ataque_container"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvDefesaHome"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/home_hero_defense"
+                    android:textColor="@android:color/black"
+                    android:textSize="17sp"
+                    tools:text="Defesa: 10" />
+
+                <ImageButton
+                    android:id="@+id/btnAumentarDefesa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tvDefesaHome"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </RelativeLayout>
     </RelativeLayout>
 
-</FrameLayout>
+</RelativeLayout>

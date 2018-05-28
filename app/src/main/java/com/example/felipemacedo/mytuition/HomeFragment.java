@@ -8,11 +8,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.felipemacedo.mytuition.conf.Configuration;
 
@@ -30,6 +29,13 @@ public class HomeFragment extends Fragment {
     private ProgressBar mLevelProgress;
     private TextView mLevel;
     private ImageButton alertButton;
+    private TextView tvNomeHeroiHome;
+    private TextView tvAtaqueHome;
+    private TextView tvDefesaHome;
+    private ImageButton btnAumentarAtaque;
+    private ImageButton btnAumentarDefesa;
+
+    private int pontosDisponiveis;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,6 +47,7 @@ public class HomeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -77,12 +84,24 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadProgress();
+
+        calcularPontosDisponiveis();
+
     }
 
     private void initComponents(View view) {
         mLevel = (TextView) view.findViewById(R.id.txtHomeLevel);
         mLevelProgress = (ProgressBar) view.findViewById(R.id.levelProgress);
         alertButton = (ImageButton) view.findViewById(R.id.alertButton);
+        tvNomeHeroiHome = (TextView) view.findViewById(R.id.tvNomeHeroiHome);
+        tvAtaqueHome = (TextView) view.findViewById(R.id.tvAtaqueHome);
+        tvDefesaHome = (TextView) view.findViewById(R.id.tvDefesaHome);
+        btnAumentarAtaque = (ImageButton) view.findViewById(R.id.btnAumentarAtaque);
+        btnAumentarDefesa = (ImageButton) view.findViewById(R.id.btnAumentarDefesa);
+
+        tvNomeHeroiHome.setText(Configuration.usuario.getHeroiResponseDTO().getNome());
+        tvAtaqueHome.setText(getResources().getText(R.string.home_hero_attack) + String.valueOf(Configuration.usuario.getHeroiResponseDTO().getAtaque()));
+        tvDefesaHome.setText(getResources().getText(R.string.home_hero_defense) + String.valueOf(Configuration.usuario.getHeroiResponseDTO().getDefesa()));
 
     }
 
@@ -108,6 +127,46 @@ public class HomeFragment extends Fragment {
                 startActivity(new Intent(HomeFragment.this.getContext(), LutaActivity.class));
             }
         });
+
+        btnAumentarAtaque.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (existePontosParaAdicionar()) {
+                    int ataqueAtual = Configuration.usuario.getHeroiResponseDTO().getAtaque() + 1;
+                    Configuration.usuario.getHeroiResponseDTO().setAtaque(ataqueAtual);
+
+                    tvAtaqueHome.setText(getResources().getString(R.string.home_hero_attack) + ataqueAtual);
+                }
+            }
+        });
+
+        btnAumentarDefesa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (existePontosParaAdicionar()) {
+                    int defesaAtual = Configuration.usuario.getHeroiResponseDTO().getDefesa() + 1;
+                    Configuration.usuario.getHeroiResponseDTO().setDefesa(defesaAtual);
+
+                    tvDefesaHome.setText(getResources().getString(R.string.home_hero_defense) + defesaAtual);
+                }
+            }
+        });
+    }
+
+    private synchronized boolean existePontosParaAdicionar() {
+        int xp = Configuration.usuario.getHeroiResponseDTO().getXp();
+        int level = Level.calculateLevel(xp);
+        int ataque = Configuration.usuario.getHeroiResponseDTO().getAtaque();
+        int defesa = Configuration.usuario.getHeroiResponseDTO().getDefesa();
+
+        if (level <= ataque + defesa - 1) {
+            btnAumentarAtaque.setVisibility(View.INVISIBLE);
+            btnAumentarDefesa.setVisibility(View.INVISIBLE);
+
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -120,7 +179,38 @@ public class HomeFragment extends Fragment {
         initComponents(view);
         initListeners();
 
+        calcularPontosDisponiveis();
+
         return view;
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+//        if (getView() != null) {
+//            if (isVisibleToUser) {
+//                calcularPontosDisponiveis();
+//            }
+//        }
+    }
+
+    private void calcularPontosDisponiveis() {
+        int xp = Configuration.usuario.getHeroiResponseDTO().getXp();
+        int level = Level.calculateLevel(xp);
+        int ataque = Configuration.usuario.getHeroiResponseDTO().getAtaque();
+        int defesa = Configuration.usuario.getHeroiResponseDTO().getDefesa();
+
+        //            Toast.makeText(getContext(),"ESTÁ VISÍVEL", Toast.LENGTH_SHORT);
+
+
+        if (level > ataque + defesa - 1) {
+            //                Toast.makeText(getContext(),"LEVEL > ", Toast.LENGTH_SHORT);
+            pontosDisponiveis = level - ataque + defesa - 1;
+
+            btnAumentarAtaque.setVisibility(View.VISIBLE);
+            btnAumentarDefesa.setVisibility(View.VISIBLE);
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

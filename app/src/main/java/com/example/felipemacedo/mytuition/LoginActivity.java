@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.LoginDTO;
@@ -74,10 +75,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         service = new UsuarioServiceImpl();
 
-        service.logar(this.getBaseContext(), generateWrappedDTO(), new JsonRequestListener<JSONObject>() {
+        service.logar(this.getBaseContext(), generateWrappedDTO(), new JsonRequestListener<Object>() {
             @Override
-            public void onSuccess(JSONObject response) {
+            public void onSuccess(Object response) {
 
+                try {
+                    JSONObject jsonObject = getJSONObject(response);
+                } catch (JSONException e) {
+                    Toast.makeText(LoginActivity.this, "Erro ao converter para JSONObject", Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
 
                 Gson gson = new GsonBuilder()
                         .setPrettyPrinting()
@@ -91,8 +98,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onError(JSONObject response) {
-
+            public void onError(Object response) {
+                Toast.makeText(LoginActivity.this, "Erro ao tentar fazer o login", Toast.LENGTH_LONG).show();
             }
         });
     }

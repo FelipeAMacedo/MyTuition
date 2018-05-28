@@ -26,6 +26,9 @@
         completions."
     </string>
 
+    <!-- Strings related to home fragment -->
+    <string name="home_hero_attack">Ataque: </string>
+    <string name="home_hero_defense">Defesa: </string>
 
     <!-- String to Register Activity -->
     <string name="action_create_account">Criar conta</string>

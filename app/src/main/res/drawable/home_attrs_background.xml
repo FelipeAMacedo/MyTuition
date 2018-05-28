@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+    <shape
+    android:shape="rectangle">
+
+    <stroke
+    android:width="5dp"
+    android:color="@color/home_hero_border" />
+
+    <corners
+    android:bottomLeftRadius="5dp"
+    android:bottomRightRadius="5dp"
+    android:topLeftRadius="5dp"
+    android:topRightRadius="5dp" />
+
+    <solid android:color="@color/home_hero_background" />
+    </shape>
+    </item>
+    <!--<item>-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<stroke-->
+                <!--android:width="5dp"-->
+                <!--android:color="@color/home_hero_border" />-->
+            <!--<solid android:color="@color/home_attrs_background" />-->
+
+            <!--<corners-->
+                <!--android:bottomLeftRadius="15dp"-->
+                <!--android:bottomRightRadius="15dp"-->
+                <!--android:topLeftRadius="0dp"-->
+                <!--android:topRightRadius="0dp" />-->
+
+        <!--</shape>-->
+    <!--</item>-->
+
+    <!--<item-->
+        <!--android:bottom="20dp"-->
+        <!--android:left="5dp"-->
+        <!--android:right="5dp">-->
+        <!--<shape android:shape="rectangle">-->
+            <!--<stroke-->
+                <!--android:width="20dp"-->
+                <!--android:color="@color/home_attrs_background" />-->
+
+            <!--<solid android:color="#00000000" />-->
+        <!--</shape>-->
+    <!--</item>-->
+    <!--<item android:top="5dp">-->
+    <!--<shape-->
+    <!--android:shape="rectangle">-->
+    <!--<stroke android:width="5dp" android:color="#" />-->
+    <!--<solid android:color="#00000000" />-->
+    <!--</shape>-->
+    <!--</item>-->
+</layer-list>

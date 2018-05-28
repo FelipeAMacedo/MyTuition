@@ -1,0 +1,31 @@
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:shape="rectangle">-->
+
+<!--<stroke--><!--android:width="5dp"--><!--android:color="@color/home_hero_border" />-->
+
+<!--<corners--><!--android:bottomLeftRadius="0dp"--><!--android:bottomRightRadius="0dp"--><!--android:topLeftRadius="15dp"--><!--android:topRightRadius="15dp" />-->
+
+<!--<solid--><!--android:color="@color/home_hero_background" />--><!--</shape>-->
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <item>
+        <shape android:shape="rectangle">
+
+            <stroke
+                android:width="5dp"
+                android:color="@color/home_hero_border" />
+
+            <solid android:color="@color/home_attrs_background" />
+        </shape>
+    </item>
+
+    <item
+        android:bottom="5dp"
+        android:left="5dp"
+        android:right="5dp">
+        <shape android:shape="rectangle">
+            <solid android:color="@color/home_attrs_background" />
+        </shape>
+    </item>
+</layer-list>
