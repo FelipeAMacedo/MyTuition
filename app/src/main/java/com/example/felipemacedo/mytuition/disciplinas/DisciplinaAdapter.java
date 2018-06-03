@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.licoes;
+package com.example.felipemacedo.mytuition.disciplinas;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -11,37 +11,37 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.felipemacedo.mytuition.R;
-import com.example.felipemacedo.mytuition.model.eclipse.Materia;
+import com.example.felipemacedo.mytuition.model.eclipse.Disciplina;
 import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 
 import java.util.List;
 
-public class MateriasAdapter extends RecyclerView.Adapter<MateriasAdapter.MateriasViewHolder> {
+public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.DisciplinaViewHolder> {
 
-    private List<Materia> materias;
+    private List<Disciplina> disciplinas;
     private LayoutInflater mLayoutInflater;
     private RecyclerViewOnItemClickListener mRecyclerViewOnItemClickListener;
 
-    public MateriasAdapter(Context context, List<Materia> materias) {
-        this.materias = materias;
+    public DisciplinaAdapter(Context context, List<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
         this.mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
-    public MateriasViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DisciplinaViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = mLayoutInflater.inflate(R.layout.item_disciplina, parent, false);
-        return new MateriasViewHolder(v);
+        return new DisciplinaViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(MateriasViewHolder holder, int position) {
-        Materia materia = materias.get(position);
+    public void onBindViewHolder(DisciplinaViewHolder holder, int position) {
+        Disciplina disciplina = disciplinas.get(position);
 
-        holder.nomeMateria.setText(materia.getNome());
+        holder.nomeDisciplina.setText(disciplina.getNome());
 
-        if(materia.getUsuarioMateria() == null) {
+        if(disciplina.getUsuarioDisciplina() == null) {
             holder.status.setBackgroundColor(Color.parseColor("#BBBBBB"));
-        } else if(materia.getUsuarioMateria().iterator().next().getConclusao() == null) {
+        } else if(disciplina.getUsuarioDisciplina().iterator().next().getConclusao() == null) {
             holder.status.setBackgroundColor(Color.parseColor("#F5B64E"));
         } else {
             holder.status.setBackgroundColor(Color.parseColor("#13CE66"));
@@ -61,24 +61,24 @@ public class MateriasAdapter extends RecyclerView.Adapter<MateriasAdapter.Materi
 
     @Override
     public int getItemCount() {
-        return materias.size();
+        return disciplinas.size();
     }
 
     public void setmRecyclerViewOnClickListener(RecyclerViewOnItemClickListener r) {
         mRecyclerViewOnItemClickListener = r;
     }
 
-    public class MateriasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class DisciplinaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private TextView nomeMateria;
+        private TextView nomeDisciplina;
         private TextView qtdConteudo;
         private RelativeLayout status;
         private ProgressBar mProgressBar;
 
-        public MateriasViewHolder(View itemView) {
+        public DisciplinaViewHolder(View itemView) {
             super(itemView);
 
-            nomeMateria = (TextView) itemView.findViewById(R.id.txtNomeLicao);
+            nomeDisciplina = (TextView) itemView.findViewById(R.id.txtNomeLicao);
             qtdConteudo = (TextView) itemView.findViewById(R.id.txtQtdLicoes);
             status = (RelativeLayout) itemView.findViewById(R.id.licao_status);
             mProgressBar = (ProgressBar) itemView.findViewById(R.id.progresso_da_licao);

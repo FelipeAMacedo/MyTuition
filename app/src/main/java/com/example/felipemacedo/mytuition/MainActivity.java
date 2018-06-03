@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private BottomNavigationView navigation;
     private ViewPager mViewPager;
-    private Fragment[] fragments = {new HomeFragment(), new LicoesFragment(), new AchievementsFragment()};
+    private Fragment[] fragments = {new HomeFragment(), new DisciplinasFragment(), new AchievementsFragment()};
 
     private ImageButton ibtnHome;
     private ImageButton ibtnLicoes;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
                     switchFragment(new HomeFragment());
                     return true;
                 case R.id.navigation_train:
-                    switchFragment(new LicoesFragment());
+                    switchFragment(new DisciplinasFragment());
                     return true;
                 case R.id.navigation_notifications:
                     Toast.makeText(MainActivity.this, "Notification taped", Toast.LENGTH_SHORT).show();

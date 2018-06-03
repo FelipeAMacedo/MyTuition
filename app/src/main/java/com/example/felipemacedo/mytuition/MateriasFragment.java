@@ -23,7 +23,7 @@ import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuar
 import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
 import com.example.felipemacedo.mytuition.dto.wrapper.response.MateriaResponseWrapper;
 import com.example.felipemacedo.mytuition.licoes.MateriasAdapter;
-import com.example.felipemacedo.mytuition.licoes.RecyclerViewOnItemClickListener;
+import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.example.felipemacedo.mytuition.model.eclipse.Materia;
@@ -59,10 +59,10 @@ import java.util.Set;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link LicoesFragment#newInstance} factory method to
+ * Use the {@link MateriasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickListener {
+public class MateriasFragment extends Fragment implements RecyclerViewOnItemClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -87,7 +87,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
     private OnFragmentInteractionListener mListener;
 
-    public LicoesFragment() {
+    public MateriasFragment() {
         // Required empty public constructor
     }
 
@@ -97,11 +97,11 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment LicoesFragment.
+     * @return A new instance of fragment DisciplinasFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static LicoesFragment newInstance(String param1, String param2) {
-        LicoesFragment fragment = new LicoesFragment();
+    public static MateriasFragment newInstance(String param1, String param2) {
+        MateriasFragment fragment = new MateriasFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -124,7 +124,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_licoes, container, false);
+        View view = inflater.inflate(R.layout.fragment_disciplinas, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_licoes);
         mRecyclerView.setHasFixedSize(true);
@@ -151,7 +151,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
                 materias = convertMateriaDTOToEntity(wrapper.getMaterias());
 
                 materiasAdapter = new MateriasAdapter(getActivity(), materias);
-                materiasAdapter.setmRecyclerViewOnClickListener(LicoesFragment.this);
+                materiasAdapter.setmRecyclerViewOnClickListener(MateriasFragment.this);
 
                 mRecyclerView.setAdapter(materiasAdapter);
 
@@ -172,7 +172,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
 
             @Override
             public void onError(JSONObject response) {
-                Toast.makeText(LicoesFragment.this.getContext(), "Não foi possível carregar as matérias", Toast.LENGTH_LONG);
+                Toast.makeText(MateriasFragment.this.getContext(), "Não foi possível carregar as matérias", Toast.LENGTH_LONG);
                 Log.e(TAG, response.toString());
             }
         });
@@ -230,7 +230,7 @@ public class LicoesFragment extends Fragment implements RecyclerViewOnItemClickL
                     if(materias.get(position).getUsuarioMateria() == null) {
                         UsuarioMateriaSaveWrapper wrapperUsuarioMateria = montarWrapper(Configuration.usuario.getEmail(), materias.get(position).getId());
                         usuarioMateriaService = new UsuarioMateriaServiceImpl();
-                        usuarioMateriaService.iniciarMateria(LicoesFragment.this.getContext(), wrapperUsuarioMateria, new JsonRequestListener<JSONObject>() {
+                        usuarioMateriaService.iniciarMateria(MateriasFragment.this.getContext(), wrapperUsuarioMateria, new JsonRequestListener<JSONObject>() {
                             @Override
                             public void onSuccess(JSONObject response) {
                                 atribuirUsuarioMateriaLocalmente(wrapperUsuarioMateria.getUsuarioMateriaDTO());

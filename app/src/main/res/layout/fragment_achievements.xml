@@ -10,10 +10,11 @@
         android:background="@color/backgroundDark">
 
         <RelativeLayout
+            android:id="@+id/conquista_perfil"
             android:layout_width="match_parent"
             android:layout_height="166.67dp"
-            android:background="#CBEDFF"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:background="#CBEDFF">
 
             <TextView
                 android:id="@+id/tvAchHeroiNome"
@@ -31,8 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tvAchHeroiNome"
                 android:gravity="center_horizontal"
-                android:textColor="#637181"
                 android:text="Nível "
+                android:textColor="#637181"
                 android:textSize="20sp" />
 
             <ProgressBar
@@ -41,8 +42,8 @@
                 android:layout_width="216.67dp"
                 android:layout_height="10.33dp"
                 android:layout_below="@id/tvAchNivel"
-                android:progressDrawable="@drawable/licao_progressbar"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:progressDrawable="@drawable/licao_progressbar" />
 
             <TextView
                 android:id="@+id/tvAchPontos"
@@ -54,6 +55,29 @@
                 android:textSize="13.33sp" />
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="280dp"
+            android:layout_height="400dp"
+            android:layout_below="@id/conquista_perfil"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp"
+            android:padding="10dp"
+            android:background="@drawable/conquistas_recycler_container">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_conquista"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:layout_centerHorizontal="true">
+
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
     <!-- TODO: Update blank fragment layout -->

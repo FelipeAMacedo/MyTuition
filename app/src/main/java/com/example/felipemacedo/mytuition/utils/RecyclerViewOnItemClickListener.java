@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.licoes;
+package com.example.felipemacedo.mytuition.utils;
 
 import android.view.View;
 
