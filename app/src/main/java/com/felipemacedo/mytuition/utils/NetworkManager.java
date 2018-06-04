@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.utils;
+package com.felipemacedo.mytuition.utils;
 
 import android.content.Context;
 import android.util.Log;
@@ -9,8 +9,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
 
 import org.json.JSONObject;
 

@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.enums;
+package com.felipemacedo.mytuition.enums;
 
 public enum Atributo {
 	ATAQUE, DEFESA

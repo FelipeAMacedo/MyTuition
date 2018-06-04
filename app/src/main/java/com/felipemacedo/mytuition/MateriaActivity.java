@@ -9,32 +9,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.ConteudoActivity;
-import com.example.felipemacedo.mytuition.R;
-import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
-import com.example.felipemacedo.mytuition.dto.materia.MateriaResultDTO;
-import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
-import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
-import com.example.felipemacedo.mytuition.dto.wrapper.response.MateriaResponseWrapper;
-import com.example.felipemacedo.mytuition.licoes.MateriasAdapter;
-import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
-import com.example.felipemacedo.mytuition.model.eclipse.Materia;
-import com.example.felipemacedo.mytuition.model.eclipse.UsuarioMateria;
-import com.example.felipemacedo.mytuition.model.eclipse.UsuarioMateriaId;
-import com.example.felipemacedo.mytuition.services.ConteudoService;
-import com.example.felipemacedo.mytuition.services.MateriaService;
-import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
-import com.example.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
-import com.example.felipemacedo.mytuition.services.impl.MateriaServiceImpl;
-import com.example.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
-import com.example.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
-import com.example.felipemacedo.mytuition.utils.LocalTimeDeserializer;
+import com.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
+import com.felipemacedo.mytuition.dto.materia.MateriaResultDTO;
+import com.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
+import com.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
+import com.felipemacedo.mytuition.dto.wrapper.response.MateriaResponseWrapper;
+import com.felipemacedo.mytuition.licoes.MateriasAdapter;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.model.eclipse.Conteudo;
+import com.felipemacedo.mytuition.model.eclipse.Materia;
+import com.felipemacedo.mytuition.model.eclipse.UsuarioMateria;
+import com.felipemacedo.mytuition.model.eclipse.UsuarioMateriaId;
+import com.felipemacedo.mytuition.services.ConteudoService;
+import com.felipemacedo.mytuition.services.MateriaService;
+import com.felipemacedo.mytuition.services.UsuarioMateriaService;
+import com.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
+import com.felipemacedo.mytuition.services.impl.MateriaServiceImpl;
+import com.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
+import com.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
+import com.felipemacedo.mytuition.utils.LocalTimeDeserializer;
+import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -69,9 +67,11 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
         setContentView(R.layout.activity_materia);
 
         initComponents();
-        initListeners();
     }
 
+    /**
+     * Inicia os componentes visuais da tela.
+     */
     private void initComponents() {
 
         disciplinaId = getIntent().getExtras().getLong("disciplinaId");
@@ -127,9 +127,12 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
         });
     }
 
-    private void initListeners() {
-    }
-
+    /**
+     * Listener responsável pelo comportamento referente à seleção de uma matéria da lista.
+     *
+     * @param view
+     * @param position
+     */
     @Override
     public void onItemClickListener(View view, int position) {
         conteudoService = new ConteudoServiceImpl();
@@ -155,7 +158,7 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
                             @Override
                             public void onSuccess(JSONObject response) {
                                 atribuirUsuarioMateriaLocalmente(wrapperUsuarioMateria.getUsuarioMateriaDTO());
-                                mostrarConteudo(position, conteudos, materias.get(position).getUsuarioMateria());
+                                mostrarConteudo(materias.get(position), conteudos, materias.get(position).getUsuarioMateria());
                                 materiasAdapter.notifyDataSetChanged();
                             }
 
@@ -182,7 +185,7 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
                             }
                         });
                     } else {
-                        mostrarConteudo(position, conteudos, materias.get(position).getUsuarioMateria());
+                        mostrarConteudo(materias.get(position), conteudos, materias.get(position).getUsuarioMateria());
                     }
 
                 } else {
@@ -250,12 +253,18 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
         });
     }
 
-
-    private void mostrarConteudo(int position, List<Conteudo> conteudos, Set<UsuarioMateria> usuarioMateria) {
+    /**
+     * Prepara a informação que será repassada para a tela de conteúdo e a mostra.
+     *
+     * @param materia Matéria que foi selecionada pelo usuário.
+     * @param conteudos Lista de conteúdos da matéria selecionada.
+     * @param usuarioMateria Informações sobre a interação do usuário com a matéria selecionada.
+     */
+    private void mostrarConteudo(Materia materia, List<Conteudo> conteudos, Set<UsuarioMateria> usuarioMateria) {
 
         Intent intent = new Intent(this, ConteudoActivity.class);
 
-        intent.putExtra("materia", materias.get(position));
+        intent.putExtra("materia", materia);
         intent.putExtra("conteudos", (Serializable) conteudos);
         intent.putExtra("usuarioMateria", (Serializable) usuarioMateria);
 

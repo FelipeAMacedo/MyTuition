@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 
 import android.graphics.drawable.ColorDrawable;
@@ -16,18 +16,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.conquistas.ConquistasAdapter;
+import com.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.conquistas.ConquistasAdapter;
 import com.felipemacedo.mytuition.dto.conquista.ConquistaResultDTO;
-import com.example.felipemacedo.mytuition.dto.wrapper.response.ConquistaResponseWrapper;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.eclipse.Conquista;
-import com.example.felipemacedo.mytuition.services.ConquistaService;
-import com.example.felipemacedo.mytuition.services.impl.ConquistaServiceImpl;
-import com.example.felipemacedo.mytuition.utils.Base64Util;
-import com.example.felipemacedo.mytuition.utils.LocalDateDeserializer;
-import com.example.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
-import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
+import com.felipemacedo.mytuition.dto.wrapper.response.ConquistaResponseWrapper;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.model.eclipse.Conquista;
+import com.felipemacedo.mytuition.services.ConquistaService;
+import com.felipemacedo.mytuition.services.impl.ConquistaServiceImpl;
+import com.felipemacedo.mytuition.utils.Base64Util;
+import com.felipemacedo.mytuition.utils.LocalDateDeserializer;
+import com.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
+import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

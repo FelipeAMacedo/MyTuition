@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.dto.wrapper.response;
+package com.felipemacedo.mytuition.dto.wrapper.response;
 
 import com.felipemacedo.mytuition.dto.materia.MateriaResultDTO;
 import com.google.gson.annotations.SerializedName;

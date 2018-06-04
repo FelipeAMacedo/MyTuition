@@ -1,6 +1,6 @@
-package com.example.felipemacedo.mytuition.dto.save.wrapper;
+package com.felipemacedo.mytuition.dto.save.wrapper;
 
-import com.example.felipemacedo.mytuition.dto.conquista.ConquistaDTO;
+import com.felipemacedo.mytuition.dto.conquista.ConquistaDTO;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

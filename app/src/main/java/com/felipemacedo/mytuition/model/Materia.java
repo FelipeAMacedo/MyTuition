@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.model;
+package com.felipemacedo.mytuition.model;
 
 import java.io.Serializable;
 import java.util.List;

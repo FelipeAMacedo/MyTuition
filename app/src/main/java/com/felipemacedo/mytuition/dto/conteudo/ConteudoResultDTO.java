@@ -1,5 +1,6 @@
-package com.example.felipemacedo.mytuition.dto.conteudo;
+package com.felipemacedo.mytuition.dto.conteudo;
 
+import com.felipemacedo.mytuition.dto.conteudo.AlternativasResultDTO;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

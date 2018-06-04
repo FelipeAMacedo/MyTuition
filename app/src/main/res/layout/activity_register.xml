@@ -5,7 +5,7 @@
     android:background="@color/backgroundLight"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.example.felipemacedo.mytuition.RegisterActivity">
+    tools:context="com.felipemacedo.mytuition.RegisterActivity">
 
     <!-- Login progress -->
     <ProgressBar

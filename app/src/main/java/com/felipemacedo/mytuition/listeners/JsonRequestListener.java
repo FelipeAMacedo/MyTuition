@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.listeners;
+package com.felipemacedo.mytuition.listeners;
 
 public interface JsonRequestListener<T> {
 

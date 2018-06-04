@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.dto.login;
+package com.felipemacedo.mytuition.dto.login;
 
 import com.google.gson.annotations.SerializedName;
 

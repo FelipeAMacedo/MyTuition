@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,18 +13,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.dto.AlunoDTO;
-import com.example.felipemacedo.mytuition.dto.HeroiDTO;
-import com.example.felipemacedo.mytuition.dto.UsuarioDTO;
-import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioSaveWrapper;
-import com.example.felipemacedo.mytuition.enums.Perfil;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.eclipse.Aluno;
-import com.example.felipemacedo.mytuition.model.eclipse.Curso;
-import com.example.felipemacedo.mytuition.model.eclipse.Heroi;
-import com.example.felipemacedo.mytuition.model.eclipse.Usuario;
-import com.example.felipemacedo.mytuition.services.UsuarioService;
-import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
+import com.felipemacedo.mytuition.dto.AlunoDTO;
+import com.felipemacedo.mytuition.dto.HeroiDTO;
+import com.felipemacedo.mytuition.dto.UsuarioDTO;
+import com.felipemacedo.mytuition.dto.save.wrapper.UsuarioSaveWrapper;
+import com.felipemacedo.mytuition.enums.Perfil;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.model.eclipse.Aluno;
+import com.felipemacedo.mytuition.model.eclipse.Curso;
+import com.felipemacedo.mytuition.model.eclipse.Heroi;
+import com.felipemacedo.mytuition.model.eclipse.Usuario;
+import com.felipemacedo.mytuition.services.UsuarioService;
+import com.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

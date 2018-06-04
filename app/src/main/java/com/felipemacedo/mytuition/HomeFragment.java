@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.conf.Configuration;
 
 
 /**

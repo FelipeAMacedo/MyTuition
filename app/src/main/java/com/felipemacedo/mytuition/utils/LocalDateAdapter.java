@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.utils;
+package com.felipemacedo.mytuition.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonPrimitive;

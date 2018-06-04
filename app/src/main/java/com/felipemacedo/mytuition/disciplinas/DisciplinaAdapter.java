@@ -10,9 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.felipemacedo.mytuition.R;
-import com.example.felipemacedo.mytuition.model.eclipse.Disciplina;
-import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
+import com.felipemacedo.mytuition.R;
+import com.felipemacedo.mytuition.model.eclipse.Disciplina;
+import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 
 import java.util.List;
 

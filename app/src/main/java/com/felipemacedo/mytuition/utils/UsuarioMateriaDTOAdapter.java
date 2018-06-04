@@ -1,6 +1,6 @@
-package com.example.felipemacedo.mytuition.utils;
+package com.felipemacedo.mytuition.utils;
 
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;

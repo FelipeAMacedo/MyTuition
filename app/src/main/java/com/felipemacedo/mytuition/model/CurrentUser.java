@@ -1,6 +1,4 @@
-package com.example.felipemacedo.mytuition.model;
-
-import com.felipemacedo.mytuition.model.Usuario;
+package com.felipemacedo.mytuition.model;
 
 /**
  * Created by felipemacedo on 23/10/17.

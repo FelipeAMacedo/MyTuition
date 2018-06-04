@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.enums;
+package com.felipemacedo.mytuition.enums;
 
 /**
  * Created by felipemacedo on 24/09/17.

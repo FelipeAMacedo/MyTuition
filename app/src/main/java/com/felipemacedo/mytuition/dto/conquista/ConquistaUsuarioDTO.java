@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.dto.conquista;
+package com.felipemacedo.mytuition.dto.conquista;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
@@ -19,19 +19,19 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.dto.conteudo.ConteudoResultDTO;
 import com.felipemacedo.mytuition.dto.heroi.AtualizacaoExperienciaDTO;
 import com.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
-import com.example.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.eclipse.Ataque;
-import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
-import com.example.felipemacedo.mytuition.services.ConteudoService;
-import com.example.felipemacedo.mytuition.services.HeroiService;
-import com.example.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
-import com.example.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
-import com.example.felipemacedo.mytuition.utils.LocalTimeDeserializer;
+import com.felipemacedo.mytuition.dto.wrapper.response.ConteudoResponseWrapper;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.model.eclipse.Ataque;
+import com.felipemacedo.mytuition.model.eclipse.Conteudo;
+import com.felipemacedo.mytuition.services.ConteudoService;
+import com.felipemacedo.mytuition.services.HeroiService;
+import com.felipemacedo.mytuition.services.impl.ConteudoServiceImpl;
+import com.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
+import com.felipemacedo.mytuition.utils.LocalTimeDeserializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

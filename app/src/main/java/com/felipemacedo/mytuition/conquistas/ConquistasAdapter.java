@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.conquistas;
+package com.felipemacedo.mytuition.conquistas;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -9,10 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import com.example.felipemacedo.mytuition.R;
-import com.example.felipemacedo.mytuition.model.eclipse.Conquista;
-import com.example.felipemacedo.mytuition.utils.Base64Util;
-import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
+import com.felipemacedo.mytuition.R;
+import com.felipemacedo.mytuition.model.eclipse.Conquista;
+import com.felipemacedo.mytuition.utils.Base64Util;
+import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 
 import java.util.List;
 

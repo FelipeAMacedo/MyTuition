@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.licoes;
+package com.felipemacedo.mytuition.licoes;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,9 +10,9 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.example.felipemacedo.mytuition.R;
-import com.example.felipemacedo.mytuition.model.eclipse.Materia;
-import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
+import com.felipemacedo.mytuition.R;
+import com.felipemacedo.mytuition.model.eclipse.Materia;
+import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 
 import java.util.List;
 

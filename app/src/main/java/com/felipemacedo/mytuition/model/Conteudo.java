@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.model;
+package com.felipemacedo.mytuition.model;
 
 import com.felipemacedo.mytuition.enums.TipoConteudo;
 

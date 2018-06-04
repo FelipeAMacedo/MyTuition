@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.net.Uri;
 

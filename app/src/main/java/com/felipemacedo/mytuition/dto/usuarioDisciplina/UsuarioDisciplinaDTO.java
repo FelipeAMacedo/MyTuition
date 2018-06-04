@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.dto.usuarioDisciplina;
+package com.felipemacedo.mytuition.dto.usuarioDisciplina;
 
 import com.google.gson.annotations.SerializedName;
 

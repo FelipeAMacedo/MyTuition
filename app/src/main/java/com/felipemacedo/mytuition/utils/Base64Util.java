@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.utils;
+package com.felipemacedo.mytuition.utils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;

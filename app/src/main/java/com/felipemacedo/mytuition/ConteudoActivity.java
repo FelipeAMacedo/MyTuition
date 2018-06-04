@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,31 +16,29 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.example.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.dto.heroi.AtualizacaoExperienciaDTO;
 import com.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
-import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.CurrentUser;
-import com.example.felipemacedo.mytuition.model.eclipse.Alternativa;
-import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
-import com.example.felipemacedo.mytuition.model.eclipse.Materia;
-import com.example.felipemacedo.mytuition.model.eclipse.Usuario;
-import com.example.felipemacedo.mytuition.model.eclipse.UsuarioMateria;
-import com.example.felipemacedo.mytuition.services.HeroiService;
-import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
-import com.example.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
-import com.example.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
+import com.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
+import com.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.model.CurrentUser;
+import com.felipemacedo.mytuition.model.eclipse.Alternativa;
+import com.felipemacedo.mytuition.model.eclipse.Conteudo;
+import com.felipemacedo.mytuition.model.eclipse.Materia;
+import com.felipemacedo.mytuition.model.eclipse.Usuario;
+import com.felipemacedo.mytuition.model.eclipse.UsuarioMateria;
+import com.felipemacedo.mytuition.services.HeroiService;
+import com.felipemacedo.mytuition.services.UsuarioMateriaService;
+import com.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
+import com.felipemacedo.mytuition.services.impl.UsuarioMateriaServiceImpl;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-//import com.example.felipemacedo.mytuition.dao.ConteudoDao;
 
 public class ConteudoActivity extends AppCompatActivity {
 

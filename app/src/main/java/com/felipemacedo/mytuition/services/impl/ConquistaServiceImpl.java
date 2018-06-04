@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.services.impl;
+package com.felipemacedo.mytuition.services.impl;
 
 import android.content.Context;
 
@@ -9,10 +9,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.dto.save.wrapper.ConquistaBuscaWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.services.ConquistaService;
+import com.felipemacedo.mytuition.services.ConquistaService;
 import com.felipemacedo.mytuition.utils.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.dto.save.wrapper;
+package com.felipemacedo.mytuition.dto.save.wrapper;
 
 import com.felipemacedo.mytuition.dto.materia.MateriaDTO;
 import com.google.gson.annotations.SerializedName;

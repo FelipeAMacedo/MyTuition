@@ -1,6 +1,6 @@
-package com.example.felipemacedo.mytuition.dto.disciplina;
+package com.felipemacedo.mytuition.dto.disciplina;
 
-import com.example.felipemacedo.mytuition.dto.usuarioDisciplina.UsuarioDisciplinaDTO;
+import com.felipemacedo.mytuition.dto.usuarioDisciplina.UsuarioDisciplinaDTO;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

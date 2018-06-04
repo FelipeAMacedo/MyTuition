@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,21 +13,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.disciplinas.DisciplinaAdapter;
+import com.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.disciplinas.DisciplinaAdapter;
 import com.felipemacedo.mytuition.dto.disciplina.DisciplinaResultDTO;
-import com.example.felipemacedo.mytuition.dto.wrapper.response.DisciplinaResponseWrapper;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.eclipse.Conteudo;
-import com.example.felipemacedo.mytuition.model.eclipse.Disciplina;
-import com.example.felipemacedo.mytuition.model.eclipse.UsuarioDisciplina;
-import com.example.felipemacedo.mytuition.services.ConteudoService;
-import com.example.felipemacedo.mytuition.services.DisciplinaService;
-import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
-import com.example.felipemacedo.mytuition.services.impl.DisciplinaServiceImpl;
-import com.example.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
-import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
-import com.felipemacedo.mytuition.MateriaActivity;
+import com.felipemacedo.mytuition.dto.wrapper.response.DisciplinaResponseWrapper;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.model.eclipse.Conteudo;
+import com.felipemacedo.mytuition.model.eclipse.Disciplina;
+import com.felipemacedo.mytuition.model.eclipse.UsuarioDisciplina;
+import com.felipemacedo.mytuition.services.ConteudoService;
+import com.felipemacedo.mytuition.services.DisciplinaService;
+import com.felipemacedo.mytuition.services.UsuarioMateriaService;
+import com.felipemacedo.mytuition.services.impl.DisciplinaServiceImpl;
+import com.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
+import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

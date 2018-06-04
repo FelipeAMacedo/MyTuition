@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.services.impl;
+package com.felipemacedo.mytuition.services.impl;
 
 import android.content.Context;
 
@@ -8,10 +8,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.services.HeroiService;
+import com.felipemacedo.mytuition.services.HeroiService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

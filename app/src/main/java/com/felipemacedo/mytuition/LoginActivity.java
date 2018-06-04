@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition;
+package com.felipemacedo.mytuition;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.dto.LoginDTO;
+import com.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.dto.LoginDTO;
 import com.felipemacedo.mytuition.dto.login.UsuarioResponseDTO;
 import com.felipemacedo.mytuition.dto.save.wrapper.LoginWrapper;
-import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.services.UsuarioService;
-import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
-import com.example.felipemacedo.mytuition.utils.LocalDateAdapter;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.services.UsuarioService;
+import com.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
+import com.felipemacedo.mytuition.utils.LocalDateAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.gson.Gson;

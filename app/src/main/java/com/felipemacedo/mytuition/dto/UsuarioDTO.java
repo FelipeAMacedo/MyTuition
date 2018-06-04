@@ -1,6 +1,6 @@
-package com.example.felipemacedo.mytuition.dto;
+package com.felipemacedo.mytuition.dto;
 
-import com.example.felipemacedo.mytuition.enums.Perfil;
+import com.felipemacedo.mytuition.enums.Perfil;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

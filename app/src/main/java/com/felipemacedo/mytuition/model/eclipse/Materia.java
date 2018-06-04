@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.model.eclipse;
+package com.felipemacedo.mytuition.model.eclipse;
 
 import com.felipemacedo.mytuition.enums.Atributo;
 

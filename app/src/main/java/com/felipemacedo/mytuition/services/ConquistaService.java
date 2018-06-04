@@ -1,4 +1,4 @@
-package com.example.felipemacedo.mytuition.services;
+package com.felipemacedo.mytuition.services;
 
 import android.content.Context;
 
