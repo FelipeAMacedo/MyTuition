@@ -46,4 +46,8 @@ public class Curso implements Serializable {
 		this.alunos = alunos;
 	}
 
+	@Override
+	public String toString() {
+		return this.nome;
+	}
 }

@@ -10,11 +10,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.felipemacedo.mytuition.conf.Configuration;
-import com.example.felipemacedo.mytuition.dto.conquista.ConquistaBuscaDTO;
 import com.example.felipemacedo.mytuition.dto.save.wrapper.ConquistaBuscaWrapper;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.services.ConquistaService;
-import com.example.felipemacedo.mytuition.services.DisciplinaService;
 import com.example.felipemacedo.mytuition.utils.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -35,7 +33,7 @@ public class ConquistaServiceImpl implements ConquistaService {
     public void buscarTodas(Context context, String email, JsonRequestListener listener) {
         String url = urlConquista + "/buscarNovasAtualizacoes";
 
-        JSONObject jsonBody = null;
+        JSONObject jsonBody;
 
         try {
             jsonBody = getJSONObject(buscarConquistasLocais());
@@ -54,7 +52,7 @@ public class ConquistaServiceImpl implements ConquistaService {
     private ConquistaBuscaWrapper buscarConquistasLocais() {
         // TODO: buscar todas as conquistas que se tem localmente
         ConquistaBuscaWrapper wrapper = new ConquistaBuscaWrapper();
-        wrapper.setConquistaBuscaDTO(new ArrayList<ConquistaBuscaDTO>());
+        wrapper.setConquistaBuscaDTO(new ArrayList<>());
 
         return wrapper;
     }
@@ -77,7 +75,7 @@ public class ConquistaServiceImpl implements ConquistaService {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
+                HashMap<String, String> headers = new HashMap<>();
                 //headers.put("Content-Type", "application/json");
                 headers.put("email", email);
                 return headers;

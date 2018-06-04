@@ -1,7 +1,6 @@
 package com.example.felipemacedo.mytuition.dto.disciplina;
 
 import com.example.felipemacedo.mytuition.dto.usuarioDisciplina.UsuarioDisciplinaDTO;
-import com.example.felipemacedo.mytuition.enums.Atributo;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

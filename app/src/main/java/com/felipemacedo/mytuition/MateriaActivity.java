@@ -73,6 +73,7 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
     }
 
     private void initComponents() {
+
         disciplinaId = getIntent().getExtras().getLong("disciplinaId");
 
         mRecyclerView = (RecyclerView) findViewById(R.id.rv_materias);
@@ -147,7 +148,7 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
 
                 if (conteudos != null && !conteudos.isEmpty()) {
 
-                    if(materias.get(position).getUsuarioMateria() == null) {
+                    if (materias.get(position).getUsuarioMateria() == null) {
                         UsuarioMateriaSaveWrapper wrapperUsuarioMateria = montarWrapper(Configuration.usuario.getEmail(), materias.get(position).getId());
                         usuarioMateriaService = new UsuarioMateriaServiceImpl();
                         usuarioMateriaService.iniciarMateria(MateriaActivity.this, wrapperUsuarioMateria, new JsonRequestListener<JSONObject>() {

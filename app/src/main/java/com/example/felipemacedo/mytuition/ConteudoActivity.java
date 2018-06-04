@@ -1,7 +1,6 @@
 package com.example.felipemacedo.mytuition;
 
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -141,7 +140,7 @@ public class ConteudoActivity extends AppCompatActivity {
 
                 if (!somenteQuestao) {
                     if (conteudoAtual.getAlternativas() != null && !conteudoAtual.getAlternativas().isEmpty()) {
-                        if (verificaResposta() == false) {
+                        if (!verificaResposta()) {
                             return;
                         }
                     }
@@ -172,7 +171,7 @@ public class ConteudoActivity extends AppCompatActivity {
                         finalizarMateria();
                     }
                 } else {
-                    if (verificaResposta() == false)
+                    if (!verificaResposta())
                         setResult(1, new Intent().putExtra("acertou", false));
                     else
                         setResult(1, new Intent().putExtra("acertou", true));

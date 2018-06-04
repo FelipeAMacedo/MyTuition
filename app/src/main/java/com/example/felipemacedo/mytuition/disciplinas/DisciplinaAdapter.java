@@ -78,10 +78,10 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
         public DisciplinaViewHolder(View itemView) {
             super(itemView);
 
-            nomeDisciplina = (TextView) itemView.findViewById(R.id.txtNomeLicao);
-            qtdConteudo = (TextView) itemView.findViewById(R.id.txtQtdLicoes);
-            status = (RelativeLayout) itemView.findViewById(R.id.licao_status);
-            mProgressBar = (ProgressBar) itemView.findViewById(R.id.progresso_da_licao);
+            nomeDisciplina = itemView.findViewById(R.id.txtNomeLicao);
+            qtdConteudo = itemView.findViewById(R.id.txtQtdLicoes);
+            status = itemView.findViewById(R.id.licao_status);
+            mProgressBar = itemView.findViewById(R.id.progresso_da_licao);
 
 
             itemView.setOnClickListener(this);

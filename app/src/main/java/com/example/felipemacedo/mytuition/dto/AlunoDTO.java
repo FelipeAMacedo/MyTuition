@@ -81,6 +81,14 @@ public class AlunoDTO implements Serializable {
 		this.dataEntrada = dataEntrada;
 	}
 
+	public Long getCurso() {
+		return curso;
+	}
+
+	public void setCurso(Long curso) {
+		this.curso = curso;
+	}
+
 	public Boolean getTrabalhaArea() {
 		return trabalhaArea;
 	}

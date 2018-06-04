@@ -1,7 +1,6 @@
 package com.example.felipemacedo.mytuition.services.impl;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -12,7 +11,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.services.ConteudoService;
-import com.example.felipemacedo.mytuition.services.MateriaService;
 
 import org.json.JSONObject;
 

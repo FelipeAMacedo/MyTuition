@@ -1,11 +1,15 @@
 package com.example.felipemacedo.mytuition;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +20,7 @@ import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioSaveWrapper;
 import com.example.felipemacedo.mytuition.enums.Perfil;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.model.eclipse.Aluno;
+import com.example.felipemacedo.mytuition.model.eclipse.Curso;
 import com.example.felipemacedo.mytuition.model.eclipse.Heroi;
 import com.example.felipemacedo.mytuition.model.eclipse.Usuario;
 import com.example.felipemacedo.mytuition.services.UsuarioService;
@@ -23,6 +28,8 @@ import com.example.felipemacedo.mytuition.services.impl.UsuarioServiceImpl;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -36,6 +43,12 @@ public class RegisterActivity extends AppCompatActivity {
     private TextView mSenha;
     private TextView mConfSenha;
     private Button mCadastrarButton;
+
+    private TextView mCpf;
+    private TextView mDataEntrada;
+    private Spinner mCurso;
+    private RadioButton mSim;
+    private RadioButton mNao;
 
     private UsuarioService service;
 
@@ -66,30 +79,75 @@ public class RegisterActivity extends AppCompatActivity {
         mSenha = (TextView) findViewById(R.id.etCadPassword);
         mConfSenha = (TextView) findViewById(R.id.etCadPasswordConfirm);
         mCadastrarButton = (Button) findViewById(R.id.btnCreateAccount);
+
+
+        mCpf = (TextView) findViewById(R.id.etCadCpf);
+        mDataEntrada = (TextView) findViewById(R.id.etCadEntrada);
+        mCurso = (Spinner) findViewById(R.id.sprCurso);
+        mSim = (RadioButton) findViewById(R.id.rBtnCadTrabalha);
+        mNao = (RadioButton) findViewById(R.id.rBtnCadNaoTrabalha);
+
+        prepararSpinner();
+    }
+
+    private void prepararSpinner() {
+
+        List<Curso> cursos = new ArrayList<>();
+        Curso hint = new Curso();
+        hint.setId(0L);
+        hint.setNome("Curso");
+
+        Curso c1 = new Curso();
+        c1.setId(1L);
+        c1.setNome("ADS");
+
+        Curso c2 = new Curso();
+        c2.setId(2L);
+        c2.setNome("Comex");
+
+        cursos.add(hint);
+        cursos.add(c1);
+        cursos.add(c2);
+
+        ArrayAdapter<Curso> adapter = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, cursos) {
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+
+                if (position == 0)
+                    tv.setTextColor(Color.GRAY);
+                else
+                    tv.setTextColor(Color.BLACK);
+
+                return view;
+            }
+        };
+
+        mCurso.setAdapter(adapter);
     }
 
     private void initListeners() {
-        mCadastrarButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!validateForm()) {
-                    return;
+        mCadastrarButton.setOnClickListener((view) -> {
+            if (!validateForm()) {
+                return;
+            }
+
+            service = new UsuarioServiceImpl();
+            service.registrar(view.getContext(), generateWrappedDTO(), new JsonRequestListener() {
+                @Override
+                public void onSuccess(Object response) {
+                    startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 }
 
-                service = new UsuarioServiceImpl();
-                service.registrar(view.getContext(), generateWrappedDTO(), new JsonRequestListener() {
-                    @Override
-                    public void onSuccess(Object response) {
-                        startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                    }
+                @Override
+                public void onError(Object response) {
 
-                    @Override
-                    public void onError(Object response) {
-
-                    }
-                });
-
-            }
+                }
+            });
         });
     }
 
@@ -102,11 +160,19 @@ public class RegisterActivity extends AppCompatActivity {
         String senha = mSenha.getText().toString();
         String email = mEmail.getText().toString();
 
+        String cpf = mCpf.getText().toString();
+        String dataEntrada = mDataEntrada.getText().toString();
+
+        Curso cursoSelecionado = (Curso) mCurso.getSelectedItem();
+        Long curso = cursoSelecionado.getId();
+
         if (nomeCompleto.isEmpty() || nomeHeroi.isEmpty() ||
                 ra.isEmpty() || dataNascimento.isEmpty() ||
                 (!mMasculino.isChecked() && !mFeminino.isChecked()) ||
+                (!mSim.isChecked() && !mNao.isChecked()) ||
                 email.equals("") || senha.isEmpty() ||
-                confSenha.isEmpty()) {
+                confSenha.isEmpty() || curso == 0L ||
+                cpf.isEmpty() || dataEntrada.isEmpty()) {
 
             exibirToast("Preencha os dados corretamente");
             return false;
@@ -143,11 +209,20 @@ public class RegisterActivity extends AppCompatActivity {
         aluno.setRa(mRa.getText().toString());
 
 
-        mockData(aluno);
+        aluno.setCpf(mCpf.getText().toString());
+
+        if (mSim.isChecked()) {
+            aluno.setTrabalhaArea(true);
+        } else if (mNao.isChecked()) {
+            aluno.setTrabalhaArea(false);
+        }
+
+        Curso selecionado = (Curso) mCurso.getSelectedItem();
+        aluno.setCurso(selecionado.getId());
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         aluno.setDataNascimento(LocalDate.parse(mNascimento.getText().toString(), formatter));
-
+        aluno.setDataEntrada(LocalDate.parse(mDataEntrada.getText().toString(), formatter));
 
         if (mMasculino.isChecked()) {
             aluno.setSexo(true);
@@ -156,12 +231,6 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         return aluno;
-    }
-
-    private void mockData(AlunoDTO aluno) {
-        aluno.setCpf("431.353.768-69");
-        aluno.setTrabalhaArea(true);
-        aluno.setDataEntrada(LocalDate.now());
     }
 
     private UsuarioDTO getUsuarioData() {

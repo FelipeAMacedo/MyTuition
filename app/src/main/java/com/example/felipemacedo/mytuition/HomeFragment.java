@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.felipemacedo.mytuition.conf.Configuration;
 
@@ -90,14 +89,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void initComponents(View view) {
-        mLevel = (TextView) view.findViewById(R.id.txtHomeLevel);
-        mLevelProgress = (ProgressBar) view.findViewById(R.id.levelProgress);
-        alertButton = (ImageButton) view.findViewById(R.id.alertButton);
-        tvNomeHeroiHome = (TextView) view.findViewById(R.id.tvNomeHeroiHome);
-        tvAtaqueHome = (TextView) view.findViewById(R.id.tvAtaqueHome);
-        tvDefesaHome = (TextView) view.findViewById(R.id.tvDefesaHome);
-        btnAumentarAtaque = (ImageButton) view.findViewById(R.id.btnAumentarAtaque);
-        btnAumentarDefesa = (ImageButton) view.findViewById(R.id.btnAumentarDefesa);
+        mLevel = view.findViewById(R.id.txtHomeLevel);
+        mLevelProgress = view.findViewById(R.id.levelProgress);
+        alertButton = view.findViewById(R.id.alertButton);
+        tvNomeHeroiHome = view.findViewById(R.id.tvNomeHeroiHome);
+        tvAtaqueHome = view.findViewById(R.id.tvAtaqueHome);
+        tvDefesaHome = view.findViewById(R.id.tvDefesaHome);
+        btnAumentarAtaque = view.findViewById(R.id.btnAumentarAtaque);
+        btnAumentarDefesa = view.findViewById(R.id.btnAumentarDefesa);
 
         tvNomeHeroiHome.setText(Configuration.usuario.getHeroiResponseDTO().getNome());
         tvAtaqueHome.setText(getResources().getText(R.string.home_hero_attack) + String.valueOf(Configuration.usuario.getHeroiResponseDTO().getAtaque()));
@@ -121,34 +120,23 @@ public class HomeFragment extends Fragment {
 
     private void initListeners() {
 
-        alertButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(HomeFragment.this.getContext(), LutaActivity.class));
+        alertButton.setOnClickListener((view) -> startActivity(new Intent(HomeFragment.this.getContext(), LutaActivity.class)));
+
+        btnAumentarAtaque.setOnClickListener((view) -> {
+            if (existePontosParaAdicionar()) {
+                int ataqueAtual = Configuration.usuario.getHeroiResponseDTO().getAtaque() + 1;
+                Configuration.usuario.getHeroiResponseDTO().setAtaque(ataqueAtual);
+
+                tvAtaqueHome.setText(getResources().getString(R.string.home_hero_attack) + ataqueAtual);
             }
         });
 
-        btnAumentarAtaque.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (existePontosParaAdicionar()) {
-                    int ataqueAtual = Configuration.usuario.getHeroiResponseDTO().getAtaque() + 1;
-                    Configuration.usuario.getHeroiResponseDTO().setAtaque(ataqueAtual);
+        btnAumentarDefesa.setOnClickListener((view) -> {
+            if (existePontosParaAdicionar()) {
+                int defesaAtual = Configuration.usuario.getHeroiResponseDTO().getDefesa() + 1;
+                Configuration.usuario.getHeroiResponseDTO().setDefesa(defesaAtual);
 
-                    tvAtaqueHome.setText(getResources().getString(R.string.home_hero_attack) + ataqueAtual);
-                }
-            }
-        });
-
-        btnAumentarDefesa.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (existePontosParaAdicionar()) {
-                    int defesaAtual = Configuration.usuario.getHeroiResponseDTO().getDefesa() + 1;
-                    Configuration.usuario.getHeroiResponseDTO().setDefesa(defesaAtual);
-
-                    tvDefesaHome.setText(getResources().getString(R.string.home_hero_defense) + defesaAtual);
-                }
+                tvDefesaHome.setText(getResources().getString(R.string.home_hero_defense) + defesaAtual);
             }
         });
     }

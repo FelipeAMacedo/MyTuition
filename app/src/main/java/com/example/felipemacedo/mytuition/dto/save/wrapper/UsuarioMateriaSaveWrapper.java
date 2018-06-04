@@ -1,6 +1,5 @@
 package com.example.felipemacedo.mytuition.dto.save.wrapper;
 
-import com.example.felipemacedo.mytuition.dto.LoginDTO;
 import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
 import com.google.gson.annotations.SerializedName;
 

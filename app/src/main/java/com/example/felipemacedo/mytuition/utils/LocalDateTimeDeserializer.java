@@ -7,7 +7,6 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class LocalDateTimeDeserializer implements JsonDeserializer<LocalDateTime> {
 

@@ -2,11 +2,9 @@ package com.example.felipemacedo.mytuition;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -105,16 +103,13 @@ public class LutaActivity extends AppCompatActivity {
     };
 
     private View mControlsView;
-    private final Runnable mShowPart2Runnable = new Runnable() {
-        @Override
-        public void run() {
-            // Delayed display of UI elements
-            ActionBar actionBar = getSupportActionBar();
-            if (actionBar != null) {
-                actionBar.show();
-            }
-//            mControlsView.setVisibility(View.VISIBLE);
+    private final Runnable mShowPart2Runnable = () -> {
+        // Delayed display of UI elements
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.show();
         }
+//            mControlsView.setVisibility(View.VISIBLE);
     };
     private boolean mVisible;
     private final Runnable mHideRunnable = () -> hide();
@@ -286,23 +281,19 @@ public class LutaActivity extends AppCompatActivity {
 
         animator.setInterpolator(new AccelerateInterpolator());
 
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                if (progressBar.getProgress() < 70) {
-                    Resources res = getResources();
-                    Rect bounds = progressBar.getProgressDrawable().getBounds();
+        animator.addUpdateListener((animation) -> {
+            if (progressBar.getProgress() < 70) {
+                Rect bounds = progressBar.getProgressDrawable().getBounds();
 
-                    if (progressBar.getProgress() >= 30)
-                        progressBar.setProgressDrawable(ContextCompat.getDrawable(LutaActivity.this, R.drawable.hp_progressbar_yellow));
-                    else if (progressBar.getProgress() < 30)
-                        progressBar.setProgressDrawable(ContextCompat.getDrawable(LutaActivity.this, R.drawable.hp_progressbar_red));
+                if (progressBar.getProgress() >= 30)
+                    progressBar.setProgressDrawable(ContextCompat.getDrawable(LutaActivity.this, R.drawable.hp_progressbar_yellow));
+                else if (progressBar.getProgress() < 30)
+                    progressBar.setProgressDrawable(ContextCompat.getDrawable(LutaActivity.this, R.drawable.hp_progressbar_red));
 
-                    progressBar.getProgressDrawable().setBounds(bounds);
+                progressBar.getProgressDrawable().setBounds(bounds);
 
-                    if (progressBar.getProgress() <= 0) {
-                        animator.pause();
-                    }
+                if (progressBar.getProgress() <= 0) {
+                    animator.pause();
                 }
             }
         });
@@ -388,9 +379,9 @@ public class LutaActivity extends AppCompatActivity {
         final Dialog mensagem = new Dialog(this);
         mensagem.setContentView(R.layout.dialog_luta_fim);
 
-        TextView tvResultado = (TextView) mensagem.findViewById(R.id.tvDialogLutaResultado);
-        TextView tvPontos = (TextView) mensagem.findViewById(R.id.tvDialogLutaPontos);
-        Button btnOk = (Button) mensagem.findViewById(R.id.btnDialogLutaFim);
+        TextView tvResultado = mensagem.findViewById(R.id.tvDialogLutaResultado);
+        TextView tvPontos = mensagem.findViewById(R.id.tvDialogLutaPontos);
+        Button btnOk = mensagem.findViewById(R.id.btnDialogLutaFim);
 
         int pontosVitoria = 3000;
         int pontosDerrota = -5000;
@@ -421,12 +412,9 @@ public class LutaActivity extends AppCompatActivity {
             tvPontos.setBackgroundColor(Color.parseColor("#F7C9CA"));
         }
 
-        btnOk.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mensagem.cancel();
-                LutaActivity.this.finish();
-            }
+        btnOk.setOnClickListener((view) -> {
+            mensagem.cancel();
+            LutaActivity.this.finish();
         });
 
         mensagem.show();

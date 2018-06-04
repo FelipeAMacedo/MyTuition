@@ -78,10 +78,10 @@ public class MateriasAdapter extends RecyclerView.Adapter<MateriasAdapter.Materi
         public MateriasViewHolder(View itemView) {
             super(itemView);
 
-            nomeMateria = (TextView) itemView.findViewById(R.id.txtNomeLicao);
-            qtdConteudo = (TextView) itemView.findViewById(R.id.txtQtdLicoes);
-            status = (RelativeLayout) itemView.findViewById(R.id.licao_status);
-            mProgressBar = (ProgressBar) itemView.findViewById(R.id.progresso_da_licao);
+            nomeMateria = itemView.findViewById(R.id.txtNomeLicao);
+            qtdConteudo = itemView.findViewById(R.id.txtQtdLicoes);
+            status = itemView.findViewById(R.id.licao_status);
+            mProgressBar = itemView.findViewById(R.id.progresso_da_licao);
 
 
             itemView.setOnClickListener(this);

@@ -126,7 +126,7 @@ public class MateriasFragment extends Fragment implements RecyclerViewOnItemClic
 
         View view = inflater.inflate(R.layout.fragment_disciplinas, container, false);
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_licoes);
+        mRecyclerView = view.findViewById(R.id.rv_licoes);
         mRecyclerView.setHasFixedSize(true);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());

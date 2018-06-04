@@ -71,26 +71,11 @@ public class MainActivity extends AppCompatActivity implements OnFragmentInterac
 
     private void initListeners() {
 
-        ibtnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewPager.setCurrentItem(0);
-            }
-        });
+        ibtnHome.setOnClickListener((view) -> mViewPager.setCurrentItem(0));
 
-        ibtnLicoes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewPager.setCurrentItem(1);
-            }
-        });
+        ibtnLicoes.setOnClickListener((view) -> mViewPager.setCurrentItem(1));
 
-        ibtnAchievements.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewPager.setCurrentItem(2);
-            }
-        });
+        ibtnAchievements.setOnClickListener((view) -> mViewPager.setCurrentItem(2));
     }
 
     private class MainAdapter extends FragmentStatePagerAdapter {

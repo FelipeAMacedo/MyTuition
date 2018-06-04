@@ -2,22 +2,18 @@ package com.example.felipemacedo.mytuition.conquistas;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.example.felipemacedo.mytuition.R;
 import com.example.felipemacedo.mytuition.model.eclipse.Conquista;
 import com.example.felipemacedo.mytuition.utils.Base64Util;
 import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 
-import java.util.Base64;
 import java.util.List;
 
 public class ConquistasAdapter extends RecyclerView.Adapter<ConquistasAdapter.ConquistasViewHolder> {
@@ -47,18 +43,10 @@ public class ConquistasAdapter extends RecyclerView.Adapter<ConquistasAdapter.Co
 
         holder.imagemConquista.setImageDrawable(Base64Util.base64ToDrawable(res, conquista.getImagem()));
 
-//        int completado = 0;
+        if (conquista.getUsuarioConquista() != null && !conquista.getUsuarioConquista().isEmpty())
+            holder.camada.setVisibility(View.GONE);
 
-        // calcula o quanto já foi estudado
-//        if (licao.getUsuarios() != null && licao.getUsuarios().containsKey(getUid())) {
-//            completado = licao.getUsuarios().get(getUid()).intValue();
-//        }
-
-//        holder.qtdLicoes.setText(completado + "/" + licao.getConteudoCount());
-
-//        holder.mProgressBar.setProgress(completado > 0 ? (completado * 100) / licao.getConteudoCount() : 0);
     }
-
 
     @Override
     public int getItemCount() {
@@ -72,11 +60,13 @@ public class ConquistasAdapter extends RecyclerView.Adapter<ConquistasAdapter.Co
     public class ConquistasViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
         private AppCompatImageView imagemConquista;
+        private RelativeLayout camada;
 
         public ConquistasViewHolder(View itemView) {
             super(itemView);
 
-            imagemConquista = (AppCompatImageView) itemView.findViewById(R.id.img_conquista);
+            imagemConquista = itemView.findViewById(R.id.img_conquista);
+            camada = itemView.findViewById(R.id.conquista_item_camada);
 
             itemView.setOnLongClickListener(this);
         }

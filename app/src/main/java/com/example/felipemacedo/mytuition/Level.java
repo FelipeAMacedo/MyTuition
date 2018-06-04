@@ -13,6 +13,6 @@ public final class Level {
     }
 
     public static int calculateNeededExp (int level) {
-        return (int) ((level * level - level) * 50) / 2;
+        return (level * level - level) * 50 / 2;
     }
 }

@@ -5,9 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.support.v7.widget.ActionBarOverlayLayout;
 import android.view.View;
-import android.view.ViewGroup;
 
 /**
  * Created by felipemacedo on 21/10/17.

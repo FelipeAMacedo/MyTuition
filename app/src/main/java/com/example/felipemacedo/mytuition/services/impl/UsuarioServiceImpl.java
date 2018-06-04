@@ -1,7 +1,6 @@
 package com.example.felipemacedo.mytuition.services.impl;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -31,7 +30,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void registrar(Context context, UsuarioSaveWrapper wrapper, JsonRequestListener listener) {
         String url = urlUsuario + "/registrar";
 
-        JSONObject jsonBody = null;
+        JSONObject jsonBody;
 
         try {
             jsonBody = getJSONObject(wrapper);
@@ -49,7 +48,7 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void logar(Context context, LoginWrapper wrapper, JsonRequestListener listener) {
         String url = urlUsuario + "/logar";
 
-        JSONObject jsonBody = null;
+        JSONObject jsonBody;
 
         try {
             jsonBody = getJSONObject(wrapper);

@@ -12,7 +12,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.services.DisciplinaService;
-import com.example.felipemacedo.mytuition.services.MateriaService;
 
 import org.json.JSONObject;
 
@@ -51,7 +50,7 @@ public class DisciplinaServiceImpl implements DisciplinaService {
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
+                HashMap<String, String> headers = new HashMap<>();
                 //headers.put("Content-Type", "application/json");
                 headers.put("email", email);
                 return headers;

@@ -10,12 +10,8 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.dto.save.wrapper.UsuarioMateriaSaveWrapper;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaMateriaDTO;
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaUsuarioDTO;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.example.felipemacedo.mytuition.services.UsuarioMateriaService;
-import com.example.felipemacedo.mytuition.utils.LocalDateAdapter;
 import com.example.felipemacedo.mytuition.utils.LocalDateTimeAdapter;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,7 +19,6 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class UsuarioMateriaServiceImpl implements UsuarioMateriaService {
@@ -34,7 +29,7 @@ public class UsuarioMateriaServiceImpl implements UsuarioMateriaService {
     public void finalizarMateria(Context context, UsuarioMateriaSaveWrapper wrapper, JsonRequestListener listener) {
         StringBuilder url = new StringBuilder(urlUsuarioMateria).append("/finalizar");
 
-        JSONObject jsonBody = null;
+        JSONObject jsonBody;
 
         try {
             jsonBody = getJSONObject(wrapper);
@@ -52,7 +47,7 @@ public class UsuarioMateriaServiceImpl implements UsuarioMateriaService {
     public void iniciarMateria(Context context, UsuarioMateriaSaveWrapper wrapper, JsonRequestListener listener) {
         StringBuilder url = new StringBuilder(urlUsuarioMateria).append("/iniciar");
 
-        JSONObject jsonBody = null;
+        JSONObject jsonBody;
 
         try {
             jsonBody = getJSONObject(wrapper);

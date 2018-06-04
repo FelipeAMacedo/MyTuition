@@ -60,5 +60,12 @@
     <string name="title_activity_luta">LutaActivity</string>
 
     <string name="descricao_heroi_imagem">Imagem do herói escolhido</string>
+    <string name="prompt_cpf">CPF</string>
+    <string name="prompt_entrada">Data de entrada na faculdade</string>
+    <string name="prompt_nao">Não</string>
+    <string name="prompt_sim">Sim</string>
+    <string name="prompt_work">Trabalha na área de TI?</string>
+    <string name="prompt_curso">Escolha o seu curso atual</string>
+    <string name="selecionar_curso">Selecione o seu curso</string>
 
 </resources>

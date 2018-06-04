@@ -1,7 +1,6 @@
 package com.example.felipemacedo.mytuition.dto.conquista;
 
-import com.example.felipemacedo.mytuition.dto.usuarioMateria.UsuarioMateriaDTO;
-import com.example.felipemacedo.mytuition.enums.Atributo;
+import com.example.felipemacedo.mytuition.dto.usuarioConquista.UsuarioConquistaResultDTO;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -27,6 +26,9 @@ public class ConquistaResultDTO implements Serializable {
 
     @SerializedName("dataAlteracao")
     private LocalDateTime dataAlteracao;
+
+    @SerializedName("usuarioConquista")
+    private Set<UsuarioConquistaResultDTO> usuarioConquistaResultDTO;
 
     public Long getId() {
         return id;
@@ -74,5 +76,13 @@ public class ConquistaResultDTO implements Serializable {
 
     public void setDataAlteracao(LocalDateTime dataAlteracao) {
         this.dataAlteracao = dataAlteracao;
+    }
+
+    public Set<UsuarioConquistaResultDTO> getUsuarioConquistaResultDTO() {
+        return usuarioConquistaResultDTO;
+    }
+
+    public void setUsuarioConquistaResultDTO(Set<UsuarioConquistaResultDTO> usuarioConquistaResultDTO) {
+        this.usuarioConquistaResultDTO = usuarioConquistaResultDTO;
     }
 }

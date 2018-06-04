@@ -48,4 +48,11 @@ public class Conquista implements Serializable {
         this.imagem = imagem;
     }
 
+    public Set<UsuarioConquista> getUsuarioConquista() {
+        return usuarioConquista;
+    }
+
+    public void setUsuarioConquista(Set<UsuarioConquista> usuarioConquista) {
+        this.usuarioConquista = usuarioConquista;
+    }
 }

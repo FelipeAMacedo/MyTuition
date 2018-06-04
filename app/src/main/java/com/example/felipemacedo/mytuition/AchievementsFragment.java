@@ -3,10 +3,8 @@ package com.example.felipemacedo.mytuition;
 
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatDialog;
-import android.support.v7.app.AppCompatDialogFragment;
 import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,15 +19,13 @@ import android.widget.Toast;
 import com.example.felipemacedo.mytuition.conf.Configuration;
 import com.example.felipemacedo.mytuition.conquistas.ConquistasAdapter;
 import com.example.felipemacedo.mytuition.dto.conquista.ConquistaResultDTO;
-import com.example.felipemacedo.mytuition.dto.disciplina.DisciplinaResultDTO;
 import com.example.felipemacedo.mytuition.dto.wrapper.response.ConquistaResponseWrapper;
 import com.example.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.example.felipemacedo.mytuition.model.CurrentUser;
 import com.example.felipemacedo.mytuition.model.eclipse.Conquista;
-import com.example.felipemacedo.mytuition.model.eclipse.Disciplina;
 import com.example.felipemacedo.mytuition.services.ConquistaService;
 import com.example.felipemacedo.mytuition.services.impl.ConquistaServiceImpl;
 import com.example.felipemacedo.mytuition.utils.Base64Util;
+import com.example.felipemacedo.mytuition.utils.LocalDateDeserializer;
 import com.example.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
 import com.example.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 import com.google.gson.Gson;
@@ -38,6 +34,7 @@ import com.google.gson.GsonBuilder;
 import org.json.JSONObject;
 import org.modelmapper.ModelMapper;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +51,7 @@ public class AchievementsFragment extends Fragment implements RecyclerViewOnItem
     private TextView mNivel;
     private ProgressBar mProgress;
     private TextView mPontosFaltam;
-    private CurrentUser currUser = CurrentUser.getInstance();
+
 
     private RecyclerView mRecyclerView;
     private List<Conquista> conquistas;
@@ -88,14 +85,14 @@ public class AchievementsFragment extends Fragment implements RecyclerViewOnItem
     }
 
     private void initComponents(View view) {
-        mNomeHeroi = (TextView) view.findViewById(R.id.tvAchHeroiNome);
-        mNivel = (TextView) view.findViewById(R.id.tvAchNivel);
-        mProgress = (ProgressBar) view.findViewById(R.id.pbAchNivel);
-        mPontosFaltam = (TextView) view.findViewById(R.id.tvAchPontos);
+        mNomeHeroi = view.findViewById(R.id.tvAchHeroiNome);
+        mNivel = view.findViewById(R.id.tvAchNivel);
+        mProgress = view.findViewById(R.id.pbAchNivel);
+        mPontosFaltam = view.findViewById(R.id.tvAchPontos);
 
-        mNomeHeroi.setText(currUser.nomeHeroi);
+        mNomeHeroi.setText(Configuration.usuario.getHeroiResponseDTO().getNome());
 
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.rv_conquista);
+        mRecyclerView = view.findViewById(R.id.rv_conquista);
         mRecyclerView.setHasFixedSize(true);
 
         mRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
@@ -109,6 +106,7 @@ public class AchievementsFragment extends Fragment implements RecyclerViewOnItem
             public void onSuccess(JSONObject response) {
                 Gson gson = new GsonBuilder()
                         .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeDeserializer())
+                        .registerTypeAdapter(LocalDate.class, new LocalDateDeserializer())
                         .setPrettyPrinting()
                         .create();
 

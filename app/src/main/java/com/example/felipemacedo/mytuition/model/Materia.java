@@ -1,9 +1,5 @@
 package com.example.felipemacedo.mytuition.model;
 
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
-import android.arch.persistence.room.PrimaryKey;
-
 import java.io.Serializable;
 import java.util.List;
 

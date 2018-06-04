@@ -17,7 +17,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_mytuition_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login">
@@ -41,7 +42,7 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name="com.felipemacedo.mytuition.MateriaActivity"></activity>
+        <activity android:name="com.felipemacedo.mytuition.MateriaActivity" />
     </application>
 
 </manifest>
