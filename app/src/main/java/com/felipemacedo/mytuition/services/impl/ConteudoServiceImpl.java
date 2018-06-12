@@ -7,10 +7,10 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.felipemacedo.mytuition.services.ConteudoService;
+import com.felipemacedo.mytuition.utils.RequestQueueSingleton;
 
 import org.json.JSONObject;
 
@@ -24,7 +24,7 @@ public class ConteudoServiceImpl implements ConteudoService {
 
         JsonObjectRequest getRequest = buildGetRequest(context, url, listener);
 
-        Volley.newRequestQueue(context).add(getRequest);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(getRequest);
 
     }
 
@@ -35,7 +35,7 @@ public class ConteudoServiceImpl implements ConteudoService {
 
         JsonObjectRequest getRequest = buildGetRequest(context, url, listener);
 
-        Volley.newRequestQueue(context).add(getRequest);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(getRequest);
     }
 
     private JsonObjectRequest buildGetRequest(Context context, String url, JsonRequestListener listener) {

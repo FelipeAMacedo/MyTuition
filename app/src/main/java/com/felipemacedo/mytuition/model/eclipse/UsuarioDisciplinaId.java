@@ -6,23 +6,23 @@ public class UsuarioDisciplinaId implements Serializable {
 
     private static final long serialVersionUID = 5194698684021449931L;
 
-    private Long usuarioId;
-    private Long conquistaId;
+    private String usuarioId;
+    private Long disciplinaId;
 
-    public Long getUsuarioId() {
+    public String getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(Long usuarioId) {
+    public void setUsuarioId(String usuarioId) {
         this.usuarioId = usuarioId;
     }
 
-    public Long getConquistaId() {
-        return conquistaId;
+    public Long getDisciplinaId() {
+        return disciplinaId;
     }
 
-    public void setConquistaId(Long conquistaId) {
-        this.conquistaId = conquistaId;
+    public void setDisciplinaId(Long disciplinaId) {
+        this.disciplinaId = disciplinaId;
     }
 
 }

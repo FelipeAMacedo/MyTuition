@@ -14,6 +14,7 @@ import com.felipemacedo.mytuition.dto.save.wrapper.UsuarioSaveWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.felipemacedo.mytuition.services.UsuarioService;
 import com.felipemacedo.mytuition.utils.LocalDateAdapter;
+import com.felipemacedo.mytuition.utils.RequestQueueSingleton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -41,7 +42,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         JsonObjectRequest postRequest = buildRequest(context, url, jsonBody, listener);
 
-        Volley.newRequestQueue(context).add(postRequest);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
     }
 
     @Override
@@ -59,7 +60,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 
         JsonObjectRequest postRequest = buildRequest(context, url, jsonBody, listener);
 
-        Volley.newRequestQueue(context).add(postRequest);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
     }
 
     private JsonObjectRequest buildRequest(Context context, String url, JSONObject jsonBody, JsonRequestListener listener) {

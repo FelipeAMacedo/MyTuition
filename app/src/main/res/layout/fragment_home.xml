@@ -103,6 +103,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginEnd="7dp"
             android:layout_marginStart="7dp"
+            android:paddingHorizontal="20dp"
             android:background="@drawable/home_hero_background">
 
             <ImageView
@@ -110,7 +111,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/descricao_heroi_imagem"
-                android:src="@drawable/common_google_signin_btn_icon_dark" />
+                android:src="@drawable/dc_hero" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -138,11 +139,18 @@
                     android:textSize="17sp"
                     tools:text="Ataque: 10" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnAumentarAtaque"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:textColor="#FFFFFF"
+                    android:shadowColor="#424242"
+                    android:shadowDx="2"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_toEndOf="@id/tvAtaqueHome"
+                    android:background="@drawable/button_aumentar_ponto"
                     android:visibility="invisible"/>
             </LinearLayout>
 
@@ -164,10 +172,17 @@
                     android:textSize="17sp"
                     tools:text="Defesa: 10" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/btnAumentarDefesa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:text="+"
+                    android:textColor="#FFFFFF"
+                    android:shadowColor="#424242"
+                    android:shadowDx="2"
+                    android:shadowDy="1"
+                    android:shadowRadius="1"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:background="@drawable/button_aumentar_ponto"
                     android:layout_toEndOf="@id/tvDefesaHome"
                     android:visibility="invisible" />
             </LinearLayout>

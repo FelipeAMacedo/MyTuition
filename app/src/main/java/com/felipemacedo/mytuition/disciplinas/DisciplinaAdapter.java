@@ -37,15 +37,7 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
     public void onBindViewHolder(DisciplinaViewHolder holder, int position) {
         Disciplina disciplina = disciplinas.get(position);
 
-        holder.nomeDisciplina.setText(disciplina.getNome());
-
-        if(disciplina.getUsuarioDisciplina() == null) {
-            holder.status.setBackgroundColor(Color.parseColor("#BBBBBB"));
-        } else if(disciplina.getUsuarioDisciplina().iterator().next().getConclusao() == null) {
-            holder.status.setBackgroundColor(Color.parseColor("#F5B64E"));
-        } else {
-            holder.status.setBackgroundColor(Color.parseColor("#13CE66"));
-        }
+        holder.bindInfo(disciplina);
 
 //        int completado = 0;
 
@@ -93,6 +85,18 @@ public class DisciplinaAdapter extends RecyclerView.Adapter<DisciplinaAdapter.Di
                 mRecyclerViewOnItemClickListener.onItemClickListener(view, getAdapterPosition());
             }
 
+        }
+
+        public void bindInfo(Disciplina disciplina) {
+            this.nomeDisciplina.setText(disciplina.getNome());
+
+            if(disciplina.getUsuarioDisciplina() == null) {
+                this.status.setBackgroundColor(Color.parseColor("#BBBBBB"));
+            } else if(disciplina.getUsuarioDisciplina().iterator().next().getConclusao() == null) {
+                this.status.setBackgroundColor(Color.parseColor("#F5B64E"));
+            } else {
+                this.status.setBackgroundColor(Color.parseColor("#13CE66"));
+            }
         }
     }
 

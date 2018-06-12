@@ -69,6 +69,15 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
         initComponents();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (materiasAdapter != null) {
+            materiasAdapter.notifyDataSetChanged();
+        }
+    }
+
     /**
      * Inicia os componentes visuais da tela.
      */

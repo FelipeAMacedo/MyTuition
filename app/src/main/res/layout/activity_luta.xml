@@ -11,21 +11,37 @@
         android:layout_height="match_parent"
         android:background="#E8E8E8">
 
-        <ImageView
-            android:id="@+id/imgLutaVilao"
+        <RelativeLayout
+            android:id="@+id/imgVilaoContainer"
             android:layout_width="286.67dp"
-            android:layout_height="272.67dp"
+            android:layout_height="280.67dp"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="27.33dp"
-            app:srcCompat="@drawable/common_google_signin_btn_icon_dark" />
+            android:layout_marginTop="27.33dp">
+
+            <RelativeLayout
+                android:layout_width="130dp"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/vilao_sombra">
+
+            </RelativeLayout>
+            <ImageView
+                android:id="@+id/imgLutaVilao"
+                android:layout_width="286.67dp"
+                android:layout_height="272.67dp"
+                android:layout_centerHorizontal="true"
+                app:srcCompat="@drawable/dc_vilao" />
+        </RelativeLayout>
+
 
         <LinearLayout
             android:id="@+id/llInfoVilao"
             android:layout_width="286.67dp"
             android:layout_height="80dp"
             android:layout_centerHorizontal="true"
-            android:layout_below="@+id/imgLutaVilao"
+            android:layout_below="@id/imgVilaoContainer"
             android:background="@drawable/luta_info"
             android:orientation="vertical"
             android:paddingTop="7dp">

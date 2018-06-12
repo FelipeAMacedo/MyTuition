@@ -15,4 +15,5 @@
     <color name="home_attrs_background">#235195</color>
     <color name="dialog_conquista_background">#F5F5F5</color>
     <color name="dialog_conquista_divider_color">#8A8A8A</color>
+    <color name="vilao_sombra">#BEBEBB</color>
 </resources>

@@ -2,16 +2,15 @@ package com.felipemacedo.mytuition.services.impl;
 
 import android.content.Context;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.felipemacedo.mytuition.conf.Configuration;
-import com.felipemacedo.mytuition.dto.save.wrapper.ConquistaBuscaWrapper;
+import com.felipemacedo.mytuition.dto.save.wrapper.UsuarioDisciplinaSaveWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.felipemacedo.mytuition.services.ConquistaService;
+import com.felipemacedo.mytuition.services.UsuarioDisciplinaService;
 import com.felipemacedo.mytuition.utils.LocalDateTimeAdapter;
 import com.felipemacedo.mytuition.utils.RequestQueueSingleton;
 import com.google.gson.Gson;
@@ -21,46 +20,50 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class ConquistaServiceImpl implements ConquistaService {
+public class UsuarioDisciplinaServiceImpl implements UsuarioDisciplinaService {
 
-    private static final String urlConquista = Configuration.API_URL + "conquista";
+    private static final String urlUsuarioDisciplina = Configuration.API_URL + "usuarioDisciplina";
 
     @Override
-    public void buscarTodas(Context context, String email, JsonRequestListener listener) {
-        String url = urlConquista + "/buscarNovasAtualizacoes";
+    public void finalizarDisciplina(Context context, UsuarioDisciplinaSaveWrapper wrapper, JsonRequestListener listener) {
+        StringBuilder url = new StringBuilder(urlUsuarioDisciplina).append("/finalizar");
 
         JSONObject jsonBody;
 
         try {
-            jsonBody = getJSONObject(buscarConquistasLocais());
+            jsonBody = getJSONObject(wrapper);
         } catch (JSONException e) {
             e.printStackTrace();
             jsonBody = new JSONObject();
         }
 
+        JsonObjectRequest postRequest = buildRequest(context, url.toString(), Request.Method.PUT, jsonBody, listener);
 
-        JsonObjectRequest getRequest = buildPostRequest(context, url, jsonBody, email, listener);
-
-        RequestQueueSingleton.getInstance(context).addToRequestQueue(getRequest);
-
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
     }
 
-    private ConquistaBuscaWrapper buscarConquistasLocais() {
-        // TODO: buscar todas as conquistas que se tem localmente
-        ConquistaBuscaWrapper wrapper = new ConquistaBuscaWrapper();
-        wrapper.setConquistaBuscaDTO(new ArrayList<>());
+    @Override
+    public void iniciarDisciplina(Context context, UsuarioDisciplinaSaveWrapper wrapper, JsonRequestListener listener) {
+        StringBuilder url = new StringBuilder(urlUsuarioDisciplina).append("/iniciar");
 
-        return wrapper;
+        JSONObject jsonBody;
+
+        try {
+            jsonBody = getJSONObject(wrapper);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            jsonBody = new JSONObject();
+        }
+
+        JsonObjectRequest postRequest = buildRequest(context, url.toString(), Request.Method.POST, jsonBody, listener);
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
     }
 
-    private JsonObjectRequest buildPostRequest(Context context, String url, JSONObject jsonBody, String email, JsonRequestListener listener) {
-
+    private JsonObjectRequest buildRequest(Context context, String url, int requestMethod, JSONObject jsonBody, JsonRequestListener listener) {
         JsonObjectRequest request = new JsonObjectRequest
-                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
+                (requestMethod, url, jsonBody, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -72,16 +75,7 @@ public class ConquistaServiceImpl implements ConquistaService {
                     public void onErrorResponse(VolleyError error) {
                         listener.onError(error);
                     }
-                }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<>();
-                //headers.put("Content-Type", "application/json");
-                headers.put("email", email);
-                return headers;
-            }
-        };
-
+                });
 
         request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));

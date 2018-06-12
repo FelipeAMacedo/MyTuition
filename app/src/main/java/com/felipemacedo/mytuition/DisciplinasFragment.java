@@ -16,15 +16,20 @@ import android.widget.Toast;
 import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.disciplinas.DisciplinaAdapter;
 import com.felipemacedo.mytuition.dto.disciplina.DisciplinaResultDTO;
+import com.felipemacedo.mytuition.dto.save.wrapper.UsuarioDisciplinaSaveWrapper;
+import com.felipemacedo.mytuition.dto.usuarioDisciplina.UsuarioDisciplinaDTO;
+import com.felipemacedo.mytuition.dto.usuarioDisciplina.UsuarioDisciplinaDisciplinaDTO;
+import com.felipemacedo.mytuition.dto.usuarioDisciplina.UsuarioDisciplinaUsuarioDTO;
 import com.felipemacedo.mytuition.dto.wrapper.response.DisciplinaResponseWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
-import com.felipemacedo.mytuition.model.eclipse.Conteudo;
 import com.felipemacedo.mytuition.model.eclipse.Disciplina;
 import com.felipemacedo.mytuition.model.eclipse.UsuarioDisciplina;
+import com.felipemacedo.mytuition.model.eclipse.UsuarioDisciplinaId;
 import com.felipemacedo.mytuition.services.ConteudoService;
 import com.felipemacedo.mytuition.services.DisciplinaService;
-import com.felipemacedo.mytuition.services.UsuarioMateriaService;
+import com.felipemacedo.mytuition.services.UsuarioDisciplinaService;
 import com.felipemacedo.mytuition.services.impl.DisciplinaServiceImpl;
+import com.felipemacedo.mytuition.services.impl.UsuarioDisciplinaServiceImpl;
 import com.felipemacedo.mytuition.utils.LocalDateTimeDeserializer;
 import com.felipemacedo.mytuition.utils.RecyclerViewOnItemClickListener;
 import com.google.gson.Gson;
@@ -36,6 +41,7 @@ import org.modelmapper.ModelMapper;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -67,7 +73,7 @@ public class DisciplinasFragment extends Fragment implements RecyclerViewOnItemC
 
     private DisciplinaService service;
     private ConteudoService conteudoService;
-    private UsuarioMateriaService usuarioMateriaService;
+    private UsuarioDisciplinaService usuarioDisciplinaService;
 
     private OnFragmentInteractionListener mListener;
 
@@ -166,6 +172,10 @@ public class DisciplinasFragment extends Fragment implements RecyclerViewOnItemC
     @Override
     public void onResume() {
         super.onResume();
+
+        if (disciplinaAdapter != null) {
+            disciplinaAdapter.notifyDataSetChanged();
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -194,9 +204,44 @@ public class DisciplinasFragment extends Fragment implements RecyclerViewOnItemC
 
     @Override
     public void onItemClickListener(View view, int position) {
-        Intent intent = new Intent(getActivity(), MateriaActivity.class);
-        intent.putExtra("disciplinaId", disciplinas.get(position).getId());
-        startActivity(intent);
+        if (disciplinas.get(position).getUsuarioDisciplina() == null) {
+            UsuarioDisciplinaSaveWrapper wrapperUsuarioDisciplina = montarWrapper(Configuration.usuario.getEmail(), disciplinas.get(position).getId());
+            usuarioDisciplinaService = new UsuarioDisciplinaServiceImpl();
+            usuarioDisciplinaService.iniciarDisciplina(getActivity(), wrapperUsuarioDisciplina, new JsonRequestListener<JSONObject>() {
+                @Override
+                public void onSuccess(JSONObject response) {
+                    atribuirUsuarioDisciplinaLocalmente(wrapperUsuarioDisciplina.getUsuarioDisciplinaDTO());
+                    mostrarConteudo(disciplinas.get(position).getId());
+                    disciplinaAdapter.notifyDataSetChanged();
+                }
+
+                private void atribuirUsuarioDisciplinaLocalmente(UsuarioDisciplinaDTO usuarioDisciplinaDTO) {
+                    UsuarioDisciplina usuarioDisciplina = new UsuarioDisciplina();
+                    usuarioDisciplina.setInicio(usuarioDisciplinaDTO.getInicio());
+                    usuarioDisciplina.setConclusao(usuarioDisciplinaDTO.getConclusao());
+
+                    UsuarioDisciplinaId id = new UsuarioDisciplinaId();
+                    id.setDisciplinaId(usuarioDisciplinaDTO.getDisciplina().getId());
+                    id.setUsuarioId(usuarioDisciplinaDTO.getUsuario().getEmail());
+
+                    usuarioDisciplina.setId(id);
+
+                    Set<UsuarioDisciplina> usuarioDisciplinas = new HashSet<>();
+                    usuarioDisciplinas.add(usuarioDisciplina);
+
+                    disciplinas.get(position).setUsuarioDisciplina(usuarioDisciplinas);
+                }
+
+                @Override
+                public void onError(JSONObject response) {
+                    Toast.makeText(getContext(), "Não foi possível iniciar a disciplina", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            mostrarConteudo(disciplinas.get(position).getId());
+        }
+
+
 //        conteudoService = new ConteudoServiceImpl();
 //
 //        conteudoService.findByMateriaId(this.getContext(), disciplinas.get(position).getId(), new JsonRequestListener<JSONObject>() {
@@ -317,12 +362,29 @@ public class DisciplinasFragment extends Fragment implements RecyclerViewOnItemC
 //        });
     }
 
-    private void mostrarConteudo(int position, List<Conteudo> conteudos, Set<UsuarioDisciplina> usuarioDisciplina) {
+    private UsuarioDisciplinaSaveWrapper montarWrapper(String emailUsuario, Long materiaId) {
+        UsuarioDisciplinaDTO dto = new UsuarioDisciplinaDTO();
+        UsuarioDisciplinaDisciplinaDTO usuarioDisciplinaDisciplinaDTO = new UsuarioDisciplinaDisciplinaDTO();
+        usuarioDisciplinaDisciplinaDTO.setId(materiaId);
 
-        Intent intent = new Intent(getActivity(), ConteudoActivity.class);
+        UsuarioDisciplinaUsuarioDTO usuarioDisciplinaUsuarioDTO = new UsuarioDisciplinaUsuarioDTO();
+        usuarioDisciplinaUsuarioDTO.setEmail(emailUsuario);
 
-        intent.putExtra("disciplina", disciplinas.get(position));
-        intent.putExtra("usuarioDisciplina", (Serializable) usuarioDisciplina);
+        dto.setDisciplina(usuarioDisciplinaDisciplinaDTO);
+        dto.setUsuario(usuarioDisciplinaUsuarioDTO);
+        dto.setInicio(LocalDateTime.now());
+
+        UsuarioDisciplinaSaveWrapper wrapper = new UsuarioDisciplinaSaveWrapper();
+        wrapper.setUsuarioDisciplinaDTO(dto);
+
+        return wrapper;
+    }
+
+    private void mostrarConteudo(Long disciplinaId) {
+
+        Intent intent = new Intent(getActivity(), MateriaActivity.class);
+
+        intent.putExtra("disciplinaId", disciplinaId);
 
         startActivity(intent);
     }

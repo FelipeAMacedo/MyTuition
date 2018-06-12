@@ -7,11 +7,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.felipemacedo.mytuition.services.HeroiService;
+import com.felipemacedo.mytuition.utils.RequestQueueSingleton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -37,7 +37,7 @@ public class HeroiServiceImpl implements HeroiService {
 
         JsonObjectRequest postRequest = buildRequest(context, url, jsonBody, listener);
 
-        Volley.newRequestQueue(context).add(postRequest);
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
     }
 
     private JsonObjectRequest buildRequest(Context context, String url, JSONObject jsonBody, JsonRequestListener listener) {
