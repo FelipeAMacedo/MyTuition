@@ -107,6 +107,15 @@ public class AchievementsFragment extends Fragment implements RecyclerViewOnItem
 
         conquistas = new ArrayList<>();
 
+        carregarConquistas();
+
+
+    }
+
+    /**
+     * Carrega as conquistas que serão mostradas na tela
+     */
+    private void carregarConquistas() {
         service.buscarTodas(this.getContext(), Configuration.usuario.getEmail(), new JsonRequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -145,9 +154,11 @@ public class AchievementsFragment extends Fragment implements RecyclerViewOnItem
                 Log.e(TAG, response.toString());
             }
         });
-
     }
 
+    /**
+     * Carrega a experiência do heroi do usuário para exibição na tela
+     */
     private void loadProgress() {
         int xp = Configuration.usuario.getHeroiResponseDTO().getXp();
         int level = Level.calculateLevel(xp);

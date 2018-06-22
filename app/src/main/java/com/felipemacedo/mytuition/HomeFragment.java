@@ -8,11 +8,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.felipemacedo.mytuition.conf.Configuration;
+import com.felipemacedo.mytuition.dto.heroi.AumentarPontosDTO;
+import com.felipemacedo.mytuition.dto.save.wrapper.AumentarPontosWrapper;
+import com.felipemacedo.mytuition.listeners.JsonRequestListener;
+import com.felipemacedo.mytuition.services.HeroiService;
+import com.felipemacedo.mytuition.services.impl.HeroiServiceImpl;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
@@ -31,8 +41,12 @@ public class HomeFragment extends Fragment {
     private TextView tvNomeHeroiHome;
     private TextView tvAtaqueHome;
     private TextView tvDefesaHome;
-    private ImageButton btnAumentarAtaque;
-    private ImageButton btnAumentarDefesa;
+    private Button btnAumentarAtaque;
+    private Button btnAumentarDefesa;
+    private Timer atualizarPontosTimer;
+    private TimerTask atualizarPontosTask;
+    private HeroiService heroiService;
+    private static long pontosTimerDelay = 5000L;
 
     private int pontosDisponiveis;
 
@@ -107,6 +121,8 @@ public class HomeFragment extends Fragment {
         tvAtaqueHome.setText(getResources().getText(R.string.home_hero_attack) + String.valueOf(Configuration.usuario.getHeroiResponseDTO().getAtaque()));
         tvDefesaHome.setText(getResources().getText(R.string.home_hero_defense) + String.valueOf(Configuration.usuario.getHeroiResponseDTO().getDefesa()));
 
+        atualizarPontosTimer = new Timer();
+
     }
 
     private void loadProgress() {
@@ -135,7 +151,19 @@ public class HomeFragment extends Fragment {
                 int ataqueAtual = Configuration.usuario.getHeroiResponseDTO().getAtaque() + 1;
                 Configuration.usuario.getHeroiResponseDTO().setAtaque(ataqueAtual);
 
+
                 tvAtaqueHome.setText(getResources().getString(R.string.home_hero_attack) + ataqueAtual);
+
+                atualizarPontosTimer.cancel();
+                atualizarPontosTimer = new Timer();
+                atualizarPontosTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(() -> {
+                            atualizaPontos();
+                        });
+                    }
+                }, pontosTimerDelay);
             }
         });
 
@@ -145,8 +173,42 @@ public class HomeFragment extends Fragment {
                 Configuration.usuario.getHeroiResponseDTO().setDefesa(defesaAtual);
 
                 tvDefesaHome.setText(getResources().getString(R.string.home_hero_defense) + defesaAtual);
+
+                atualizarPontosTimer.cancel();
+                atualizarPontosTimer = new Timer();
+                atualizarPontosTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        getActivity().runOnUiThread(() -> {
+                            atualizaPontos();
+                        });
+                    }
+                }, pontosTimerDelay);
             }
         });
+    }
+
+    private void atualizaPontos() {
+        heroiService = new HeroiServiceImpl();
+
+        heroiService.aumentarPontos(getContext(), montarAumentarPontosWrapper(), new JsonRequestListener() {
+            @Override
+            public void onSuccess(Object response) { }
+
+            @Override
+            public void onError(Object response) { }
+        });
+    }
+
+    private AumentarPontosWrapper montarAumentarPontosWrapper() {
+        AumentarPontosDTO dto = new AumentarPontosDTO();
+        dto.setId(Configuration.usuario.getHeroiResponseDTO().getId());
+        dto.setAtaque(Configuration.usuario.getHeroiResponseDTO().getAtaque());
+        dto.setDefesa(Configuration.usuario.getHeroiResponseDTO().getDefesa());
+
+        AumentarPontosWrapper wrapper = new AumentarPontosWrapper();
+        wrapper.setAumentarPontosDTO(dto);
+        return wrapper;
     }
 
     private synchronized boolean existePontosParaAdicionar() {

@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.felipemacedo.mytuition.conf.Configuration;
 import com.felipemacedo.mytuition.dto.save.wrapper.AtualizacaoExperienciaWrapper;
+import com.felipemacedo.mytuition.dto.save.wrapper.AumentarPontosWrapper;
 import com.felipemacedo.mytuition.listeners.JsonRequestListener;
 import com.felipemacedo.mytuition.services.HeroiService;
 import com.felipemacedo.mytuition.utils.RequestQueueSingleton;
@@ -23,6 +24,24 @@ public class HeroiServiceImpl implements HeroiService {
     private static final String urlHeroi = Configuration.API_URL + "heroi";
 
     @Override
+    public void aumentarPontos(Context context, AumentarPontosWrapper wrapper, JsonRequestListener listener) {
+        String url = urlHeroi + "/aumentarPontos";
+
+        JSONObject jsonBody;
+
+        try {
+            jsonBody = getJSONObject(wrapper);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            jsonBody = new JSONObject();
+        }
+
+        JsonObjectRequest postRequest = buildPostRequest(context, url, jsonBody, listener);
+
+        RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
+    }
+
+    @Override
     public void adicionarExperiencia(Context context, AtualizacaoExperienciaWrapper wrapper, JsonRequestListener listener) {
         String url = urlHeroi + "/aumentarExperiencia";
 
@@ -35,12 +54,12 @@ public class HeroiServiceImpl implements HeroiService {
             jsonBody = new JSONObject();
         }
 
-        JsonObjectRequest postRequest = buildRequest(context, url, jsonBody, listener);
+        JsonObjectRequest postRequest = buildPostRequest(context, url, jsonBody, listener);
 
         RequestQueueSingleton.getInstance(context).addToRequestQueue(postRequest);
     }
 
-    private JsonObjectRequest buildRequest(Context context, String url, JSONObject jsonBody, JsonRequestListener listener) {
+    private JsonObjectRequest buildPostRequest(Context context, String url, JSONObject jsonBody, JsonRequestListener listener) {
         JsonObjectRequest request = new JsonObjectRequest
                 (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
 

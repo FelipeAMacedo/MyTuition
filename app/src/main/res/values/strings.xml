@@ -67,5 +67,10 @@
     <string name="prompt_work">Trabalha na área de TI?</string>
     <string name="prompt_curso">Escolha o seu curso atual</string>
     <string name="selecionar_curso">Selecione o seu curso</string>
+    <string name="action_change_password">Alterar a senha</string>
+    <string name="prompt_conf_nova_senha">Repetir nova senha</string>
+    <string name="prompt_senha_atual">Senha atual</string>
+    <string name="prompt_nova_senha">Nova senha</string>
+    <string name="action_alterar_senha">ALTERAR SENHA</string>
 
 </resources>

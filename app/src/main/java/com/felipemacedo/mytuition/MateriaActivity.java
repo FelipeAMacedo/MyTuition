@@ -73,9 +73,7 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
     protected void onResume() {
         super.onResume();
 
-        if (materiasAdapter != null) {
-            materiasAdapter.notifyDataSetChanged();
-        }
+        carregarMaterias();
     }
 
     /**
@@ -95,7 +93,12 @@ public class MateriaActivity extends AppCompatActivity implements RecyclerViewOn
         service = new MateriaServiceImpl();
 
         materias = new ArrayList<>();
+    }
 
+    /**
+     * Carrega as matérias que serão listadas na tela
+     */
+    private void carregarMaterias() {
         service.findByDisciplinaId(MateriaActivity.this, disciplinaId, Configuration.usuario.getEmail(), new JsonRequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {

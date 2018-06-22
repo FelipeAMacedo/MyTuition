@@ -7,8 +7,6 @@ import java.io.Serializable;
 
 public class AtualizacaoExperienciaWrapper implements Serializable {
 
-	private static final long serialVersionUID = 29172965326690849L;
-
 	@SerializedName("heroi")
 	private AtualizacaoExperienciaDTO atualizacaoExperienciaDTO;
 

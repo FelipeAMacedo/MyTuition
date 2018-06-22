@@ -60,6 +60,7 @@ public class LutaActivity extends AppCompatActivity {
     private static final boolean AUTO_HIDE = true;
 
     private Button btnLutaAtacar;
+    private Button btnLutaSair;
     private Ataque ataque;
 
     private ProgressBar vidaVilaoProgress;
@@ -70,6 +71,13 @@ public class LutaActivity extends AppCompatActivity {
 
     private TextView tvInfoNomeHeroi;
     private TextView tvInfoNomeVilao;
+
+    private int pontosVitoria = 300;
+    private int pontosDerrota = -300;
+
+    //TODO: ataque será de acordo com a pontuacao de habilidade de força do vilão
+    private int ataqueVilao = 500;
+    private int defesaVilao = 1000;
 
     private static final Long MATERIA_ID = 1L;
 
@@ -156,6 +164,9 @@ public class LutaActivity extends AppCompatActivity {
         loadData();
     }
 
+    /**
+     * Carrega as questões que o usuário terá que responder em cada ataque
+     */
     private void loadData() {
         ataque = new Ataque();
         //TODO:
@@ -190,6 +201,12 @@ public class LutaActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Converte uma lista de DTOs de Conteudo para a entidade em si
+     *
+     * @param conteudos Lista de DTOs que serão convertidos
+     * @return Lista de entidades de Conteudo
+     */
     private List<Conteudo> convertConteudoDTOToEntity(Set<ConteudoResultDTO> conteudos) {
         List<Conteudo> conteudosConvertidos = new ArrayList<>();
         ModelMapper mapper = new ModelMapper();
@@ -208,6 +225,7 @@ public class LutaActivity extends AppCompatActivity {
         vidaHeroiProgress = (ProgressBar) findViewById(R.id.pgbHPHeroi);
         vidaVilaoProgress = (ProgressBar) findViewById(R.id.pgbHPVilao);
         btnLutaAtacar = (Button) findViewById(R.id.btnLutaAtacar);
+        btnLutaSair = (Button) findViewById(R.id.btnLutaSair);
         tvInfoNomeHeroi = (TextView) findViewById(R.id.tvInfoNomeHeroi);
         tvInfoNomeVilao = (TextView) findViewById(R.id.tvInfoNomeVilao);
 
@@ -240,17 +258,50 @@ public class LutaActivity extends AppCompatActivity {
 
             startActivityForResult(intent, 1);
         });
+
+        btnLutaSair.setOnClickListener((View view) -> avisarSaida());
+    }
+
+    /**
+     * Mostra um Dialog de aviso para o usuário caso ele tenha apertado o botão Back
+     */
+    @Override
+    public void onBackPressed() {
+        avisarSaida();
+    }
+
+    /**
+     * Mostra um Dialog de aviso para o usuário caso ele tenha escolhido sair da tela
+     */
+    private void avisarSaida() {
+        final Dialog dialogSair = new Dialog(this);
+        dialogSair.setContentView(R.layout.dialog_luta_sair);
+
+        TextView tvLutaSairPontos = dialogSair.findViewById(R.id.tvLutaSairPontos);
+
+        tvLutaSairPontos.setText("VOCÊ PERDERÁ " + String.valueOf(pontosDerrota).substring(1) + " PONTOS");
+
+        Button btnFicar = dialogSair.findViewById(R.id.btnLutaSairFicar);
+        Button btnSair = dialogSair.findViewById(R.id.btnLutaSairConfirm);
+
+        btnFicar.setOnClickListener((v) -> {
+            dialogSair.cancel();
+        });
+
+        btnSair.setOnClickListener((v) -> {
+            dialogSair.dismiss();
+            finalizarLuta(Adversario.VILAO);
+        });
+
+        dialogSair.show();
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
         if (requestCode == 1) {
-            //TODO: ataque será de acordo com a pontuacao de habilidade de força do vilão
-            int ataqueVilao = 3;
-            int defesaVilao = 1;
+
 
             Configuration.usuario.getHeroiResponseDTO().setAtaque(10);
 
@@ -267,6 +318,12 @@ public class LutaActivity extends AppCompatActivity {
         return Double.valueOf((ataque / defesa) * ataque * 2).intValue();
     }
 
+    /**
+     * Reduz a vida de um dos lutadores
+     *
+     * @param dano       Quantidade de vida que será tirada
+     * @param adversario Quem sofrerá o dano
+     */
     private void reduzirVida(int dano, Adversario adversario) {
         int vida;
 
@@ -282,6 +339,13 @@ public class LutaActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Animação da barra de vida diminuindo
+     *
+     * @param progressBar  Barra de vida que será animada
+     * @param vida         Quantidade atual de vida
+     * @param sofreuAtaque Quem está sofrendo o ataque
+     */
     private void doAnimation(ProgressBar progressBar, int vida, Adversario sofreuAtaque) {
         ObjectAnimator animator = ObjectAnimator.ofInt(progressBar, "progress", progressBar.getProgress(), vida).setDuration(5000L);
 
@@ -381,16 +445,19 @@ public class LutaActivity extends AppCompatActivity {
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
 
+    /**
+     * Finaliza a luta
+     *
+     * @param vencedor Lutador que venceu a luta
+     */
     private void finalizarLuta(Adversario vencedor) {
         final Dialog mensagem = new Dialog(this);
+        mensagem.setCanceledOnTouchOutside(false);
         mensagem.setContentView(R.layout.dialog_luta_fim);
 
         TextView tvResultado = mensagem.findViewById(R.id.tvDialogLutaResultado);
         TextView tvPontos = mensagem.findViewById(R.id.tvDialogLutaPontos);
         Button btnOk = mensagem.findViewById(R.id.btnDialogLutaFim);
-
-        int pontosVitoria = 3000;
-        int pontosDerrota = -5000;
 
         if (vencedor.equals(Adversario.HEROI)) {
 //            ataque.venceu(true);
@@ -420,12 +487,17 @@ public class LutaActivity extends AppCompatActivity {
 
         btnOk.setOnClickListener((view) -> {
             mensagem.cancel();
-            LutaActivity.this.finish();
+            super.onBackPressed();
         });
 
         mensagem.show();
     }
 
+    /**
+     * Atualiza a experiência do Heroi de acordo com o resultado da luta
+     *
+     * @param pontos Quantidade atualizada dos pontos de experiência do Heroi
+     */
     private void mudarExperienciaBanco(int pontos) {
         AtualizacaoExperienciaDTO dto = new AtualizacaoExperienciaDTO();
         dto.setPontosAdicionais(pontos);
@@ -452,6 +524,9 @@ public class LutaActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Enum dos participantes da luta
+     */
     private enum Adversario {
         HEROI, VILAO
     }

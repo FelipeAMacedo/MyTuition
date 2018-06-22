@@ -127,6 +127,20 @@ public class DisciplinasFragment extends Fragment implements RecyclerViewOnItemC
 
         disciplinas = new ArrayList<>();
 
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        carregarDisciplinas();
+    }
+
+    /**
+     * Carrega as disciplinas que serão listadas na tela
+     */
+    private void carregarDisciplinas() {
         service.buscarTodas(this.getContext(), Configuration.usuario.getEmail(), new JsonRequestListener<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
@@ -165,17 +179,6 @@ public class DisciplinasFragment extends Fragment implements RecyclerViewOnItemC
                 Log.e(TAG, response.toString());
             }
         });
-
-        return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (disciplinaAdapter != null) {
-            disciplinaAdapter.notifyDataSetChanged();
-        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event

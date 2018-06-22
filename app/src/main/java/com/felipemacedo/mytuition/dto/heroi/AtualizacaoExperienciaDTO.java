@@ -6,8 +6,6 @@ import java.io.Serializable;
 
 public class AtualizacaoExperienciaDTO implements Serializable {
 
-	private static final long serialVersionUID = 5139843617220555968L;
-
 	@SerializedName("id")
 	private Long id;
 

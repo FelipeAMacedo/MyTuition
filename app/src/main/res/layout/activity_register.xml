@@ -19,7 +19,9 @@
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="8dp"
+        android:layout_marginBottom="8dp">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -99,19 +101,6 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="11dp"
                 android:background="@drawable/textview_drawable" />
-
-            <EditText
-                android:id="@+id/etCadCurso"
-                android:layout_width="268.00dp"
-                android:layout_height="37.33dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="11dp"
-                android:background="@drawable/textview_drawable"
-                android:hint="@string/prompt_entrada"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="date"
-                android:maxLines="1" />
 
             <EditText
                 android:id="@+id/etCadNascimento"
@@ -260,6 +249,7 @@
                 android:text="@string/action_cancel"
                 android:textColor="#fff"
                 android:textSize="20sp"
+                android:visibility="gone"
                 tools:textAllCaps="false" />
 
         </LinearLayout>

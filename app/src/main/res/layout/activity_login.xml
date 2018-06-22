@@ -85,6 +85,17 @@
             android:textSize="16.67sp"
             android:textStyle="bold|italic" />
 
+        <TextView
+            android:id="@+id/txtTrocarSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5.33dp"
+            android:clickable="true"
+            android:gravity="right"
+            android:text="@string/action_change_password"
+            android:textSize="16.67sp"
+            android:textStyle="bold|italic" />
+
         <Button
             android:id="@+id/email_sign_in_button"
             android:layout_width="150dp"

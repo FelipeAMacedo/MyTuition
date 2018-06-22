@@ -1,0 +1,89 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLight"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.felipemacedo.mytuition.AlterarSenhaActivity">
+
+    <LinearLayout
+        android:id="@+id/alterar_senha_form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerVertical="true">
+
+        <AutoCompleteTextView
+            android:id="@+id/etAltSenEmail"
+            android:layout_width="268.00dp"
+            android:layout_height="37.33dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/textview_drawable"
+            android:hint="@string/prompt_email"
+            android:inputType="textEmailAddress"
+            android:maxLines="1" />
+
+        <EditText
+            android:id="@+id/etAltSenSenhaAtual"
+            android:layout_width="268.00dp"
+            android:layout_height="37.33dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="11dp"
+            android:background="@drawable/textview_drawable"
+            android:hint="@string/prompt_senha_atual"
+            android:imeActionLabel="@string/action_sign_in_short"
+            android:imeOptions="actionUnspecified"
+            android:inputType="textPassword"
+            android:maxLines="1" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="50dp">
+
+            <EditText
+                android:id="@+id/etAltSenNovaSenha"
+                android:layout_width="268.00dp"
+                android:layout_height="37.33dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/textview_drawable"
+                android:hint="@string/prompt_nova_senha"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <EditText
+                android:id="@+id/etAltSenConfirmarNovaSenha"
+                android:layout_width="268.00dp"
+                android:layout_height="37.33dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="11dp"
+                android:background="@drawable/textview_drawable"
+                android:hint="@string/prompt_conf_nova_senha"
+                android:imeActionLabel="@string/action_sign_in_short"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1" />
+
+            <Button
+                android:id="@+id/btnAlterarSenha"
+                android:layout_width="wrap_content"
+                android:paddingHorizontal="20dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="23dp"
+                android:background="@drawable/button_login_finish"
+                android:text="@string/action_alterar_senha"
+                android:textColor="#fff"
+                android:textSize="18.33dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>

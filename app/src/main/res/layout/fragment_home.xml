@@ -20,7 +20,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="53dp"
                 android:layout_marginTop="38dp"
-                android:background="@drawable/alarm" />
+                android:background="@drawable/alarm"
+                android:visibility="visible"/>
 
 
         </RelativeLayout>

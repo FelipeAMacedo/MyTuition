@@ -10,4 +10,5 @@ public interface UsuarioService {
 
     void registrar(Context context, UsuarioSaveWrapper wrapper, JsonRequestListener listener);
     void logar(Context context, LoginWrapper wrapper, JsonRequestListener listener);
+    void recuperarSenha(Context context, String email, JsonRequestListener listener);
 }
